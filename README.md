@@ -14,7 +14,7 @@
 3: log 新建log-redis.log (vim log-redis.log)
 4: 在etc目录下新建redis.conf配置文件 (vim redis.conf)
 5: 配置如下:<br>
-``ssh
+```ssh
 #修改为守护模式
 daemonize yes
 
@@ -64,7 +64,7 @@ appendonly no
 #always：表示每次更新操作后手动调用fsync()将数据写到磁盘（慢，安全）
 #everysec：表示每秒同步一次（折衷，默认值）
 appendfsync everysec
-``ssh
+```ssh
 
 
 
