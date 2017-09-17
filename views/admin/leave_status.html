@@ -1,0 +1,134 @@
+<style>
+	table, td, th{
+		border : 1px solid #CCC;	
+	}
+	h1{
+		padding : 10px;
+		font-size : 20px;	
+	}
+	.add-leavestatus{
+		margin : 10px;	
+	}
+	.status-leave{
+		color : red;	
+	}
+    .content{
+        width: 1000px;
+    }
+</style>
+
+<p>
+{{if cur_leave_status}}
+	<div>当前状态是“<strong class="status-leave">离开</strong>”，留言是: “ {{html cur_leave_status.content}} ” <a class="action" type="del" href="/dashixiongwx/admin/shop/${shop_id}/leavestatus/curclear">清空当前公告</a></div>
+{{else}}
+	当前状态是“工作中”，你要及时回复粉丝们啊~
+{{/if}}
+</p>
+
+<p class="add-leavestatus">
+	<a href="/dashixiongwx/admin/shop/${shop_id}/leavestatus/add">添加离开状态</a>
+    &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" size="12" id="shopid" placeholder="请输入店铺ID"/>
+    <input type="button" id="btnClick" value="查询"/>
+    <span id="tip" style="color: red;display: none;">亲,只能输入数字!</span>
+    &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" placeholder="如:1,2,3(中间用逗号隔开)" size="22" class="cancelShopIds"/>
+    <a style="text-decoration: underline;cursor: pointer;" id="cancelStatus" class="cancelStatus" type="del">一键取消当前离开状态</a>
+</p>
+
+<table>
+	<tr>
+		<th>
+			id
+		</th>
+        <th>
+            所在分店ID
+        </th>
+		<th>
+			时间
+		</th>
+		<th class="content">
+			内容
+		</th>
+        <th>
+            设置离开状态的店铺ID(快速通道)
+        </th>
+		<th>
+			操作
+		</th>
+	</tr>	
+
+{{each(status, i) leave_status}}
+	<tr>
+		<td>
+			${status.id}	
+		</td>
+        <td class="sid" shopIdVal="${status.shopId}">
+            ${status.shopId}
+        </td>
+		<td>
+			${status.intime}
+		</td>
+		<td>
+			${status.content}
+		</td>
+        <td>
+            <input type="text" placeholder="如:1,2,3(中间用逗号隔开)" size="22" class="moto_shopid"/>
+        </td>
+		<td>
+			&nbsp;<a class="action" type="del" href="/dashixiongwx/admin/shop/${shop_id}/leavestatus/${status.id}/del">删除</a> | 
+			&nbsp;<a style="text-decoration: underline;cursor: pointer;" id="setStatus" class="setStatus" statusId="${status.id}" type="del">设为当前离开状态</a>
+		</td>
+	</tr>
+{{/each}}
+</table>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#btnClick').click(function(){
+            var $shopid = $('#shopid').val()-0;
+            if($shopid){
+                $('#tip').hide();
+                $('.sid').each(function(i,domEle){
+                    if($shopid != $(this).attr('shopIdVal')){
+                        $(this).parent('tr').hide();
+                    }
+                    if($shopid == $(this).attr('shopIdVal')){
+                        $(this).parent('tr').show();
+                    }
+                });
+            } else if($shopid == ''){
+                location.reload();
+            } else{
+                $('#tip').show();
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    document.onkeydown = function (e) {
+        var theEvent = window.event || e;
+        var code = theEvent.keyCode || theEvent.which;
+        if (code == 13) {
+            $("#btnClick").click();
+        }
+    }
+</script>
+<script type="text/javascript">
+    $('.setStatus').click(function(){
+        var id = $(this).attr('statusId');
+        var a = $(this).parent().siblings('td').children('input').val();
+        var arrays = [];
+        a = a.replace(/，/ig,',');
+        arrays = a.split(',');
+        $.get('/dashixiongwx/admin/shop/${shop_id}/leavestatus/'+id+'/cur',{arrays:arrays},function(){
+            window.location.reload();
+        });
+    });
+    $('.cancelStatus').click(function(){
+        var a = $('.cancelShopIds').val();
+        var arrays = [];
+        a = a.replace(/，/ig,',');
+        arrays = a.split(',');
+        $.get('/dashixiongwx/admin/shop/${shop_id}/leavestatus/curclear/set',{arrays:arrays},function(){
+            window.location.reload();
+        });
+    });
+</script>

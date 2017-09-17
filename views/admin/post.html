@@ -1,0 +1,65 @@
+<style>
+	p{
+		margin : 0 0 30px 0;	
+	}
+	.editor{
+		width : 99%;	
+		height : 500px;
+	}
+</style>
+
+<h1> 发布文章 </h1>
+<form action="/dashixiongwx/admin/shop/${shop_id}/article/dopost" method="POST">
+	<p>
+		标题 <input id="title" name="title" class="title" type="text" value="" />
+	</p>
+    <p>
+        店铺ID<input type="text" class="shop_id" name="shop_id" title="店铺ID" placeholder="请输入店铺ID" value="${shop_id}"/><a style="color: red">(0号店为所有店铺可见!)</a>
+	<p>
+    <p>
+        文章类别
+        <select name="categoryid"style="border: 0;background-color: #ffffff;">
+            <option value="-1" selected="selected" class="category">请选择分类</option>
+            {{each(change,i) ArticleCategory}}
+                <option value="${change.id}">${change.name}</option>
+            {{/each}}
+        </select>
+    <p>
+		<textarea id="content" class="editor" name="content" ></textarea>
+	</p>
+
+	<p>
+		<input type="submit" value="提交" class="submit"/> <input id="preview_btn" type="button" value="预览" onclick="return false;" />
+	</p>
+</form>
+
+<form target="_blank" id="preview_form" action="/dashixiongwx/admin/shop/${shop_id}/article/preview" method="POST"> 
+    <input id="preview_title" type="hidden" name="title"  value="" />
+    <input id="preview_content" type="hidden" name="content" />
+</form>
+
+<script type="text/javascript" charset="utf-8">
+    var preview_btn = $( '#preview_btn' );
+    var $title = $('.title'),
+        $shop_id = $('.shop_id'),
+        $submit = $('.submit'),
+        $editor = $('.editor');
+
+    $submit.click(function () {
+        var title = $title.val(),
+            shop_id =  $shop_id.val(),
+            editor  =  $editor.val();
+        if(!title  || !shop_id  || !editor){
+            alert('抱歉，新用户信息不完整！');
+            return false;
+        }
+
+    });
+    preview_btn.click(function () {
+        $( '#preview_title' ).val( $( '#title' ).val() );
+        $( '#preview_content' ).val( $( '#content' ).val() );
+        $( '#preview_form' ).submit();
+    });
+</script>
+
+

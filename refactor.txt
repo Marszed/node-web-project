@@ -1,0 +1,78 @@
+
+UserOrder(shopId), defaut 0 , update 1
+Log(shopId),default 0, update 1
+Notice(shopId),default 0, update 1
+Product(shopId), default 0, update 1
+Motto(shopId), default 0, update 1
+LeaveStatus(shopId), default 0, update 1
+FinanceRecord(shopId), defaut 0, update 1
+User(email, pwdHash, nick, power)
+Store(count, secureCount) 两个count的数据要default 0
+Article(shopId, viewCount, showOrder, lastCommentTimeStamp,commentNum, author)
+Section 整个表都可以导入进去
+DateResume(shopId)
+把整个表导出来, 改一下主键为dateStr,shopId, 更新一下之前的数据的shopId=1
+UserLikes
+Article(lastCommentTimeStamp ===>> lastUpdateTimeStamp)
+Msg(reply)
+udpate Log set shopId=1;
+为两个分店新建, 活动用仓库
+UserActivity
+AddressBook (isAvailable binary default 1) update set=1;
+Tool
+UserTool
+Section(isAvailable binary)defualt 1
+======================================
+
+
+
+
+当前请求信息是  /dashixiongwx
+请求/dashixiongwx不需要验证
+{ ToUserName: [ 'gh_c992d1a79c34' ],
+  FromUserName: [ 'oXvPNjoxt-9jKtFTx6CbAuIRFxDY' ],
+  CreateTime: [ '1393232235' ],
+  MsgType: [ 'event' ],
+  Event: [ 'CLICK' ],
+  EventKey: [ 'key_my_order' ] }
+===============dao.listValidOrdersByUserId: [ { id: 7004,
+    userId: 382,
+    addressId: 523,
+    timeStamp: 1387887199103,
+    productIds: '[22]',
+    orderStatus: 2,
+    snapshot: '{"products_bought":[{"id":22,"title":"咪咪虾条 儿时经典味道","unit":"包","price_deal":0.5,"cost":0.34,"count":1}],"total_num":1,"total_pay":0.5,"total_cost":0.34,"requirements":["咪咪  小腿王鸭腿',
+    name: '林映茂',
+    mobile: '666020',
+    address: '九栋412' } ]
+
+undefined:1
+1}],"total_num":1,"total_pay":0.5,"total_cost":0.34,"requirements":["咪咪  小腿王鸭腿
+                                                                              ^
+SyntaxError: Unexpected end of input
+    at Object.parse (native)
+    at exports.listValidOrdersByWxId.exports.getUserByWxId.dao.listValidOrdersByUserId.fn.msg (/projects/dashixiong/controllers/dashixiong.js:608:51)
+    at Array.forEach (native)
+    at exports.listValidOrdersByWxId.exports.getUserByWxId.fn.code (/projects/dashixiong/controllers/dashixiong.js:602:11)
+    at Client.exports.listValidOrdersByUserId (/projects/dashixiong/models/dao.js:350:10)
+    at MySQLPool._populate.Client (/node_modules/mysql-pool/lib/mysql-pool/pool.js:147:9)
+    at Query.Client.query (/node_modules/mysql/lib/client.js:108:11)
+    at Query.EventEmitter.emit (events.js:93:17)
+    at Query._handlePacket (/node_modules/mysql/lib/query.js:51:14)
+    at Client._handlePacket (/node_modules/mysql/lib/client.js:319:14)
+worker 15 died, but don't worry, restarted...
+dashixiong server start at 6789
+app.js >> 2014-02-24 17:02:57 info: 正在加载服务:store_service.js
+app.js >> 2014-02-24 17:02:57 info: 正在加载服务:admin_service.js
+app.js >> 2014-02-24 17:02:57 info: 正在加载服务:weixin_service.js
+
+
+
+
+
+
+
+
+
+
+

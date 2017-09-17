@@ -1,0 +1,131 @@
+<style>
+	body{
+		background : #000;
+	}
+	.content{
+		text-align : center;	
+		margin-bottom : 0.5em;
+	}
+	.desc{
+		color : #AAA;	
+		line-height : 1.5em;
+	}
+	img{
+		width : 100%;	
+	}
+    .desc strong{
+        font-size : 24px; 
+        color : orange;
+    }
+
+ul:after{content:"";clear:both;display:block;width:100%;height:0px;overflow:hidden;}
+.sign-wrap{padding:10px;-webkit-box-sizing:border-box;box-sizing:border-box;background:#e1e1e1; color:#888;line-height:1;}
+.sign-wrap .user, .sign-btn-wrap{display:-ms-flexbox;display:-webkit-box;display:box;}
+.p-pic{border-radius:4px;width:40px;height:40px;}
+.sign-wrap .d{-webkit-box-flex:1;-ms-flex:1;margin-top:-2px;line-height:1.2em;margin-left:10px;}
+.user .p{width:40px;height:40px;}
+.user .p-pic{width:40px;height:40px;}
+.sign-btn-wrap{margin-top:10px;}
+.sign-btn{-webkit-box-flex:1; -ms-flex:1;box-flex:1;display:block;background:#eee;width:100%;margin-right:10px;text-align:center;padding:5px 0;border-radius:2px;text-decoration:none;box-shadow:1px 1px 3px #ccc;color:#333;}
+.sign-wrap .last{margin-right:0;}
+.story{margin-top:15px;}
+.tools{ overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width:100%; display:block;}
+.story-list>li{width:50%;float:left;}
+.story-item{margin:0 10px;}
+.story-list>li img{width:100%;border-radius:4px; padding:3px; background:#fff;}
+.num{color:#f50;}
+.t-tit:after{ content: "×"; color: #f50; margin-left:3px; }
+#rank{text-decoration:none;padding:0 5px;}
+</style>
+    <div class="sign-wrap">
+        <div class="user">
+            <div class="p">
+                {{if user.head}}
+                <img src="http://img.ksmimi.com/uploads/heads/${user.head}" alt="${user.nick}" class="p-pic" width="40" height="40">
+                {{else}}
+                <img src="${'http://s.ksmimi.com/dashixiong_static/img/default-p-pic.jpg'}" alt="${user.nick}" class="p-pic" width="40" height="40">
+                {{/if}}
+            </div>
+            <div class="d">
+                <p id="tools" class="tools">你拥有:</p>
+                <p class="mt5">位居<a href="/dashixiongwx/listWealth/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}" class="fbs" >福布斯财富榜</a>第<a href="#" class="rank" id="rank" onclick="return false"></a>位</p>
+            </div>
+        </div>
+        <div class="sign-btn-wrap">
+            <a href="#" class="sign-btn" id="good">签到,攒人品</a>
+            <a href="/dashixiongwx/rp/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}" class="sign-btn last">兑换道具</a>
+        </div>
+        <!--TODO 1、2、5号店要换成签到抽奖页面-->
+        <div class="story none" id="story">
+            <p style="margin:8px;">点击以下图片, 签到: </p>
+            <ul class="list story-list">
+                <li>
+                    <div class="story-item" gid="2">
+                        <img src="${env.imgpro}/yanchanghui.jpg" alt="">
+                        <p>大声喊出内心的渴望“大师兄我爱你” </p>
+                    </div>
+                </li>
+                <li>
+                    <div class="story-item" gid="1">
+                        <img src="${env.imgpro}/huabanxie.jpg" alt="">
+                        <p>时尚时尚最时尚的滑板鞋送给大师兄摩擦</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+<div class="content">
+    {{if config.closeImgUrl}}
+    <img src="${config.closeImgUrl}" />
+    {{else}}
+    <img src="http://${env.staticRoot}/dashixiong_static/img/closing.jpg" />
+    {{/if}}
+</div>
+<p class="desc">
+    {{html config.closeText}}
+    <!-- 2014年大师兄将在<strong>2月23日</strong>开业！
+	晚11点前下的单子，我们一定会送达。11点后由于送货太过缓慢(同学们都骂娘了)，为了维护良好的用户体验，我们忍痛放弃这些订单。见谅 ^0^ 小卖部营业时间为早9点至晚11点
+    -->
+</p>
+
+<script>
+
+$(function(){
+    $('#good').click(function(){
+        $('#story').toggle();
+    });
+    var $story = $('.story-item');
+
+
+    $story.click(function(){
+        var id = $(this).attr('gid');
+        $.post('/dashixiongwx/doSign/${user.openId}/'+id,function(obj){
+            if(obj && !obj.code){
+                alert(obj.msg);
+            }else{
+                alert('做好事的人太多了,请稍后再来吧~');
+            }
+        });
+    });
+    $.get('/dashixiongwx/getRankAndWealth/${user.openId}',function(obj){
+        if(obj&&obj.tools&&obj.rank){
+            obj.rank = obj.rank || {};
+            obj.tools = obj.tools || [];
+            if(obj.tools.length == 0 ){
+                $('#tools').html('你尚未兑换任何道具').siblings('p').html('位于<a href="/dashixiongwx/listWealth/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}">福布斯财富榜</a>千里之外~~');
+                return;
+            }
+            $('#rank').text(obj.rank.rownum);
+            var tools = '你拥有: ';
+            $.each(obj.tools, function(i, tool){
+                tools+= '<span class="t-tit">'+tool.title+'</span><span class="num">' +tool.num +'</span> &nbsp; ';
+            })
+            $('#tools').html(tools);
+            return;
+        }
+        $('#tools').html('你尚未兑换任何道具').siblings('p').html('位于<a href="/dashixiongwx/listWealth/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}">福布斯财富榜</a>千里之外~~');
+    });
+});
+
+
+</script>

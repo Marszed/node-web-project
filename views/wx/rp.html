@@ -1,0 +1,123 @@
+<div id="layout">
+        <div id="content">
+            <div class="category">
+                <a href="/dashixiongwx/rp/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}" class="cur">人品</a>
+                <a href="/dashixiongwx/myWealth/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}">我的财富</a>
+                <a href="/dashixiongwx/listWealth/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}">福布斯财富榜</a>
+            </div>
+            <div class="categort-content">
+                <p class="description" >你拥有<stong id="totalRP" rp="${ret.rp}" class="f50">  ${ret.rp}</stong> 个人品，可以兑换以下道具<br/><a href="/dashixiongwx/shop/1/article/440">如何攒人品?</a></p>
+                <ul class="ul-list props-list">
+                    {{each(tool, i) ret.tools}}
+                        {{if tool.id!=1}}
+                        <li>
+                            <div class="list-item">
+                                <div class="p"><a href=""><img class="p-pic" src="${tool.img}" style="width:80px;height:80px;" alt="${tool.alt}"></a></div>
+                                <div class="des" style="position: relative;">
+                                    <a href="#" class="btn-exchange" id="${tool.id}" rp="${tool.cValue}" style="position: absolute;left: 147px;top: -10px;color: #3c5f07;z-index: 100;">兑换</a>
+                                    <p class="d-tit"> <strong>${tool.title}</strong></p>
+                                    <p class="d-main">${tool.description}</p>
+                                    <p class="d-main">需要: <em>${tool.cValue}</em>人品</p>
+                                    <!--<a href="#" class="btn-exchange" id="${tool.id}" rp="${tool.cValue}">兑换</a>-->
+                                </div>
+                            </div>
+                        </li>
+                        {{/if}}
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+        <div id="layout-footer"></div>
+    </div>
+    <div id="footer"><a href="/dashixiongwx/shop/1/article/440">如何攒人品</a></div>
+    <div id="dialog" style="display:none;" title="大师兄提醒你"></div>
+    <link rel="stylesheet" type="text/css" href="http://s.ksmimi.com/dashixiong_static/csspro/??widget/dialog/dialog.css,widget/dialog/dialog.iOS7.css" />
+    <script type="text/javascript" src="http://s.ksmimi.com/dashixiong_static/jspro/??zepto.js,extend/touch.js,extend/iscroll.js,extend/highlight.js,extend/parseTpl.js"></script>
+    <script type="text/javascript" src="http://s.ksmimi.com/dashixiong_static/jspro/??gmu.max.js,navigator.max.js"></script>
+    <script type="text/javascript" src="http://s.ksmimi.com/dashixiong_static/jspro/extend/dialog.js"></script>
+    <script>
+        $(function(){
+
+            var $btnExchange = $('.btn-exchange');
+
+            $btnExchange.click(function(){
+                var $sel = $(this);
+                var id = $sel.attr('id');
+                var rp = $sel.attr('rp')-0;
+                var totalRP = $('#totalRP').text()-0;
+                var msg = '';
+                var button = {};
+                var a = function(){
+                    $.ajax({
+                        url : '/dashixiongwx/exchange/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}',
+                        type : 'post',
+                        data : {id: id},
+                        dataType : 'json',
+                        success: function(obj){
+                            if(obj && obj.code == 0){
+                                msg = '道具兑换成功';
+                                button = {
+                                    '确定': function(){
+                                        $('#totalRP').text(totalRP-rp);
+                                        this.destroy();
+                                    }
+                                };
+                               dialog(); 
+                           }else if(obj && obj.code==2){
+                                msg = obj.msg;
+                                button = {
+                                    '确定': function(){
+                                        this.destroy();
+                                    }
+                                };
+                               dialog(); 
+                           }else{
+                                msg = '兑换系统出了点小问题,我们正在抢修中,请稍后再来~';
+                                button = {
+                                    '确定': function(){
+                                        this.destroy();
+                                    }
+                                };
+                               dialog(); 
+                           }
+                        }
+                    });
+                };
+
+                if( rp>totalRP ){
+                    msg = '你的人品个数不够, 查看如何攒人品';
+                    button = {
+                        '取消': function(){
+                            this.destroy();
+                        },
+                        '查看': function(){
+                            window.location.href="/dashixiongwx/shop/1/article/440";
+                            this.destroy();
+                        }
+                    }
+                }else{
+                    msg = '你确定要兑换该道具吗?';
+                    button = {
+                        '取消': function(){
+                            this.destroy();
+                        },
+                        '确定': function(){
+                            this.destroy();
+                            a();
+                        }
+                    }
+                }
+                var dialog = function(){
+                    $('#dialog').dialog({
+                        autoOpen: false,
+                        closeBtn: true,
+                        content: msg,
+                        buttons: button
+                    });
+                    $('#dialog').dialog('open'); 
+                };
+                dialog();
+                return false;
+            });
+        });
+    </script>

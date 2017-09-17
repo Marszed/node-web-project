@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        td{
+            text-align: center;
+            width: 150px;
+        }
+    </style>
+</head>
+<body>
+    <h3>渠道信息列表</h3>
+    <table>
+        <tr>
+            <td>渠道ID</td>
+            <td>备注</td>
+            <td>店号</td>
+            <td>时间</td>
+            <td>操作</td>
+        </tr>
+        {{each(info, i) infos}}
+        <tr>
+            <td>
+                <a target="_blank" href="/dashixiongwx/admin/shop/${shop_id}/queryChannelInfo/qId/${info.qId}">${info.qId}</a> ( 共<span style="color: red; font-weight: bolder;"> ${info.count} </span>人 )
+            </td>
+            <td>${info.mark}</td>
+            <td>${info.shopId}</td>
+            <td>${info.timeStamp}</td>
+            <td>
+                <a href="/dashixiongwx/admin/shop/${shop_id}/queryChannelInfo/del?qid=${info.qId}">删除</a>
+            </td>
+        </tr>
+        {{/each}}
+    </table>
+</body>
+</html>

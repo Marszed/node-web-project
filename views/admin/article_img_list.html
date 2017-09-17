@@ -1,0 +1,73 @@
+<style>
+	table, td, th{
+		border : 1px solid #CCC;	
+	}
+	h1{
+		padding : 10px;
+		font-size : 20px;	
+	}
+	.money {
+		padding : 10px;	
+	}
+	.good{
+		font-size : 18px;
+		color : green;	
+	}
+	.bad{
+
+		color : red;
+	}
+	.order-create{
+		color : red;	
+	}
+	.order-delivering{
+		color : green;	
+	}
+	.order-receive{
+		color : #CCC;	
+	}
+	.add-img{
+		margin : 10px;	
+	}
+</style>
+
+<p class="add-img">
+	<a href="/dashixiongwx/admin/shop/${shop_id}/article/img/add">添加图片</a> 
+</p>
+
+<table>
+	<tr>
+		<th>
+			id
+		</th>
+		<th>
+			图片
+		</th>
+		<th>
+			链接地址
+		</th>
+		<th>
+			操作
+		</th>
+	</tr>	
+
+{{each(img, i) imgs}}
+	<tr>
+		<td>
+			${img.id}	
+		</td>
+		<td>
+			<a target="_blank" href="http://img.ksmimi.com/uploads/articles/${img.imgName}">
+				<img width="100" src="http://img.ksmimi.com/uploads/articles/${img.imgName}" />
+			</a>
+		</td>
+		<td>
+			http://img.ksmimi.com/uploads/articles/${img.imgName}
+		</td>
+		<td>
+			&nbsp;<a class="action" type="del" href="/dashixiongwx/admin/shop/${shop_id}/article/img/${img.id}/del/${img.imgName}">删除</a>
+		</td>
+	</tr>
+{{/each}}
+
+</table>

@@ -1,0 +1,19 @@
+<style type="text/css" media="all">
+
+</style>
+
+
+<h2>"预计送达"公告</h2>
+<p class="possible-p">
+    ${possibleReach.content || '尚未添加任何公告'}
+</p>
+
+<h2>编辑公告</h2>
+<form action="/dashixiongwx/admin/shop/${shop_id}/possibleReach/doupdate" method="post">
+    <div class="possible-edit">
+        <p><textarea name="possibleReach[content]" cols="60" placeholder="请输入公告内容" rows="10">${possibleReach.content}</textarea></p>
+        <p><input name="possibleReach[isShow]" type="text" value="${possibleReach.isShow}" /> (0 不显示， 1 显示)</p>
+        <input type="hidden" name="possibleReach[shopId]" value="${shop_id}" />
+        <input type="submit" value="添加公告"/>
+    </div>
+</form>

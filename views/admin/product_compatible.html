@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>错误日志监控表</title>
+    <style type="text/css">
+        .ops{
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<script type="text/javascript" src="http://s.ksmimi.com/dsx/jspro/jquery-2.1.1.min.js"></script>
+<body>
+<!--    <div class="ops">
+        <a href="?y=${pre_date_y}&m=${pre_date_m}&d=${pre_date_d}">前一天</a>
+        <span class="current-date">当前日期为：${y}年${m}月${d}日</span>
+        <a href="?y=${next_date_y}&m=${next_date_m}&d=${next_date_d}">后一天</a>
+    </div>-->
+    <table>
+        <tr>
+            <td>序号</td>
+            <td>用户ID</td>
+            <td>ERR</td>
+            <td>AU</td>
+            <td>时间</td>
+            <td>删除</td>
+        </tr>
+        {{each(data, i) datas}}
+        <tr>
+            <td>${i+1}</td>
+            <td>${data.userId}</td>
+            <td>${data.err}</td>
+            <td>${data.au}</td>
+            <td>${data.timeStamp}</td>
+            <td><input type="button" value="删除"  alias="${data.id}"/></td>
+        </tr>
+        {{/each}}
+    </table>
+</body>
+
+<script type="text/javascript" charset="utf-8">
+    $(function(){
+        $('input:button').click(function(){
+            if(confirm("你要删除吗？")){
+                var id =  $(this).attr('alias');
+                $.post('/dashixiongwx/admin/compatible/status/statistics/delete',{id:id},function(data){
+                    location.reload();
+                });
+            }else{
+                return false;
+            }
+        });
+    });
+</script>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <title>圣诞活动</title>
+    <style type="text/css">
+        @media print {
+            body{
+                margin: 0;
+                padding: 0;
+                font-size: 18px;
+            }
+            .merry-christmas{
+                font-family: arial, sans-serif;
+                font-size: 24px;
+            }
+            .container{
+                    text-align: left;
+                    vertical-align: middle;
+            }
+            .second-container{
+                background-color: white;
+            }
+            .to-info{
+            }
+            input{
+                border-top: 0;
+                border-left: 0;
+                border-right: 0;
+                border-bottom: 2px solid #000000;
+                line-height: 20px;
+                font-size: 16px;
+
+            }
+            .gray-font{
+                color: gray;
+            }
+            .color-red{
+                color: #cb3637;
+            }
+            .message-info{
+                font-size: 16px;
+            }
+            #say-to-content{
+                border-top: 0;
+                border-left: 0;
+                border-right: 0;
+                border-bottom: 2px solid #000000;
+                width: 230px;
+                padding-bottom: 3px;
+                margin-left: 17px;
+            }
+            #toUserAddr{
+                border-top: 0;
+                border-left: 0;
+                border-right: 0;
+                border-bottom: 2px solid #000000;
+                width: 230px;
+                padding-bottom: 3px;
+                margin-left: 17px;
+            }
+        }
+
+    </style>
+    <script type="text/javascript" src="http://s.ksmimi.com/dsx/jspro/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript">
+        var gifts = {{html gifts}},
+        shop_id = "${shopId}",
+                user_id = "${userId}",
+                wx_id = "${wx_id}";
+
+        var $doc = $(document);
+        $doc.ready(function(){
+
+            if(gifts.length){
+                var type_value = JSON.parse(gifts[0].type_value);
+                $('input[name="toUserName"]').val(type_value.toUserName);
+                $('#toUserAddr').text(type_value.toUserAddr);
+                $('#say-to-content').text(type_value.message_info);
+                $('input[name="gift"]').val(type_value.gift_type);
+                $('input[name="fromUserName"]').val(type_value.fromUserName);
+                $('input[name="fromUserAddr"]').val(type_value.fromUserAddr);
+                $('input[name="fromUserTel"]').val(type_value.fromUserTel);
+            }
+        });
+        $(function(){
+            //自动点击打印
+            var search = location.search;
+            if( search.indexOf('auto_print=1') != -1 ){
+                window.print();
+            }
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="merry-christmas">Merry Christmas</div>
+    <div class="second-container">
+        <div class="to-info">
+            <br/>
+            <span class="color-red">*&nbsp;</span> <span class="gray-font">T&nbsp;&nbsp;O:&nbsp;</span><input name="toUserName" class="input-address" type="text" ><br /><br />
+                <span class="color-red">*&nbsp;</span>
+                <span class="gray-font">地址:&nbsp;</span>
+                <div id="toUserAddr" class="input-address" ></div>
+            <br /><br />
+            <span class="gray-font">&nbsp;&nbsp;&nbsp;礼物:</span>&nbsp;<input name="gift" type="text" ><br /><br />
+            <br/><br/>
+            <span class="color-red">*&nbsp;</span> <span class="gray-font">我想对你说:</span><br /><br>
+        </div>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="message-info " id="say-to-content">
+
+        </div><br/><br/>
+        <div class="align-right">
+            <span class="gray-font">&nbsp;&nbsp;&nbsp;from:</span>&nbsp;<input name="fromUserName" type="text" ><br /><br />
+            <span class="gray-font">&nbsp;&nbsp;&nbsp;地址:</span>&nbsp;<input name="fromUserAddr" type="text" ><br/><br />
+            <span class="color-red">*&nbsp;</span><span class="gray-font">电话:</span></span>&nbsp;<input name="fromUserTel" type="text" ><br/><br />
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<style>
+	table, td, th{
+		border : 1px solid #CCC;	
+	}
+	h1{
+		padding : 10px;
+		font-size : 20px;	
+	}
+	.money {
+		padding : 10px;	
+	}
+	.good{
+		font-size : 18px;
+		color : green;	
+	}
+	.bad{
+
+		color : red;
+	}
+	.order-create{
+		color : red;	
+	}
+	.order-delivering{
+		color : green;	
+	}
+	.order-receive{
+		color : #CCC;	
+	}
+	.add-product{
+		margin : 10px;	
+	}
+	.tag-product{
+		margin : 10px;	
+	}
+	.onsale{
+		color : green;	
+	}
+	.offsale{
+		color : red;	
+	}
+</style>
+<!--
+<p class="add-product">
+	<a href="/dashixiongwx/admin/shop/${shop_id}/product/add">添加产品&gt;&gt;</a>
+</p>
+-->
+
+<p>
+    总共有${products.length}件产品， 存货成本${value.toFixed(1)}元， 账面价值${value_sale.toFixed(1)}元。<a href="/dashixiongwx/admin/shop/${shop_id}/warehouse/${w_id}/product/import">从产品列表导入数据</a>
+</p>
+<p class="tag-product">
+	<a href="/dashixiongwx/admin/shop/${shop_id}/warehouse/${w_id}/product/list/all">全部</a> | 
+	<a href="/dashixiongwx/admin/shop/${shop_id}/warehouse/${w_id}/product/list/onsale">已上架</a> | 
+	<a href="/dashixiongwx/admin/shop/${shop_id}/warehouse/${w_id}/product/list/offsale">已下架</a>
+    {{if power==10}}
+    | <a href="/dashixiongwx/admin/shop/${shop_id}/warehouse/${w_id}/product/list/zero/inventory">库存清零</a>
+    {{/if}}
+</p>
+
+
+
+<table>
+	<tr>
+		<th>
+			产品id
+		</th>
+		<th>
+			产品编码
+		</th>
+
+		<th>
+			图片
+		</th>
+		<th>
+			产品名称
+		</th>
+        <th>
+			售价
+		</th>
+		<th>
+			单位
+		</th>
+		<th>
+			库存
+		</th>
+		<th>
+			下架库存
+		</th>
+        <th>
+            进货库存
+        </th>
+        <th>
+            销售状态
+        </th>
+        <th>
+            货架状态
+        </th>
+		<th>
+			状态
+		</th>
+		<th>
+			操作
+		</th>
+	</tr>	
+
+{{each(product, i) products}}
+	<tr>
+		<td id="${product.pid}">
+			${product.id}
+		</td>
+		<td id="code_${product.id}">
+			${product.code}
+		</td>
+		<td>
+			<a class="action" type="edit" href="/dashixiongwx/admin/shop/${shop_id}/product/${product.id}/update">
+				<img src="http://img.ksmimi.com/uploads/products/${product.img}" width="50" />
+			</a>
+		</td>
+		<td>
+			<a href="/dashixiongwx/admin/shop/${shop_id}/product/${product.id}/trend/30?title=${product.title}">${product.title}</a>
+		</td>
+        <td>
+			${product.price}元
+		</td>
+		<td>
+			${product.unit}
+		</td>
+		<td>
+			${product.count}
+		</td>
+		<td>
+			${product.secureCount}
+		</td>
+        <td>
+            ${product.warningCount}
+        </td>
+        <td>
+            ${product.onSelling}
+        </td>
+        <td>
+            {{if product.exit == 'true'}}
+            <span style="color: red;">在货架上</span>
+            {{else}}
+            不在货架
+            {{/if}}
+        </td>
+		<td class="status">
+			{{if product.productStatus == 0 }}
+			<span style="color:green">正常</span>
+			{{else product.productStatus == 1}}
+			<span style="color:#CCC">下架</span>
+			{{else product.productStatus == 2}}
+			<span style="color:red">售罄</span>
+			{{/if}}
+		</td>
+		<td>
+			&nbsp;
+			<a class="action" type="del" href="/dashixiongwx/admin/shop/${shop_id}/warehouse/${w_id}/product/{{if product.id}}${product.id}{{else}}${product.pid}{{/if}}/del" onclick="return false;">删除</a> |
+			<a class="action" type="edit" href="/dashixiongwx/admin/shop/${shop_id}/warehouse/${w_id}/product/${product.code}/update/${product.title}">编辑</a> | 
+			<a class="action" type="on_sale" href="/dashixiongwx/admin/shop/${shop_id}/warehouse/${w_id}/product/${product.code}/status/update/0" onclick="return false;">上架</a> | 
+			<a class="action" type="off_sale" href="/dashixiongwx/admin/shop/${shop_id}/warehouse/${w_id}/product/${product.code}/status/update/1" onclick="return false;">下架</a> |
+            <a class="action" type="sold_out" href="/dashixiongwx/admin/shop/${shop_id}/warehouse/${w_id}/product/${product.code}/status/update/2" onclick="return false;">售罄</a>
+            {{if power>=3}}
+            | <a class="proBarCode" target="_blank" type="proBarCode" href="/dashixiongwx/admin/shop/${shop_id}/warehouse/${w_id}/product/${product.code}/list/bar/code">打印条形码</a>
+            {{/if}}
+			&nbsp;
+		</td>
+	</tr>
+{{/each}}
+
+</table>
+<script type="text/javascript">
+	var invoke = function(ele, fn){
+		$.get(ele.href+'?isAjax=1', fn);
+	};
+	var changeStatus = function(ele, status_code){
+		var $td= $(ele).parents('tr').find('.status');
+		switch (status_code){
+			case 0:
+				$td.html('<span style="color:green">正常</span>');
+				break;
+			case 1:
+				$td.html('<span style="color:#CCC">下架</span>');
+				break;
+			case 2:
+				$td.html('<span style="color:red">售罄</span>');
+				break;
+		}	
+	};
+
+	$('.action').click(function(){
+		var a = this;
+		if(this.type == 'on_sale'){
+			invoke(this, function(res){
+				changeStatus(a, 0);
+			});
+		}else if(this.type == 'off_sale'){
+			invoke(this, function(res){
+				changeStatus(a, 1);
+			});
+		}else if(this.type == 'sold_out'){
+			invoke(this, function(res){
+				changeStatus(a, 2);
+			});
+		}else if(this.type == 'del'){
+			var yes = confirm( '确定要删除这个产品的库存信息么？' );
+			if(yes){
+				location.href = this.href;	
+			}
+		}
+	});
+</script>

@@ -1,0 +1,229 @@
+<div>
+    第一区间：<input class="time_one" type="date" /> ~ <input class="time_two" type="date"/> <a  style="margin-right: 20px;" class="sub_one" href="#" onclick="return false;">提交</a>
+    第二区间：<input class="time_three" type="date" /> ~ <input class="time_four" type="date"/> <a class="sub_two" href="#" onclick="return false;">提交</a>
+    | <a class="pre" href="#" onclick="return false;">上一周期</a>
+    | <a class="next" href="#" onclick="return false;">下一周期</a>
+</div>
+<input class="hidval" type="hidden"/>
+<div style="float: left;">
+    <table style="float: left;margin-right: 150px; margin-top: 20px; margin-left: 40px;" class="table-order">
+    </table>
+    <table style="margin-top: 20px;" class="table-orderTwo">
+    </table>
+</div>
+<script type="text/javascript">
+
+    $('.sub_one').click(function(){
+        var $time_one = $('.time_one').val();
+        var $time_two = $('.time_two').val();
+        var shopId = ${shop_id};
+        var $table = $('.table-order');
+        if(!$time_one || !$time_two){
+            alert('请选择第一区间!');
+            return false;
+        }
+        $.post('/dashixiongwx/admin/shop/'+shopId+'/analysis/new/users/isAjax', {timeOne:$time_one, timeTwo:$time_two, shopId:shopId}, function(res){
+            if(res!='xx'){
+                var res = JSON.parse(res);
+                var $th = '<tr><th>新用户数</th><th>订单总数</th><th>订单总额</th><th>客单</th></tr>';
+                var $tr = $('<tr><td>'+res.userNum+'</td><td>'+res.num+'</td><td>'+res.total_in+'</td><td>'+res.price+'</td></tr>');
+
+                $table.empty();
+                $table.append($th)
+                $table.append($tr);
+                $('.hidval').val(res.newUserIds);
+            }else{
+                var $th = '<tr><th>新用户数</th><th>订单总数</th><th>订单总额</th><th>客单</th></tr>';
+                var $tr = $('<tr><td colspan="4">暂无数据</td></tr>');
+                $table.empty();
+                $table.append($th)
+                $table.append($tr);
+            }
+        });
+    });
+
+    $('.sub_two').click(function(){
+        var $time_one = $('.time_one').val();
+        var $time_two = $('.time_two').val();
+        var newIds = $('.hidval').val();
+        var shopId = ${shop_id};
+        var $time_three = $('.time_three').val();
+        var $time_four = $('.time_four').val();
+        var $table = $('.table-orderTwo');
+        if(!$time_one || !$time_two){
+            alert('请选择第一区间!');
+            return false;
+        }
+        if(!$time_three || !$time_four){
+            alert('请选择第二区间!');
+            return false;
+        }
+        $.post('/dashixiongwx/admin/shop/'+shopId+'/analysis/new/users/isAjaxTwo', {timeThree:$time_three, timeFour:$time_four, shopId:shopId, newIds: newIds}, function(res){
+            var res = JSON.parse(res);
+            var $th = '<tr><th>新用户数</th><th>订单总数</th><th>订单总额</th><th>客单</th></tr>';
+            var $tr = $('<tr><td>'+res.userNumTwo+'</td><td>'+res.numTwo+'</td><td>'+res.total_inTwo+'</td><td>'+res.priceTwo+'</td></tr>');
+            $table.empty();
+            $table.append($th);
+            $table.append($tr);
+        });
+    });
+
+    $('.pre').click(function(){
+        var $time_three = $('.time_three').val();
+        var $time_four = $('.time_four').val();
+
+        var start_three = $time_three+' '+'00:00:00';
+        var end_four = $time_four+' '+'23:59:59';
+        var startThreeStamp = new Date(start_three).getTime();
+        var endFourStamp = new Date(end_four).getTime();
+
+        var data1 = new Date($time_three);
+        var data2 = new Date($time_four);
+        var v = daysBetween(data1, data2)+1;
+
+        var time1 = startThreeStamp - v*24*60*60*1000;
+        var time2 = endFourStamp - v*24*60*60*1000;
+
+        time1 = new Date(time1);
+        var time1year = time1.getFullYear();
+        var time1month = time1.getMonth()+1;
+        var time1date = time1.getDate();
+
+        if(time1month>=10){
+            time1month = time1month;
+        }else{
+            time1month = '0'+time1month;
+        }
+        if(time1date>=10){
+            time1date = time1date;
+        }else{
+            time1date = '0'+time1date;
+        }
+
+        var dt1 = [time1year,time1month,time1date].join('-');
+
+        time2 = new Date(time2);
+        var time2year = time2.getFullYear();
+        var time2month = time2.getMonth()+1;
+        var time2date = time2.getDate();
+
+        if(time2month>=10){
+            time2month = time2month;
+        }else{
+            time2month = '0'+time2month;
+        }
+        if(time2date>=10){
+            time2date = time2date;
+        }else{
+            time2date = '0'+time2date;
+        }
+
+        var dt2 = [time2year,time2month,time2date].join('-');
+
+        $('.time_three').val(dt1);
+        $('.time_four').val(dt2);
+    });
+
+    $('.next').click(function(){
+        var $time_three = $('.time_three').val();
+        var $time_four = $('.time_four').val();
+
+        var start_three = $time_three+' '+'00:00:00';
+        var end_four = $time_four+' '+'23:59:59';
+        var startThreeStamp = new Date(start_three).getTime();
+        var endFourStamp = new Date(end_four).getTime();
+
+        var data1 = new Date($time_three);
+        var data2 = new Date($time_four);
+        var v = daysBetween(data1, data2)+1;
+
+        var time1 = startThreeStamp + v*24*60*60*1000;
+        var time2 = endFourStamp + v*24*60*60*1000;
+
+        time1 = new Date(time1);
+        var time1year = time1.getFullYear();
+        var time1month = time1.getMonth()+1;
+        var time1date = time1.getDate();
+
+        if(time1month>=10){
+            time1month = time1month;
+        }else{
+            time1month = '0'+time1month;
+        }
+        if(time1date>=10){
+            time1date = time1date;
+        }else{
+            time1date = '0'+time1date;
+        }
+
+        var dt1 = [time1year,time1month,time1date].join('-');
+
+        time2 = new Date(time2);
+        var time2year = time2.getFullYear();
+        var time2month = time2.getMonth()+1;
+        var time2date = time2.getDate();
+
+        if(time2month>=10){
+            time2month = time2month;
+        }else{
+            time2month = '0'+time2month;
+        }
+        if(time2date>=10){
+            time2date = time2date;
+        }else{
+            time2date = '0'+time2date;
+        }
+
+        var dt2 = [time2year,time2month,time2date].join('-');
+
+        $('.time_three').val(dt1);
+        $('.time_four').val(dt2);
+    });
+</script>
+<script type="text/javascript">
+
+    function daysBetween(date1,date2)
+    {
+        var m=0;
+        var oneMinute=1000*60;
+        var oneDay=oneMinute*60*24;
+        date1.setHours(0);
+        date1.setMinutes(0);
+        date1.setSeconds(0);
+        date2.setHours(0);
+        date2.setMinutes(0);
+        date2.setSeconds(0);
+        var diff=date2.getTime()-date1.getTime();
+        return Math.ceil(diff/oneDay);
+    }
+
+    function formatDate(date, format) {
+        if (!date) return;
+        if (!format) format = "yyyy-MM-dd";
+        switch(typeof date) {
+            case "string":
+                date = new Date(date.replace(/-/, "/"));
+                break;
+            case "number":
+                date = new Date(date);
+                break;
+        }
+        if (!date instanceof Date) return;
+        var dict = {
+            "yyyy": date.getFullYear(),
+            "M": date.getMonth() + 1,
+            "d": date.getDate(),
+            "H": date.getHours(),
+            "m": date.getMinutes(),
+            "s": date.getSeconds(),
+            "MM": ("" + (date.getMonth() + 101)).substr(1),
+            "dd": ("" + (date.getDate() + 100)).substr(1),
+            "HH": ("" + (date.getHours() + 100)).substr(1),
+            "mm": ("" + (date.getMinutes() + 100)).substr(1),
+            "ss": ("" + (date.getSeconds() + 100)).substr(1)
+        };
+        return format.replace(/(yyyy|MM?|dd?|HH?|ss?|mm?)/g, function() {
+            return dict[arguments[0]];
+        });
+    }
+</script>

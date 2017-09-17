@@ -1,0 +1,196 @@
+<div class="container_div">
+    <ul class="section-tag-list" style="display:none;">
+        {{each sections as section i}}
+            {{if section.products.length}}
+            <li><a href="#section{{section.tagId}}">{{section.tagName}}</a></li>
+            {{/if}}
+        {{/each}}
+    </ul>
+
+    {{if isTimeToClose == 'true'}}
+        <p class="notice">{{#config_obj.closeText}}</p>
+    {{else}}
+        {{if notice}}
+        <p class="notice"><strong>大师兄公告: </strong>{{#notice.content}}</p>
+        {{else}}
+        <p class="notice-info"><strong>大师兄</strong>热烈“荒淫”你~啦啦啦^o^</p>
+        {{/if}}
+    {{/if}}
+
+    <div class="sign-wrap">
+        <div class="user">
+            <div class="p">
+                <img src="{{if user.head}}{{user.head}}{{else}}http://s.ksmimi.com/dashixiong_static/img/default-p-pic.jpg{{/if}}" alt="{{user.nick}}" class="p-pic">
+            </div>
+            <div class="d">
+                <p id="tools" class="tools">你拥有:</p>
+                <p class="mt5">位居<a
+                        href="/dashixiongwx/listWealth/{{user.openId}}?wx_id={{user.openId}}&timestamp={{sigObj.timestamp}}&sig={{sigObj.sig}}" class="fbs" >福布斯财富榜</a>第<a href="#" class="rank" id="rank"
+                                                                                                                                                                          onclick="return false"></a>位</p>
+            </div>
+        </div>
+        <div class="sign-btn-wrap">
+            <a href="#" class="sign-btn" id="good">做好事,攒人品</a>
+            <a href="/dashixiongwx/rp/{{user.openId}}?wx_id={{user.openId}}&timestamp={{sigObj.timestamp}}&sig={{sigObj.sig}}" class="sign-btn last">兑换道具</a>
+        </div>
+        <div class="story none" id="story">
+            <p style="margin:8px;">点击以下图片, 签到做好事: </p>
+            <ul class="list story-list">
+                <li>
+                    <div class="story-item" gid="2">
+                        <img src="{{env.imgpro}}/suaidao.png" alt="">
+                        <p>扶摔倒老奶奶, 土豪的表现</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="story-item" gid="1">
+                        <img src="{{env.imgpro}}/rangzuo.jpg" alt="">
+                        <p>给老奶奶过让座, 红领巾不留名</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+	<div class="shop-body">
+		{{each sections as section index}}
+		{{if section.products.length}}
+        <div class="stub" id="section{{section.tagId}}"></div>
+        <div class="section" section="{{index+1}}" tagId="{{section.tagId}}" type="{{section.type}}" nPin="{{section.nPin}}">
+			<h4 class="section-title">{{#section.tagName}}</h4>
+			<ul class="sections">
+				{{each section.products as product i}}
+                {{if i == 0 && section.nPin >= 2}}
+                <!-- 主要用于模拟第一个产品的高度，n拼按钮 -->
+                <li class="section-li">
+					<div class="pd_wrap">
+						<div class="img_wrap">
+                            <img class="product-img" pid="{{product.id}}" width="100%" src="{{env.upload}}/{{env.qn ? product.imgQN : product.img}}"/>
+                            <div class="actions">
+                                <div class="num meal-num">0</div>
+                            </div>
+						</div>
+						<div class="pdWrap-title">
+                            <p class="title">{{product.title}}</p>
+                            <p class="price">¥<span>{{product.price}}</span></p>
+                        </div>
+                        <div class="set_meal">
+                            <div class="set_meal_text"><span class="add">我要</span><span class="cancel">取消</span>双拼</div>
+                        </div>
+					</div>
+				</li>
+                {{/if}}
+				<li class="section-li {{if product.productStatus == 2}}oversell{{/if}}">
+					<div class="pd_wrap">
+						<div class="img_wrap">
+                            {{if index < 2}}
+                            <img class="product-img" pid="{{product.id}}" width="100%"
+                                 src="{{env.upload}}/{{env.qn ? product.imgQN : product.img}}"/>
+                            {{else}}
+                            <img class="product-img" pid="{{product.id}}" original="{{env.upload}}/{{env.qn ? product.imgQN : product.img}}"  title="{{product.title}}" width="100%" src="http://{{env.staticRoot}}/dashixiong_static/img/product_bg.jpg"/>
+                            {{/if}}
+							<div class="actions">
+                                <div class="ac_plus" >+</div>
+                                <div class="num">0</div>
+                                <div class="trash">
+                                    <img src="http://s.ksmimi.com/dsx/img/trash.png" class="trash-img" alt=""/>
+                                </div>
+                                <div class="ac_minus" >-</div>
+                            </div>
+                            {{if product.promotePrice}}
+                            <p class="price inline promote">
+                                <span class="price-promotePrice">¥&nbsp;&nbsp;<span class="promotePrice">{{product.promotePrice}}</span></span>
+                                <span class="shadow"></span>
+                                <del class="mr10 promotePrice-del">￥{{product.price}}<span class="shadow"></span></del>
+                            </p>
+                            {{else}}
+                            <p class="price">
+                                ¥<span class="promotePrice">{{product.price}}</span>
+                                <span class="shadow"></span>
+                            </p>
+                            {{/if}}
+						</div>
+                        <div class="pdWrap-title">
+                            <p class="title">{{product.title}}</p>
+                            <ul class="pdWrap-comment" pid="{{product.id}}"></ul>
+                        </div>
+                        <div class="pd_marker">
+                            <div class="pd_checkbox"></div>
+                        </div>
+					</div>
+                    <img class="oversell-img" src="http://s.ksmimi.com/dsx/img/oversell.png" alt=""/>
+				</li>
+                {{if section.nPin >= 2}} <!-- 普通餐厅，即需要n拼的餐厅 -->
+                    {{if (i+1)%2==1 }}
+                    <li></li>
+                    {{/if}}
+                {{else}}
+                    {{if (i+1)%2==0 }}
+                    <li></li>
+                    {{/if}}
+                {{/if}}
+				{{/each}}
+			</ul>
+            {{if section.ad}}
+            <img src="http://img.ksmimi.com/uploads/products/ad/{{section.ad}}" class="section_ad" />
+            {{/if}}
+		</div>
+		{{/if}}
+		{{/each}}
+		<div class="submit">
+			<p id="submit_deliver_fee" style="display:none;">你的订单不足10元，要加1元跑腿费哟</p>
+			<form id="submit_form" action="/dashixiongwx/shop/{{shop_id}}/addr?userId={{user.userId}}&wx_id={{wx_id}}"
+                  method="POST">
+				<input id="submit_products" name="products" type="hidden"  />
+				<input type="hidden" name="shop_id" id="shop_id"  value="{{shop_id}}"  />
+                <input type="hidden" name="is_booking" id="is_booking"  value=""  />
+                <input type="hidden" name="section_id" id="section_id"  value=""  />
+                <input type="hidden" name="section_type" id="section_type"  value=""  />
+				<input type="hidden" name="user_id" value="{{user.id}}"  />
+				<input type="hidden" name="shop_name" value="{{cur_shop.name}}"  />
+				<input name="cur_warehouse_id" type="hidden" value="{{cur_warehouse_id}}"  />
+				<input name="shopType" type="hidden" value="restaurant" />
+                <input id="input_total_num" name="total_num" type="hidden" value=""  />
+				<input id="input_total_pay" name="total_pay" type="hidden" value=""  />
+			</form>
+		</div>
+	</div>
+
+    <div id="guide">
+        <div class="bag">
+            <span id="submit_info">
+                <label id="total_num">0</label>份餐，共<label id="total_pay">0</label>元
+            </span>
+            <span id="submit_none">购物袋里没有东西哦~</span>
+        </div>
+        {{if isTimeToClose == 'true'}}
+        <a class="submit_btn" href="#" type="book" onclick="return false;">我要预订</a>
+        {{else}}
+        <a class="submit_btn" href="#" type="buy" onclick="return false;">欧了，买单</a>
+        {{/if}}
+        <div class="order-detail">
+            <ul class="order-list"></ul>
+        </div>
+    </div>
+</div>
+{{if !agent&&power>0}}
+    <a href="#" id="top">TOP</a>
+{{/if}}
+<script id="shop_data">
+    var win = window;
+    win.dsx = {
+        openId : "{{user.openId}}",
+        shop_id : {{shop_id}},
+        isTimeToClose : {{isTimeToClose}},
+        closeText : "{{config_obj.closeText}}",
+        timestamp : "{{sigObj.timestamp}}",
+        sig : "{{sigObj.sig}}",
+        isNewClient : {{isNewClient}},
+        showDeliverInfo : {{showDeliverInfo}}
+    };
+
+</script>
+<script type="text/javascript" src="{{env.jspro}}/jquery.lazyload-utf8.js"></script>
+<script type="text/javascript" src="{{env.jspro}}/fastclick.min.js"></script>
+<script type="text/javascript" src="http://{{staticHost}}/dsx/jspro/{{curShop.shopType}}.js?v=0.1.4"></script>
+

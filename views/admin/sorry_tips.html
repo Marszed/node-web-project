@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>妈呀，链接失效了，重新获取一个吧...</title>
+</head>
+<style>
+    p{
+        font-size: 20px;
+        text-align: center;
+    }
+    p a{
+        color: dodgerblue;
+    }
+</style>
+<body>
+    <p>此链接已失效，请<a href="#" class="back" style="color:red;">&nbsp;返回&nbsp;</a>后</p>
+    <p>点击<a href="#" class="calling" style="text-decoration:none;">“呼叫大师兄”</a>获取新链接。</p>
+</body>
+<script src="http://s.ksmimi.com/dsx/jspro/jquery-1.8.0.min.js" type="text/javascript"></script>
+<script src="http://a.ksmimi.com/global/jspro/analysis/analysis.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var win = window;
+        $('.back').click(function(){
+            window.close();
+        });
+
+        var obj = {
+            openId : '',
+            position : 'no_wxId_in_cookie@链接失效，进不了首页',
+            content : {
+                url:location.href,
+                ua:navigator.userAgent,
+                shop_id : '${shop_id}' || 0
+            }
+        };
+        win.analysis(obj, function(data){});
+    });
+</script>
+</html>

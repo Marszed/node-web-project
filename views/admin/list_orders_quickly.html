@@ -1,0 +1,383 @@
+<style>
+	table, td, th{
+		border : 1px solid #CCC;	
+	}
+    ul{
+        padding : 0; 
+    }
+	h1{
+		padding : 10px;
+		font-size : 20px;	
+	}
+	.money {
+		padding : 10px;	
+	}
+	.good{
+		font-size : 18px;
+		color : green;	
+	}
+	.bad{
+
+		color : red;
+	}
+	.order-create{
+		color : red;	
+	}
+	.order-delivering{
+		color : green;	
+	}
+	.order-receive{
+		color : #CCC;	
+	}
+	.profit, .client-detail{
+		padding : 0 0 0 30px;	
+	}
+	
+	table{
+		margin : 10px;	
+	}
+	.resume td, .resume th{
+		padding : 5px;	
+	}
+	.warnning{
+		height : 20px;
+		background : yellow;
+		padding : 5px;
+	}
+	#new_orders{
+		display : block;	
+		color : orange;	
+		text-align : center;
+	}
+	.requirement{
+		font-size : 12px;
+		color : #FF1493;
+	}
+    .client-name{
+        min-width : 150px; 
+        max-width : 200px; 
+    }
+    .order-detail{
+        max-width : 300px; 
+    }
+
+	/*-------------------------*/
+	.deliver_fatal {/* 超过半小时, 被客户骂惨了! */
+		background : #FF6A6A;	
+		color : #FFF;
+	}
+	.deliver_caution{/* 18~30分钟, 晚了 */
+		background : #FFC1C1;
+	}
+	.deliver_warnning{/* 8~18分钟, 应该去送了 */
+		background : #FFF8DC;	
+	}
+	.deliver_saved{/* 8分钟以内, 可以等等单子 */
+		background : #E0EEE0;	
+	}
+	.deliver_fatal a{
+		color : #FFF;
+	}
+    @media screen and (max-width:500px){
+        ul,li{margin:0px;padding:0px;}
+    }
+    
+    /*---------------------------*/
+    .todo{
+        background :  #FFFACD;
+        border : 1px dashed #DDD;
+    }    
+    .todo li{
+        list-style-type : disc 
+    }
+    .todo h3{
+        padding-left : 10px; 
+    }
+    .time-text{
+        font-size : 12px; 
+        color : #CCC;
+        padding-left : 2px;
+    }
+    .action-todo-del{
+        font-size : 12px; 
+        padding-left : 10px;
+    }
+    .todo-list{
+        padding-left : 40px; 
+    }
+
+    /* user comments */
+    .user-comments{
+        color : orange; 
+        padding : 0;
+        line-height : 14px;
+    }
+    .comment-time{
+        color : #DDD; 
+    }
+    .total-pay{
+        font-size : 30px; 
+        color : orange;
+    }
+    .count input{
+        width : 20px; 
+    }
+    .action-increase, .action-decrease{
+        padding : 0 5px;
+        font-size : 20px; 
+        vertical-align : center;
+        color : #FFF;
+    }
+    .action-increase{
+        background : green; 
+    }
+    
+    .action-decrease{
+        background : red; 
+    }
+    .express-info{
+        color : #458B74;
+    }
+    .order-num{
+        text-align : center; 
+        font-size : 30px;
+    }
+    .order-create-num{
+        color : red;
+    }
+    .order-delivering-num{
+        color : green;
+    }
+    .orange{
+        color:orange;
+        text-decoration:none;
+    }
+    .remark-a{
+        text-decoration:none;
+    }
+    .remark-a:hover{
+        text-decoration:underline;
+    }
+    .showInfo{
+        margin-left:20px;
+    }
+    .showInfo label{
+        color:#ff0000;
+    }
+</style>
+
+
+
+<h1>
+	<a href="/dashixiongwx/admin/shop/order/list_quickly?type=${type}&y=${pre_date_y}&m=${pre_date_m}&d=${pre_date_d}&p=${query.p}">
+		&lt;&lt;前一天 
+	</a>
+	${shop_id}号店${m}月${d}日(${xingqi})业绩 
+	<a href="/dashixiongwx/admin/shop/order/list_quickly?type=${type}&y=${next_date_y}&m=${next_date_m}&d=${next_date_d}&p=${query.p}">
+		后一天&gt;&gt;
+	</a>
+    <span class="showInfo">共 <label id="order-num"></label> 个订单，总营收为：<label id="total-income"></label>元</span>
+</h1>
+
+{{if isToday}}
+<table class="today">
+{{else}}
+<table>
+{{/if}}
+	<tr>
+		<th> 订单id </th>
+		<th> 时间 </th>
+		<th> 客户姓名 </th>
+		<th> 联系方式 </th>
+		<th> 地址 </th>
+		<th> 总价 </th>
+		<th> 订单详情 </th>
+	</tr>
+
+{{each(order, i) orders}}
+	{{if order.deta_time <1000*60*8 && order.orderStatus!=2}}
+	<tr id="order${order.id}" class="deliver_saved">
+	{{else order.deta_time < 1000*60*18 && order.orderStatus!=2}}
+	<tr id="order${order.id}" class="deliver_warnning">
+	{{else order.deta_time <= 1000*60*30 && order.orderStatus!=2 }}
+	<tr id="order${order.id}" class="deliver_caution">
+	{{else order.deta_time > 1000*60*30 && order.orderStatus<2 }}
+	<tr id="order${order.id}" class="deliver_fatal">
+	{{else}}
+    <tr id="order${order.id}" class="client-order">
+	{{/if}}
+		<td>
+			<a href="#" class="order_id"> ${order.id} </a>
+		</td>
+		<td>
+            <p>${order.intime}</p>
+            <p>(${order.intime_text})</p>
+		</td>
+		<td>
+            <a class="client-name" href="#">
+				${order.name}
+            </a>
+             | 
+			<a href="#">
+                过往订单&gt;&gt;
+				{{if order.isNewClient}}
+				<img title="${order.name}是一个新客户，不许怠慢!" src="http://s.ksmimi.com/dashixiong_static/img/new.png"/>
+				{{/if}}
+			</a>
+
+            {{if comments_map[ order.userId ]}}
+                <ol class="user-comments">
+                    {{each(comment, i) comments_map[ order.userId ]}} 
+                    <li>
+                        ${comment.content} <span class="comment-time">${comment.timeTxt}</span>
+                    </li>
+                    {{/each}}
+                </ol>
+            {{/if}}
+            
+		</td>
+		<td>
+            <a href="#">
+                <img width="20" src="http://s.ksmimi.com/dashixiong_static/img/wechat.png" alt="wechat" />
+            </a>
+			<a href="tel:${order.mobile}">
+				${order.mobile}
+			</a>
+		</td>
+		<td>
+			${order.address}
+			{{if order.orderStatus == 0}}
+			(<span class="order-create status"><img src="http://s.ksmimi.com/dashixiong_static/img/warning-icon.png"/>未确认</span>)
+			{{else order.orderStatus == 1}}
+			(<span class="order-delivering status">配送中...</span>)
+			{{else order.orderStatus == 2}}
+			(<span class="order-receive status">已经送达</span>)
+			{{else order.orderStatus == 3}}
+			(<span class="order-receive status">订单取消</span>)
+			{{/if}}
+
+		</td>
+		<td>
+			{{if order.snapshot}}
+                <span class="order-price">${order.snapshot.total_pay && order.snapshot.total_pay.toFixed(1)}</span> 元
+                {{if order.snapshot.tool_ids}}
+                <p>
+                    <a href="#">
+                    (使用了${order.snapshot.tool_ids.length}个道具)
+                    </a>
+                </p>
+                {{/if}}
+			{{else}}
+				木有快照信息咧?
+			{{/if}}
+		</td>
+		<td class="order-detail">
+            <a href="#" class="remark-a" title="点击后可为订单添加备注">
+			{{if order.snapshot}}
+				<ul>
+				{{each(product, i) order.snapshot.products_bought}}
+					<li>
+						${product.title} x ${product.count}
+					</li>
+				{{/each}}
+				</ul>
+				{{if order.snapshot.requirements}}
+					<ul class="requirement">
+					{{each(requirement, i) order.snapshot.requirements}}
+						<li>
+							${requirement}
+						</li>
+					{{/each}}
+					</ul>
+				{{/if}}
+                {{if order.snapshot.express_info_fetch}}
+                    <p class="express-info">
+                        ${order.snapshot.express_info_fetch}
+                    </p>
+				{{/if}}
+                {{if order.snapshot.express_info_sent}}
+                    <p class="express-info">
+                        寄件公司: ${order.snapshot.express_info_sent.company}
+                    </p>
+                    <p class="express-info">
+                        收件人: ${order.snapshot.express_info_sent.receiver.replace(/undefined/g,'')}
+                    </p>
+                    <p class="express-info">
+                        寄件人: ${order.snapshot.express_info_sent.sender.replace(/undefined/g,'')}
+                    </p>
+				{{/if}}
+                {{if order.snapshot.remark}}
+                    <span class="orange">(${order.snapshot.remark})</span>
+                {{/if}}
+			{{else}}
+				木有快照信息咧?
+			{{/if}}
+            </a>
+		</td>
+	</tr>
+{{/each}}
+
+
+</table>
+
+<div id="dialog" style="display:none;">
+     <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><span id="dialog_msg"></span> </p>
+</div>
+        
+<div id="sell_in_shop" style="display:none;">
+    <div>
+        <h3>店面销售</h3>
+        <div>
+            <input id="sell_in_shop_input" type="text" name="" id="sell_input" value="" /> 共<span class="total-pay">0</span>元
+        </div>
+        <table >
+            <tr>
+                <th>图片</th>
+                <th>品名</th>
+                <th>code</th>
+                <th>价格(元)</th>
+                <th>数量</th>
+                <th>单位</th>
+                <th>小结(元)</th>
+            </tr>
+            <tbody id="sell_in_shop_container"> </tbody>
+        </table>
+    </div>
+</div>
+
+<iframe id="deliver_iframe" src="" frameborder="0" style="display:none"></iframe>
+
+<script type="text/javascript">
+    var $iframe = $('#deliver_iframe');
+
+    $( '#new_orders' ).click(function () {
+        clearAllNotification();
+        location.href = this.href;
+    });
+    
+    //----------------------- todo --------------------------//
+    $( '.action-todo-del' ).click(function () {
+        var a = this;
+        $.get( a.href, function (res) {
+            var li = $( a ).parents( 'li' );
+            li.html( '<del>'+li.html()+'</del>' );
+            $( a ).hide();
+        });
+    });
+
+    var total_income = 0,
+        $order_price = $('.order-price');
+    $order_price.each(function(i, o){
+        total_income += ($(o).text()-0);
+    });
+    $('#total-income').html(total_income.toFixed(1));
+    $('#order-num').html($order_price.size());
+
+</script>
+<script type="text/javascript" charset="utf-8" src="http://s.ksmimi.com/dashixiong_static/jspro/sell_in_shop.js"> </script>
+
+
+
+
+
+

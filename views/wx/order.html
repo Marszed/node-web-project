@@ -1,0 +1,63 @@
+<h1>订购${pack.name}套装</h1>
+<div>
+	总价<span id="total_pay"><strong>35</strong>元</span> <span>(货价<span id="good_pay"></span>元，9元邮费, 5元到付手续费)</span>
+</div>
+<form action="/wx/order/submit" method="post">
+	<div>
+		<h3>收货信息</h3>
+		<input type="hidden" name="order[pack_id]" value="${pack.id}" />
+		<p>
+			<label for="count">数量</label>
+			<select id="count" name="order[count]">
+				<option value="1">1盒</option>
+				<option value="2">2盒</option>
+				<option value="3">3盒</option>
+			</select>
+		</p>
+		<p>
+			<label for="name">姓名</label>
+			<input id="name" name="order[name]" />
+		</p>
+		<p>
+			<label for="mobile">手机号</label>
+			<input id="mobile" name="order[mobile]" />
+		</p>
+		<p>
+			<label for="email">email</label>
+			<input id="email" name="order[email]" />
+		</p>
+
+		<p>
+			<label for="mobile">收货地址</label>
+			<input id="mobile" name="order[address]" />
+		</p>
+	</div>
+	<div>
+		<h3>个性化需求</h3>
+		<p>
+			<label for="req_long"><input id="req_long" type="checkbox" name="requirement[long]" /> 我希望有"长久"一点的表现，套套厚点</label>
+		</p>
+		<p>
+			<label for="req_wet"><input id="req_wet" type="checkbox" name="requirement[wet]" /> 给我挑选几个润滑点的，我的伴侣有些干</label>
+		</p>
+	</div>	
+	<div>	
+		<input type="submit" value="提交" />
+	</div>	
+</form>
+<script type="text/javascript">
+	var price = '${pack.price}';
+	price -= 0;
+	
+	var showTotalPay = function(){
+		var num = $('#count').val();
+		var total = num*price+9+5;
+		$('#good_pay').html(num*price);
+		$('#total_pay strong').html(total);
+	};
+	showTotalPay();
+
+	$('#count').change(showTotalPay);
+
+</script>
+

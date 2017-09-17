@@ -1,0 +1,280 @@
+<!-- 
+	class的写法用"-"连接两个单词. id,name 用下划线命名法
+-->
+
+<style>
+	h2{
+		font-size : 20px;	
+		font-weight : 700;
+		line-height : 32px;
+		margin-bottom : 15px;
+		border-bottom : 1px dashed #CCC;
+	}
+	
+	ul{
+		margin-bottom : 15px;	
+		list-style : disc inside;
+	}
+	.addr-item{
+		width : 90%;
+		padding : 5px;
+		overflow : hidden;
+	}
+	.new-item{
+		padding : 5px;
+	}
+	.new-item input{
+		padding : 5px;	
+		border : 1px solid #CCC;
+		line-height : 24px;
+		background : #EEE;
+
+	}
+	
+	.new-item label{
+		line-height : 22px;	
+	}
+
+
+	input[type=radio], input[type=checkbox]{
+		margin : 5px;	
+	}
+	#addr_submit_btn{
+        background : #cb3637;
+		padding : 12px;
+		color : #FFF;
+		text-decoration : none;
+        border-radius : 5px;
+	}
+	.submit{
+		padding : 30px 30px 30px 0;
+	}
+	.info-wraper{
+		padding : 0 0 0 25px;	
+	}
+	.info-wraper input{ 
+		width : 80%;
+	}
+	.info-wraper p.input{
+		margin-bottom : 10px;	
+	}
+	
+	.section{
+		margin : 0 0 20px 0;	
+	}	
+	.other-requirement input{
+		width : 80%;
+		padding : 5px;	
+		border : 1px solid #CCC;
+		line-height : 24px;
+		background : #EEE;
+	}
+
+	.other-requirement label{
+		line-height : 24px;	
+	}
+	#submit_btn_head{
+		font-size : 16px;
+        background : #cb3637;
+        border-radius : 5px;
+		padding : 5px;
+		color : #FFF;
+		text-decoration : none;
+		float : right;
+		line-height : 18px;
+	}
+    #create_new_addr2{
+        font-size : 16px;
+		float : right;
+		line-height : 28px; 
+        padding : 0 10px 0 0;
+    }
+    #create_new_addr, #create_new_addr2{
+        color : #66a6ae;
+    }
+	.head{
+		clear : both;	
+	}
+    .msg{
+        font-size : 16px;
+        color : red;
+    }
+
+</style>
+
+{{if action}}
+<form id="submit_form" action="${action}" method="POST">
+{{else}}
+<form id="submit_form" action="/dashixiongwx/order/finish" method="POST">
+{{/if}}
+<input type="hidden" name="shop_name" value="${shop_name}">
+<div class="container">
+    {{if msg}}
+    <div class="msg">
+        ${msg} 
+    </div>
+    {{/if}}
+	<div class="section">
+		<h2 class="head">送货信息  <a id="submit_btn_head" href="#" onclick="return false;">配送到选定地址&gt;&gt;</a> <a id="create_new_addr2" href="#" onclick="return false;">新建地址</a></h2>
+		<input name="user_id" type="hidden" value="${user_id}" />
+		<input name="wx_id" type="hidden" value="${wx_id}" />
+		<input name="order_id" type="hidden" value="${order_id}" />
+		<input name="w_id" type="hidden" value="${w_id}" /><!-- 当前仓库的id  -->
+		<input name="shop_id" type="hidden" value="${shop_id}" /><!-- 当前店铺的id  -->
+		<input id="addr_id" name="addr[id]" type="hidden" />
+		<input id="addr_name" name="addr[name]" type="hidden" />
+		<input id="addr_mobile" name="addr[mobile]" type="hidden" />
+		<input id="addr_addr" name="addr[address]" type="hidden" />
+		<input id="addr_requirements" name="addr[requirements]" type="hidden" />
+
+		{{each(addr, i) address}}
+		<div class="addr-item">
+			<label>
+				<input type="radio" id="${addr.id}" name="addr_select" /><span class="name">${addr.name}</span> <span class="address">${addr.address} </span><span class="mobile">${addr.mobile}</span>
+			</label>
+		</div>
+		{{/each}}
+
+		<div id="new_addr" class="new-item" style="display:none;">
+			<p><label><input id="addr_new_radio" name="addr_select" type="radio" />姓名</label></p>
+			<div class="info-wraper">
+				<p class="input"><input id="input_addr_name" type="text" /></p>
+				<p><label>手机</label></p>
+				<p class="input"><input id="input_addr_mobile" type="text" /></p>
+				<p><label>地址</label></p>
+				<p class="input"><input id="input_addr_addr" type="text" /></p>
+			</div>
+		</div>
+	</div>
+	
+	<div class="section requirements">
+		<h2>其他吩咐</h2>
+		<div class="addr-item requirement">
+			<label>
+				<input type="checkbox" /><span>谢谢大师兄! 我会继续支持你们！</span>
+			</label>
+		</div>
+		<div class="addr-item requirement">
+			<label>
+				<input type="checkbox" /><span>大师兄这么屌, 家里人知道么？</span>
+			</label>
+		</div>
+		<div class="addr-item requirement">
+			<label>
+				<input type="checkbox" /><span>大师兄我爱你, 肥皂已经准备好！</span>
+			</label>
+		</div>
+		<div class="addr-item requirement">
+			<label>
+                <input type="checkbox" /><span>我运气这么好！将来一定会升职加薪，出任总经理，当上CEO，迎娶白富美，走向人生的巅峰！</span>
+			</label>
+		</div>
+		
+		<div class="addr-item other-requirement">
+			<label> 特别吩咐: </label> <input id="other_requirement" type="text" value=""/>
+			
+		</div>
+	</div>
+
+
+
+
+	<div class="submit">
+		<a id="create_new_addr" href="#" onclick="return false;">新建地址</a> &nbsp;<a id="addr_submit_btn" href="#" onclick="return false;">配送到选定地址&gt;</a> 
+	</div>
+
+</div>
+
+</form>
+
+
+<script type="text/javascript">
+	$(function(){
+		var init = function(){
+			var radio = $('input[type=radio]')[0];
+			if( radio.id == 'addr_new_radio' ){
+				showNewAddressBook();
+			}
+			$(radio).attr('checked', true);
+		};
+
+		
+
+		var showNewAddressBook = function(){
+			$('#new_addr').show();
+			$('#create_new_addr').hide();
+			$('#create_new_addr2').hide();
+		};
+		var getRequirements = function(){
+			var requirements = [];
+			$('div.requirement').each(function(i, div){
+				var isChecked = $(this).find('input').attr('checked');
+				if( isChecked ){//有特殊要求
+					requirements.push( $(this).find('span').html() );
+				}
+			});
+
+			var other_requirement = $('#other_requirement').val();
+			if( other_requirement ){
+				requirements.push( other_requirement );
+			}
+
+			$( '#addr_requirements' ).val( requirements.join('\n') );
+
+		};
+
+		$('#create_new_addr,#create_new_addr2').click(function(){
+			showNewAddressBook();
+			$('#addr_new_radio').attr('checked', true);
+		});
+
+		$('div.requirement').find('input').change(function(){
+			getRequirements();
+		});
+		$( '#other_requirement' ).change(function(){
+			getRequirements();
+		});
+		
+		$( '#submit_btn_head' ).click(function(){
+			$('#addr_submit_btn').trigger('click');
+		});
+		
+		//按下提交, 准备数据, 然后让表单提交
+		$('#addr_submit_btn').click(function(){
+
+			var $radio = $('input:radio:checked');
+			if( $radio.attr('id') == 'addr_new_radio' ){//选择了新建地址
+				var name = $('#input_addr_name').val();
+				var mobile = $('#input_addr_mobile').val();
+				var address = $('#input_addr_addr').val();
+				$('#addr_id').val('');//没有这个id说明是一个新地址
+				$('#addr_name').val(name);
+				$('#addr_mobile').val(mobile);
+				$('#addr_addr').val(address);
+                
+                name = $.trim( name );
+                mobile = $.trim( mobile );
+                address = $.trim( address );
+				if( (!name) || (!mobile) || (!address) ){
+					return;//没写联系方式不许提交表单	
+				}
+			}else{//使用旧的地址
+				var $item = $radio.parents('.addr-item');
+				console.log($item[0]);
+				$('#addr_id').val($radio.attr('id'));//有这个id说明是一个旧地址
+				$('#addr_name').val( $item.find('.name').text() );
+				$('#addr_mobile').val( $item.find('.mobile').text() );
+				$('#addr_addr').val( $item.find('.address').text() );	
+			}
+
+			//好, 提交数据吧
+			$('#submit_form').submit();
+		});
+
+
+		//---------------------
+		init();
+	});
+	
+
+</script>

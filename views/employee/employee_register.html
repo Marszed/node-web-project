@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>注册信息</title>
+    <script src="http://s.ksmimi.com/dsx/jspro/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <link href="http://a.ksmimi.com/store/src/csspro/employee/included_css.css" rel="stylesheet" type="text/css">
+</head>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var $name = $('.name'),
+            $tel = $('.tel'),
+            $shop = $('.shop'),
+            $submit = $('.footer');
+
+        $submit.click(function(){
+            var name = $name.val().trim(),
+                tel = $tel.val().trim(),
+                shop = $shop.val()
+            if( !name || !tel ){
+                alert("请填写完整的信息!");
+                return false;
+            }
+            if( shop == 0) {
+                alert("请选择店铺!");
+                return false;
+            }
+            $('#myform').attr("action","/dashixiongwx/shop/${shop_id}/employee/doregister");
+            $('#myform').submit();
+        });
+    });
+</script>
+<body>
+    <div class="iframe">
+        <div class="head">
+            <div class="title">填写联系信息</div>
+        </div>
+        <div class="cont">
+            <form id="myform" name="myform" method="post" action="" onsubmit="return check_form();">
+                <input name="info[userId]" type="hidden" value="${userId}"/>
+                <div class="box-contain">
+                    <div class="head_dxg"><div class="img"></div></div>
+                    <div class="msg_dxg">
+                        <div class="msg">
+                            <p class="input">
+                                <a>性别 |</a>
+                                <label style="margin-left:10%">
+                                    <a>男</a>
+                                    <input class="bradio" name="info[sex]" value="1" type="radio" style="width:14px;height:14px;" checked="checked"> 						                          </label>
+                                <label style="margin-left:15%">
+                                    <a>女</a>
+                                    <input class="gradio" name="info[sex]" value="0" type="radio" style="width:14px;height:14px;">              							                       </label>
+                            </p>
+                            <p class="input">
+                                <a>姓名 |</a><input name="info[name]" class="name" type="text" placeholder="请输入姓名">
+                            </p>
+                            <p class="input">
+                                <a>电话 |</a><input name="info[tel]" class="tel" type="text" placeholder="请输入手机号码">
+                            </p>
+                            <p class="input">
+                                <a>店铺 |</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <select class="shop" name="info[shop]" id="shop" style="width: 70%;">
+                                    <option value="0">请选择与您最近的店铺</option>
+                                    {{each(shopInfo, i) shopInfos}}
+                                    <option value="${shopInfo.shopId}">${shopInfo.shopName}</option>
+                                    {{/each}}
+                                </select>
+                            </p>
+                            <p class="input">
+                                <a>邮箱 |</a><input name="info[email]" class="email" type="text" placeholder="请输入邮箱">
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="footer">
+            <span>提 交</span>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    function check_form(){
+        var phoneVal = $('.tel').val();
+        var isPhone = /^[1][3,4,5,8][0-9]{9}$/;
+        if(!isPhone.test(phoneVal)) {
+            alert('请输入正确的电话号码!');
+            $('.tel').focus();
+            return false;
+        }
+        return true;
+    }
+</script>
+</html>

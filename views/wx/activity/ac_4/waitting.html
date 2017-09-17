@@ -1,0 +1,127 @@
+<script src="http://s.ksmimi.com/dashixiong_static/jspro/jquery-1.10.2.js"></script>
+<script type="text/javascript" charset="utf-8" src="http://s.ksmimi.com/dashixiong_static/jspro/timer_count.js"> </script>
+<style type="text/css" media="all">
+    .title{
+        text-align : center; 
+        padding-bottom : 29px;
+    }
+    .txt{
+        text-align : center; 
+        margin-bottom : 29px;
+    } 
+    .txt a{
+        padding : 10px 50px; 
+        background : #DDD;
+        color : #888;
+    }
+    .time-left{
+        text-align : center; 
+    }
+    .txt .btn{
+        color : #FFF;
+        background : #40A0C0;
+    }
+    #btn{
+        text-decoration : none;
+    }
+    .warning{
+        text-align : center;
+        margin-bottom : 15px;
+        color : red; 
+    }
+</style>
+<div class="container">
+    <!--
+    <p class="warning">
+        如果提示活动结束, 请“返回”, 然后再回复“抢”, 之后再点进来~~ 
+    </p>
+    -->
+    <p class="title">
+        大师兄小卖部抢货活动 
+    </p>
+    <p class="warning">
+        仅限西区2栋小伙伴参与
+    </p>
+
+    <p class="txt">
+        <a id="btn" href="#" onclick="return false;">
+            时候未到！
+        </a>
+    </p>
+    <p class="time-left">
+        距离今晚10:30 还有 <span id="hour"></span>小时 <span id="mini"></span>分 <span id="sec"></span>秒
+    </p>
+</div>
+<script type="text/javascript" charset="utf-8">
+    var server_timestamp_start = ${server_timestamp_start};
+    var server_timestamp_now = ${server_timestamp_now};
+    var server_timestamp_deta = ${server_timestamp_deta};
+    var obj = {
+        sec : document.getElementById("sec"),
+        mini : document.getElementById("mini"),
+        hour : document.getElementById("hour")
+    }
+    
+    var zero = function(n){
+	    var n = parseInt(n, 10);
+	    if(n > 0){
+	    	if(n <= 9){
+	    		n = "0" + n;	
+	    	}
+	    	return String(n);
+	    }else{
+	    	return "00";	
+	    }
+	};
+
+    var showNum = function ( pms ) {
+        obj.sec.innerHTML = pms.sec;
+        obj.mini.innerHTML = pms.mini;
+        obj.hour.innerHTML = pms.hour;
+    };
+
+    //倒数
+    var dur = server_timestamp_deta; 
+	dur = Math.round( dur / 1000 );//转化成秒
+    var fnTimeCountDown = function () {
+        dur -= 1;
+        var pms = {
+			sec: "00",
+			mini: "00",
+			hour: "00",
+			day: "00",
+			month: "00",
+			year: "0"
+		};
+
+		if(dur > 0){
+			pms.sec = zero(dur % 60);
+			pms.mini = Math.floor((dur / 60)) > 0? zero(Math.floor((dur / 60)) % 60) : "00";
+			pms.hour = Math.floor((dur / 3600)) > 0? zero(Math.floor((dur / 3600)) % 24) : "00";
+            showNum( pms );
+            setTimeout( fnTimeCountDown, 1000 );
+            return;
+		}
+
+        onTimesup();
+            
+    };
+    var now = new Date().getTime();
+    var isOK = false;
+
+    var onTimesup = function () {
+        $( '#btn' ).html( '点击进入! 抢啊！' ).addClass( 'btn' );
+        $( '.time-left' ).hide();
+        isOK = true;
+    };    
+    
+    $( '#btn' ).click(function () {
+        if( !isOK )return;
+        location.reload();
+    });
+    
+    /*------------- 初始化 --------------*/
+    fnTimeCountDown();
+    
+</script>
+

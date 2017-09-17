@@ -1,0 +1,36 @@
+<style type="text/css" media="all">
+    table{
+        width : 100%; 
+        border : 1px solid #DDD;
+    } 
+    td{
+        padding : 5px; 
+        border : 1px solid #DDD;
+    }
+    th{
+        padding : 5px; 
+        background : #edf8fa; 
+        border : 1px solid #DDD;
+    }
+    .title{
+        text-align : center; 
+    }
+</style>
+<div class="container">
+    <table>
+        <tr>
+            <th class="title" colspan="2">${product.title}最近${nums_of_day}天销量: ${total}</th>
+        </tr>
+         <tr>
+            <th>日期</th>
+            <th>销量</th>
+         </tr>
+         {{each(obj, i) ary_data}}
+         <tr>
+             <td>${obj.label}</td>
+             <td>${obj.num}</td>
+         </tr>
+         {{/each}}
+    </table>
+</div>
+

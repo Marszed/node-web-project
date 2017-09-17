@@ -1,0 +1,39 @@
+<style>
+	h1{
+		font-size : 32px;	
+		padding : 20px;
+	}
+	p{
+		margin : 20px 10px;	
+	}
+	input {
+		line-height : 28px;	
+		border : 1px solid #CCC;
+	}
+	.submit{
+		padding : 5px;	
+	}
+    #content {
+        display : none; 
+    }
+	.content{
+		height : 200px;
+		width : 600px;	
+	}
+
+</style>
+
+
+<h1>添加货架</h1>
+<form action="/dashixiongwx/admin/shop/${shop_id}/section/doadd" method="post">
+    <p><label>货架短标题&nbsp;&nbsp;&nbsp;&nbsp;</label> <input name="section[short_title]" type="text" /> *</p>
+	<p><label>货架名称(如:水果)</label> <input name="section[name]" type="text" /> *</p>	
+
+	<p id="content">
+		<label>货架内容(一个javascript数组字符串)</label> 
+        
+		<textarea class="content" name="section[content]"  >[]</textarea>
+		<input name="sction[content]" type="text" /> *
+	</p>	
+	<p><input class="submit" type="submit" value="提交" /></p>	
+</form>

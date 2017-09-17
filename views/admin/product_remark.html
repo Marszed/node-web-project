@@ -1,0 +1,34 @@
+<style type="text/css" media="all">
+    .remark-del{margin-left:10px;}
+    .none{display:none;}
+</style>
+
+
+<h2>订单备注</h2>
+<p class="possible-p">
+    {{if snapshot.remark}}
+        ${snapshot.remark || '尚未添加任何备注'}
+        <a href="#" class="remark-del">删除</a>
+    {{/if}}
+</p>
+
+<div class="${power <= 2 ? 'none' : ''}">
+<h2>编辑备注</h2>
+<form action="/dashixiongwx/admin/shop/${shop_id}/order/${order_id}/remark/doupdate" method="post">
+    <div class="possible-edit">
+        <p><textarea name="remark[content]" class="remark-content" cols="60" placeholder="请输入备注内容" rows="10">${snapshot .remark}</textarea></p>
+        <input type="hidden" name="remark[order_id]" value="${order_id}" />
+        <input type="submit" value="提交" class="remark-btn" />
+    </div>
+</form>
+</div>
+
+<script type="text/javascript">
+    var $remark_del = $('.remark-del'),
+        $remark_content = $('.remark-content'),
+        $remark_btn = $('.remark-btn');
+    $remark_del.click(function(){
+        $remark_content.val('');
+        $remark_btn.trigger('click');
+    });
+</script>

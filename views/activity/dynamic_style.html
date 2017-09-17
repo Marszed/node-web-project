@@ -1,0 +1,253 @@
+<style>
+    .cursor_pointer{
+        cursor: pointer;
+        color: #40A0C0;
+        text-decoration: none;
+    }
+    .new-file,.old-file{
+        display: none;
+    }
+    .textarea{
+        width: 100%;
+        min-height: 600px;
+    }
+    .tip{
+        color: #ff0000;
+        font-size: 16px;
+    }
+    table{
+        width: 40%;
+    }
+</style>
+<h2>设置皮肤样式<span class="tip"></span></h2>
+<div id="style_box">
+
+    <span class="add-style-btn cursor_pointer">新建</span>
+    <div class="new-file">
+        <div class="file-title-info">
+            <span>样式文件名:</span><input name="fileName" type="text" value="" placeholder="英文字符"/>
+            <span class="upload cursor_pointer">保存</span>|
+            <span class="cancel-style-btn cursor_pointer">取消</span>
+        </div>
+        <div class="file-main-content">
+            <textarea class="textarea" name="fileContent"></textarea>
+        </div>
+    </div>
+    <div class="old-file">
+        <div class="file-title-info edit-file-title">
+            <span >样式文件名:</span><input name="oldFileName" readonly="true" type="text" value="" placeholder="英文字符"/>
+            <span class="upload-edit cursor_pointer">保存</span>|
+            <span class="cancel-style-btn cursor_pointer">取消</span>
+        </div>
+        <div class="file-main-content">
+            <textarea class="textarea" name="oldFileContent"></textarea>
+        </div>
+    </div>
+
+    <div>
+        <table>
+            <tr>
+                <th>文件名</th>
+                <th>应用店ID</th>
+                <th>操作</th>
+                <th>状态</th>
+            </tr>
+            {{each(file,i) styleFiles}}
+            <tr id="${file.id}" fileName="${file.fileName}" fileStatus="${file.status}">
+                <td>${file.fileName}</td>
+                <td>
+                    <input class="shopIds" style="border: 0;" name="shopIds" type="text" value="${file.applyShopIds}" />
+                    <span style="display: none;color: #ff0000;"></span>
+                </td>
+                <td>
+                    <a hrer="#" class="edit cursor_pointer" fileName="${fileName}" fileId="${file.id}" onclick="return false;">编辑</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <a hrer="#" class="delete cursor_pointer" fileName="${fileName}" fileId="${file.id}" onclick="return false;">删除</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <a hrer="#" class="cancel-add-apply cursor_pointer" fileStatus="${file.status}" fileName="${file.fileName}" fileId="${file.id}" onclick="return false;">
+                        {{if file.status==1}}取消应用{{else}}应用{{/if}}
+                    </a>
+                </td>
+                <td>{{if file.status==1}}<span style="color: #ff0000;">使用中</span>{{else}}未使用{{/if}}</td>
+            </tr>
+            {{/each}}
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    var shopId = "${shopId}";
+    var $doc = $(document),
+            $tip = $('.tip'),
+            $upload = $('.upload'),
+            $add_style_btn = $('.add-style-btn'),
+            $cancel_style_btn = $('.cancel-style-btn'),
+            $newFile = $('.new-file'),
+            $newFileNameInput = $('input[name="fileName"]'),
+            $newFileContentTextarea = $('textarea[name="fileContent"]'),
+            $oldFileNameInput = $('input[name="oldFileName"]'),
+            $oldFileContentTextarea = $('textarea[name="oldFileContent"]'),
+            $odlFile = $('.old-file'),
+            $edit = $('.edit'),
+            $uploadEdit = $('.upload-edit'),
+            $delete = $('.delete'),
+            $cancelApply = $('.cancel-apply'),
+            $addApply = $('.app-apply'),
+            $cancel_add_apply = $('.cancel-add-apply'),
+            $shopIds = $('.shopIds');
+    $doc.ready(function(){
+        $add_style_btn.click(function(e){
+            $(this).hide();
+            $cancel_style_btn.show();
+            $newFile.show();
+            if($odlFile.is(":visible")){
+                $odlFile.hide();
+            }
+        });
+        $cancel_style_btn.click(function(e){
+            $(this).hide();
+            $add_style_btn.show();
+            $newFile.hide();
+            $odlFile.hide();
+        });
+        //保存新建
+        $upload.click(function(e){
+            var fileName = $newFileNameInput.val(),
+                    fileContent = $newFileContentTextarea.val();
+            if(!(fileName && fileContent)){
+                $tip.text('保存失败：请填完样式文件');
+                return false;
+            }else{
+                var file = {
+                    shopId: shopId,
+                    name: fileName,
+                    content: fileContent
+                };
+                var tmp_tr = $('<tr style="background-color: #FFF7D5;">' +
+                        '<td>'+fileName+'</td>' +
+                        '<td>'+shopId+'</td>'+
+                        '<td><a href="#" class="cursor_pointer" onclick="return false;">编辑</a>' +'&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;'+
+                        '<a href="#" class="cursor_pointer" onclick="return false;">删除</a>' +'&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;'+
+                        '<a href="#" class="cursor_pointer" onclick="return false;">应用</a></td>' +
+                        '<td>未使用</td>' +
+                        '</tr>');
+                $.post('/dashixiongwx/admin/shop/dynamic/style/add',{fileStyle: file},function(data){
+                    if(data=='success'){
+                        $tip.text('新建成功');
+                        tmp_tr.appendTo($('table'));
+                    }else{
+                        $tip.text('新建失败');
+                    }
+                });
+            }
+        });
+        //编辑已有样式文件
+        $edit.click(function(e){
+            var $tr = $(this).closest('tr'),
+                id = $tr.attr('id'),
+                fileName = $tr.attr('fileName'),
+                $edit_file_title = $('.edit-file-title');
+            $cancel_style_btn.show();
+            $odlFile.show();
+            $edit_file_title.attr('fileId',id);
+            if($newFile.is(':visible')){
+                $newFile.hide();
+            }
+            var args = {
+                id : id,
+                fileName : fileName
+            }
+            //加载文件
+            $.post('/dashixiongwx/admin/shop/dynamic/style/edit',{args:args},function(data){
+                $oldFileNameInput.val(fileName);
+                $oldFileContentTextarea.val(data);
+            });
+        });
+        //delete old style file
+        $delete.click(function(e){
+            var $tr = $(this).closest('tr'),
+                    id = $tr.attr('id'),
+                    fileName = $tr.attr('fileName');
+            var file = {
+                id : id,
+                name : fileName
+            };
+            if(confirm('Are you sure?')){
+                $.post('/dashixiongwx/admin/shop/dynamic/style/delete', {file : file}, function(data){
+                    if(data=='success'){
+                        $tip.text('删除成功');
+                        $tr.hide();
+                    }else{
+                        $tip.text('删除失败');
+                    }
+                });
+            }
+        });
+        //保存更改的样式文件
+        $uploadEdit.click(function(){
+            var fileName = $oldFileNameInput.val(),
+                    fileContent = $oldFileContentTextarea.val(),
+                    $div = $(this).closest('div');
+            var file = {
+                shopId: shopId,
+                id: $div.attr('fileid'),
+                name: fileName,
+                content: fileContent,
+                edit: 'true'
+            };
+            $.post('/dashixiongwx/admin/shop/dynamic/style/add',{fileStyle: file},function(data){
+                if(data=='success'){
+                    $tip.text('修改成功');
+                }else{
+                    $tip.text('修改失败');
+                }
+            });
+        });
+
+        //修改样式应用到的店
+        $shopIds.click(function(e){
+            var $text  = $(this);
+            $text.siblings('span').show();
+            $text.siblings('span').text("英文逗号\",\"分割");
+        });
+        $shopIds.blur(function(e){
+            var $text  = $(this),
+                    fileId = $(this).closest('tr').attr('id'),
+                    shopIds = $text.val();
+            var argObj = {
+                shopIds : shopIds,
+                fileId : fileId
+            }
+            $.post('/dashixiongwx/admin/shop/dynamic/style/shopIds/update',{argsObj : argObj}, function(data){
+                if(data=='success'){
+                    $text.siblings('span').text("修改成功");
+                }
+            });
+        });
+
+        //应用或取消应用样式
+        $cancel_add_apply.click(function(e){
+            var $tr = $(this).closest('tr'),
+                    id = $tr.attr('id'),
+                    status = $tr.attr('fileStatus'),
+                    $a = $(this);
+            var file = {
+                    id : id,
+                    status : status
+            };
+            $.post('/dashixiongwx/admin/shop/dynamic/style/status/update', {file: file}, function(data){
+                if(data=='success'){
+                    if(status==0){
+                        $a.attr('fileStatus','1');
+                        $a.text('取消应用');
+                        $tr.find('td').last().text('使用中');
+                        $tr.find('td').last().css('color','red');
+                    }else if(status==1){
+                        $a.attr('fileStatus','0');
+                        $a.text('应用');
+                        $tr.find('td').last().text('未使用');
+                    }
+                }
+            });
+        });
+    });
+</script>

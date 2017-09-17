@@ -1,0 +1,214 @@
+
+
+<style type="text/css" media="all">
+    .tool-img{
+        border : 1px solid #CCC; 
+    }
+    .tool-title{
+        font-size : 18px; 
+        color : #333;
+    }
+    button{
+        cursor:pointer;
+    }
+    table tr td input{
+        border: 0;
+        padding: 0;
+        margin: 0;
+        font-size: 12px;
+        padding: 6px 6px 6px 12px;
+        color: #4f6b72;
+    }
+</style>
+
+<h2>发放道具</h2>
+<div class="grant">
+    <p>
+        <label for="">用户id: </label><input id="user_id" type="text" name="user_id" value="" /> <label for="">道具id</label><input id="tool_id" type="text" name="tool_id" value="" /> <button id="grant" type="submit">发放</button>
+    </p>
+</div>
+
+<h2>回收道具</h2>
+<div class="recoverBox">
+    <label>用户id: </label><input type="text" id="recover_user_id" placeholder="可填写多个，逗号间隔" />
+    <label>道具id: </label><input type="text" id="recover_tool_id" />
+    <button id="recover">回收</button>
+</div>
+
+<h2>新增道具</h2>
+<div class="add">
+    <label>图片: </label><input type="text" class="timg" name="timg" placeholder="请填写图片的绝对路径"/>
+    <label>名称: </label><input type="text" class="ttitle" name="ttitle"/>
+    <label>类型: </label><input type="text" class="ttype" name="ttype"/>
+    <label>价值: </label><input type="text" class="tcValue" name="tcValue"/>
+    <label>描述: </label><input type="text" class="tdescription" name="tdescription"/>
+    <label>有效期: </label><input type="text" class="texpires" name="texpires" placeholder="请填写道具的有效时长"/>
+    <input type="button" class="addtool" value="确认新增"/>
+</div>
+
+
+
+<p>
+    系统所有道具如下:
+</p>
+<table>
+    <tr>
+        <th>id</th>
+        <th>图片</th>
+        <th>名称</th>
+        <th>类型</th>
+        <th>价值(师兄币)</th>
+        <th>描述</th>
+        <th>操作</th>
+    </tr>
+    
+{{each(tool, i) tools}}
+    <tr>
+        <td>
+            <span class="tool-title">${tool.id}</span>
+        </td>
+        <td>
+            <img class="tool-img" width="50" src="${tool.img}" alt="${tool.title}" />
+            <input type="text" class="hidden-img" placeholder="请填写图片的绝对路径" style="display: none;"/>
+        </td>
+        <td>
+            <input class="title"  type="text" value="${tool.title}"/>
+        </td>
+        <td>
+            {{if tool.title=='coupon'}}
+            代金券
+            {{else}}
+            <input class="type"  type="text" value="${tool.type}"/>
+            {{/if}}
+        </td>
+        <td>
+            <input class="cValue"  type="text" value="${tool.cValue} "/>
+        </td>
+        <td>
+            <input class="description" type="text" value="${tool.description}" style="width: 400px;"/>
+        </td>
+        <td>
+            &nbsp;<a class="update" href="#">更新</a>&nbsp;&nbsp;|
+            &nbsp;<a class="delete" href="#">删除</a>
+        </td>
+    </tr>
+{{/each}}
+</table>
+
+<script type="text/javascript" charset="utf-8">
+    var grant = $( '#grant'),
+        $recover = $('#recover');
+    //-------------------zed---------
+    var addtool = $('.addtool');
+    addtool.click(function(){
+        var img = $('.timg').val(),
+            title = $('.ttitle').val(),
+            type = $('.ttype').val(),
+            cValue = $('.tcValue').val(),
+            description = $('.tdescription').val(),
+            expires = $('.texpires').val();
+        if( !img|| !title|| !type|| !cValue|| !description ||!expires){
+            alert("信息填写不完整");
+            return;
+        }
+        $.post('/dashixiongwx/admin/shop/'+shop_id+'/tool/add',{img:img,title:title,type:type,cValue:cValue,description:description,expires:expires},function(data){
+            location.reload();
+        });
+
+    });
+    //-------------------zed---------
+    var shop_id = ${shop_id};
+    grant.click(function () {
+        var user_id = $( '#user_id' ).val();
+        var tool_id = $( '#tool_id' ).val();
+        if( !user_id || !tool_id ){
+            alert( '必须要有用户id和道具id!' );
+            return;
+        }
+        if( confirm('确认要发放道具吗？') ){
+            $.get( '/dashixiongwx/admin/shop/'+shop_id+'/tool/grant/'+user_id+'/'+tool_id, function (res) {
+                $.post('/dashixiongwx/admin/shop/'+shop_id+'/tool/grant/'+user_id+'/'+tool_id+'/monitor/tools',function(r){});
+                if( res.code ){
+                    alert( res.msg ) ;
+                    return;
+                }
+                alert( '道具'+ tool_id +'发放成功!' );
+                $( '#user_id' ).val( '' );
+                $( '#tool_id' ).val( '' );
+            });
+        }
+    });
+
+    $recover.click(function(){
+        var recover_user_id = $('#recover_user_id').val(),
+            recover_tool_id = $('#recover_tool_id').val();
+        if( confirm('真的要回收此道具吗？') ){
+             $.get( '/dashixiongwx/admin/shop/'+shop_id+'/tool/recover', {
+                 user_id :recover_user_id,
+                 tool_id : recover_tool_id
+             }, function (res) {
+                 //成功
+                 if( res.msg == 'sus' ){
+                     alert('取消成功');
+                     $( '#recover_user_id' ).val('');
+                     $( '#recover_tool_id' ).val('');
+                     return;
+                 }
+
+            });
+        }
+    });
+
+    //更新图片路径
+    $('.tool-img').click(function(){
+        var $update = $(this),
+            $tr = $update.closest('tr');
+        $tr.find("img").hide();
+        $tr.find('input[type=text]').eq(0).show();
+        $tr.find('input[type=text]').eq(0).focus();
+    });
+    //更新操作
+    $('.update').click(function(){
+        var $update = $(this),
+            $tr = $update.closest('tr'),
+            id =  $tr.children("td:eq(0)").text()-0,
+            img = $tr.find('input[type=text]').eq(0).val(),
+            title = $tr.find('input[type=text]').eq(1).val(),
+            type = $tr.find('input[type=text]').eq(2).val(),
+            cValue = $tr.find('input[type=text]').eq(3).val(),
+            description = $tr.find('input[type=text]').eq(4).val(),
+            tool = {
+            'id':id,
+            'img':img,
+            'title':title,
+            'type':type,
+            'cValue':cValue,
+            'description':description};
+
+        if(confirm("确认更新道具信息？")){
+            $.post('/dashixiongwx/admin/shop/:shop_id/tool/update', {tool:tool}, function(data){
+                location.reload();
+            });
+        }else{
+            return false;
+        };
+
+    });
+    //删除操作
+    $('.delete').click(function(){
+        var $update = $(this),
+            $tr = $update.closest('tr'),
+            id =  $tr.children("td:eq(0)").text()-0;
+
+        if(confirm("确认删除道具？")){
+            $.post('/dashixiongwx/admin/shop/:shop_id/tool/delete', {id:id}, function(data){
+                location.reload();
+            });
+        }else{
+            return false;
+        };
+
+    });
+</script>
+
+

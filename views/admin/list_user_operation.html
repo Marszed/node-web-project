@@ -1,0 +1,76 @@
+<style>
+    table, td, th{
+        border : 1px solid #CCC;
+    }
+    ul{
+        padding : 0;
+    }
+    h1{
+        padding : 10px;
+        font-size : 20px;
+    }
+
+
+    table{
+        margin : 10px;
+        width: 70%;
+    }
+    .resume td, .resume th{
+        padding : 5px;
+    }
+
+    .deliver_fatal a{
+        color : #FFF;
+    }
+    @media screen and (max-width:500px){
+        ul,li{margin:0px;padding:0px;}
+    }
+
+    /*---------------------------*/
+
+    .todo li{
+        list-style-type : disc
+    }
+    .todo h3{
+        padding-left : 10px;
+    }
+
+    .count input{
+        width : 20px;
+    }
+
+    .total-pay-td del{
+        display:block;;
+        margin-bottom:5px;
+    }
+    .push-btns input{
+        font-size:16px;
+        margin-left:10px;
+    }
+</style>
+<div class="tab2">
+    <table>
+        <tr>
+            <th>用户ID</th>
+            <th>用户名</th>
+            <th>订单号</th>
+            <th>操作名称</th>
+            <th>时间</th>
+        </tr>
+        {{each(res, i) ret}}
+        <tr>
+            <td>${res.userId}</td>
+            <td>${res.nick}</td>
+            <td>${res.orderId}</td>
+            <td>${res.opration}</td>
+            <td>${res.time}</td>
+        </tr>
+        {{/each}}
+    </table>
+</div>
+
+
+
+
+
+

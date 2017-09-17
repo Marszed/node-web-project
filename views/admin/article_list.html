@@ -1,0 +1,204 @@
+<style>
+	table, td, th{
+		border : 1px solid #CCC;	
+	}
+    th{text-align:center;}
+	h1{
+		padding : 10px;
+		font-size : 20px;	
+	}
+	.add-article{
+		margin : 10px;	
+	}
+    .options{
+        text-align:center;
+    }
+    .options a{
+        margin-right:10px;
+    }
+    #submit:hover{
+       cursor: pointer;
+    }
+</style>
+
+<p class="add-article">
+    <a href="/dashixiongwx/shop/${shop_id}/community?wx_id=${open.openId}" target="_blank">社区首页</a> |
+	<a href="/dashixiongwx/admin/shop/${shop_id}/article/post">添加文章</a> | <a href="/dashixiongwx/admin/shop/${shop_id}/article/img/list">图片管理</a>
+    |增加文章类别:<input id="category" class="category" type="text" placeholder="请输入文章类别" /><span class="refer" id="button" style="cursor:pointer;background-color: #bdd8ff;color: #000000;padding: 2px;">提交</span>
+    |<span style="color: red;">温馨提示：当SHOPID为0时，即该文章所有店可见！</span>
+</p>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>文章类别</th>
+        <th>SORTID</th>
+        <th>操作</th>
+    </tr>
+    {{each(change, i) ArticleCategory}}
+    <tr>
+        <td id="${change.id}">
+            ${change.id}
+        </td>
+        <td>
+            <input class="name"  value="${change.name}" type="text" style="text-align:center; border: 0;padding: 0;margin: 0;width: 400px;height: 20px;"/>
+        </td>
+        <td title="数值越大排序越前">
+            <input class="name"  value="${change.sortId}" type="text" style="text-align:center; border: 0;padding: 0;margin: 0;width: 100px;height: 20px;"/>
+        </td>
+        <td>
+            &nbsp;<a class="update" href="#">编辑</a> |
+            &nbsp;<a class="del" href="/dashixiongwx/admin/shop/${shop_id}/article/del/category/${change.id}">删除</a> |
+            &nbsp;<a class="sort" href="#">排序</a>
+        </td>
+    </tr>
+    {{/each}}
+</table><br/>
+
+<table>
+	<tr>
+		<th>
+			id
+		</th>
+		<th>
+			时间
+		</th>
+		<th>
+			标题
+		</th>
+        <th>
+             内容分类
+        </th>
+        <th>
+            shopId
+        </th>
+		<th>
+			操作
+		</th>
+	</tr>	
+
+{{each(article, i) articles}}
+	<tr id="${article.id}">
+		<td>
+			${article.id}
+		</td>
+		<td>
+			${article.intime}
+		</td>
+		<td>
+            <a target="_blank" href="/dashixiongwx/shop/${shop_id}/article/${article.id}">${article.title}</a>
+		</td>
+        <td title="点击即可编辑">
+            <select name="articleKind" class="article_kind" style="border: 0;background-color: #ffffff;">
+                <option value="-1">请选择分类</option>
+                {{each(change, i) ArticleCategory}}
+                    {{if article.categoryId == change.id}}
+                        <option value="${change.id}" selected="selected">${change.name}</option>
+                    {{else}}
+                        <option value="${change.id}">${change.name}</option>
+                    {{/if}}
+                 {{/each}}
+            </select>
+        </td>
+        <td style="text-align: center;">
+            <!--当shopIdKind = 0时，此文章属于所有店-->
+            <input class="shopIdKind" type="number" value="${article.shopId}" placeholder="shopId" style="width: 60px;border: 0;" />
+        </td>
+
+		<td class="options">
+			<a class="action" type="edit" href="/dashixiongwx/admin/shop/${shop_id}/article/edit/${article.id}">编辑</a>
+            <a class="delete" type="del" href="/dashixiongwx/admin/shop/${shop_id}/article/del/${article.id}">删除</a>
+		</td>
+	</tr>
+{{/each}}
+
+</table>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var $delete = $('.delete');
+            count = true;//计算控制器--第一次进入页面才提醒
+        /*if(count){
+            alert("温馨提示：点击分类即可编辑！文章分类为'0'时，属于所有店。。");
+        }*/
+        //=================================zed_start
+        //点击删除文章类别弹出提示信息
+        var $delete = $('.del');
+        $delete.click(function(){
+            alert("确认删除？");
+        });
+        //点击删除文章弹出提示信息
+        var $del = $('.delete');
+        $del.click(function(){
+            alert("确认删除？");
+        });
+        //新增操作
+        var $refer = $('.refer');
+        $refer.click(function(){
+            var category = $('#category').val();
+            alert("添加成功!");            //新增成功
+            $.post('/dashixiongwx/admin/shop/:shop_id/article/insertCategory',{name : category},function(data){           //向数据库插入新增文章
+                location.reload();//重新刷新页面
+            });
+        });
+        //加权操作
+        $(document).on('click', '.sort', function(){
+            var $sort = $(this),
+                $tr = $sort.closest('tr'),
+                idValue = $tr.children("td:eq(0)").text();
+            $tr.find('input[type=text]').eq(1).focus();//点击时间获取焦点input type=text的焦点
+            $tr.find('input[type=text]').blur(function(){//input type=text的焦点失去时
+                var _name = $tr.find('input[type=text]').eq(1).val();
+                $.post('/dashixiongwx/admin/shop/${shop_id}/article/sort/category', {id : idValue , sort: _name}, function(data){
+                    location.reload();
+                });
+            });
+        });
+        //更新操作
+        $(document).on('click', '.update', function(){
+            var $update = $(this),
+                $tr = $update.closest('tr'),
+                idValue = $tr.children("td:eq(0)").text();
+
+            $tr.find('input[type=text]').eq(0).focus();//点击时间获取焦点input type=text的焦点
+
+            $tr.find('input[type=text]').blur(function(){//input type=text的焦点失去时
+                var _name = $tr.find('input[type=text]').eq(0).val();
+                $.post('/dashixiongwx/admin/shop/${shop_id}/article/update/category', {id : idValue , name: _name}, function(data){
+                    location.reload();
+                });
+            });
+        });
+        //=================================zed_end
+
+        $(document).on('change','.article_kind',function(){
+            var $tr = $(this).closest('tr'),
+                    trIdValue = $tr.attr('id');
+            var updateArticleCategory = $(this).val();
+            /*设置文章分类*/
+            $.post('/dashixiongwx/admin/shop/${shop_id}/article/update/categroy',{id:trIdValue,catetory:updateArticleCategory},function(data){
+                location.reload();//重新刷新页面
+            });
+        });
+
+        $(document).on('change','.shopIdKind',function(data){
+            var $tr = $(this).closest('tr'),
+                trIdValue = $tr.attr('id');
+            var updateArticleShopId = $(this).val();
+            /*设置文章分类*/
+            $.post('/dashixiongwx/admin/shop/${shop_id}/article/update/shopID',{id:trIdValue,shopId:updateArticleShopId},function(data){
+                location.reload();//重新刷新页面
+            });
+        });
+
+        $('#submit').click(function(){
+            var $category = $('#category'),
+                categoryValue = $category.val();
+            $.post('/dashixiongwx/admin/shop/article/update/category',{categoryValue:categoryValue},function(data){
+
+            });
+        });
+
+    });
+
+
+
+</script>

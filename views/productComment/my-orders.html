@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="utf-8"/>
+    <title>我的订单</title>
+    <link rel="stylesheet" href="http://${staticHost}/dsx/csspro/base.css" />
+    <link rel="stylesheet" href="http://${staticHost}/dsx/csspro/productComment.css" />
+    <script src="http://s.ksmimi.com/dsx/jspro/jquery-1.8.0.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+    <div id="box">
+        <div id="header">我的订单</div>
+        <div id="main">
+            <div class="order-item">
+                <div class="order-item-title">
+                    ${month}-${date} ${hour}:${second}
+                    <input type="hidden" id="userId" name="userId" value="${user_id}" /><!--用户id-->
+                    <span class="order-status">待评价</span>
+                </div>
+                <ul class="product-list">
+                    {{each(product,i) products}}
+                    <li class="product-list-li">
+                        <div class="product-content clf">
+                            <img class="product-img fl" src="http://img.ksmimi.com/uploads/products/${product.img}" />
+                            <div class="product-text fl ml15">
+                                <input type="hidden" id="productId" name="productId" value="${product.id}" /><!--菜品id-->
+                                <p class="product-title">${product.title}</p>
+                                <p class="product-price">¥ ${product.price}</p>
+                            </div>
+                        </div>
+                        <a class="product-comment-btn" href="http://www.ksmimi.com/dashixiongwx/product/comment?userOrderId=${userOrderId}&wx_id=${wx_id}&userId=${user_id}&productId=${product.id}&title=${product.title}&img=${product.img}&price=${product.price}">评价</a>
+                        {{if status.length > 0}}
+                            {{each(sts,i) status}}
+                                {{if product.id == sts.productId}}
+                                    <input type="hidden" class="status" value="${sts.status}">
+                                {{/if}}
+                            {{/each}}
+                        {{else}}
+                            <input type="hidden" class="status" value="-1">
+                        {{/if}}
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+
+
+        <!--<div id="footer">
+            <div class="more-btn">更多</div>
+        </div>-->
+    </div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        var $status = $('.status');
+        $status.each(function(){
+            if($(this).val() == 1){
+                $(this).siblings('a').remove();
+            }
+        });
+
+        //判断一个订单是否评论完成
+        var commentFinishFlag = true;
+        var $a = $('a');
+        $a.each(function(){
+            if(($(this).is(":visible"))){
+                commentFinishFlag = false;
+                return false;
+            }
+        });
+        if(commentFinishFlag){
+            $('.order-status').text("订单完成");
+        }
+    });
+</script>
+</html>

@@ -1,0 +1,40 @@
+<style type="text/css" media="all">
+    table{
+        min-width : 800px; 
+    }
+    .head{
+        text-align : center; 
+        font-size : 20px;
+    } 
+</style>
+
+<table>
+    <tr>
+        <th colspan="4" class="head"> "呼叫大师兄"公众账号所有分组 </th>
+    </tr>
+	<tr>
+		<th>
+			id
+		</th>
+		<th>
+	        组名	
+		</th>
+		<th>
+			人数
+		</th>
+	</tr>
+
+{{each(group, i) groups}}
+    <tr>
+		<td>
+			${group.id}	
+		</td>
+		<td>
+			${group.name}
+		</td>
+		<td>
+			${group.count}
+		</td>
+	</tr>
+{{/each}}
+</table>

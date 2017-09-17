@@ -1,0 +1,98 @@
+<script type="text/javascript" charset="utf-8" src="http://s.ksmimi.com/dsx/jspro/ichart.1.2.min.js"></script>
+<style type="text/css">
+    .cont{
+        margin-bottom: 10px;
+    }
+</style>
+<h3>新用户运营统计</h3>
+<div>
+    <div class="cont"><input class="interval" type="text" placeholder="请输入间隔天数"/> 天（*间隔天数）</div>
+    <div class="cont"><input class="cycle" type="text" placeholder="请输入查询周期"/> 个 （*查询周期,必须大于1）</div>
+    <div class="cont"></div>选择区间：<input class="time_one" type="date" /> ~ <input class="time_two" type="date"/>
+    <a  style="margin-right: 20px;" class="sub_one" href="#" onclick="return false;">确定</a></div>
+</div>
+
+
+<div id="myChart"></div>
+
+<script type="text/javascript">
+    $('.sub_one').click(function(){
+        var $time_one = $('.time_one').val();
+        var $time_two = $('.time_two').val();
+        var shopId = ${shop_id};
+        var interval = $('.interval').val().trim();
+        var cycle = $('.cycle').val().trim();
+        if( !interval ) {
+            alert('请输入间隔天数!');
+            return false;
+        }
+        if( isNaN(interval) ) {
+            alert('间隔天数只能是数字!');
+            $('.interval').focus();
+            return false;
+        }
+        if( !cycle ) {
+            alert('请输入查询周期!');
+            return false;
+        }
+        if( isNaN(cycle) ){
+            alert('周期只能时数字!');
+            $('.cycle').focus();
+            return false;
+        }
+        if( cycle<2 ) {
+            alert('周期必须大于1!');
+            $('.cycle').focus();
+            return false;
+        }
+        if(!$time_one || !$time_two){
+            alert('请选择区间!');
+            return false;
+        }
+
+        $.post('/dashixiongwx/admin/shop/'+shopId+'/analysis/new/users/dataresume/isAjax', {timeOne:$time_one, timeTwo:$time_two, shopId:shopId, interval: interval, cycle: cycle, isAjax: 1}, function(res){
+            var res = JSON.parse(res);
+            var lenArr = [];
+            var dateArr = [];
+            res.forEach(function(v, i){
+                lenArr.push(v.len);
+                dateArr.push(v.date);
+            });
+            var data = [
+                {
+                    name : '新用户人数',
+                    value: lenArr,
+                    color:'#1f7e92',
+                    line_width:2
+                }
+            ];
+            var chart = new iChart.Area2D({
+                render : 'myChart',
+                data: data,
+                title : '新用户运营统计',
+                width : 1280,
+                height : 500,
+                coordinate:{height:'90%',background_color:'#edf8fa'},
+                sub_option:{
+                    hollow_inside:false,//设置一个点的亮色在外环的效果
+                    point_size:10
+                },
+                labels: dateArr
+            });
+            chart.draw();
+        });
+    });
+</script>
+
+<script type="text/javascript" charset="utf-8">
+    function checkNumber (e){
+        var reg = /^\d+(?=\.{0,1}\d+$|$)/;
+        if(e.value != '') {
+            if(!re.test(e.value)) {
+                alert('请输入正确的数字');
+                e.value = '';
+                e.focus();
+            }
+        }
+    }
+</script>

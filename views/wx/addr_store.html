@@ -1,0 +1,1373 @@
+<!-- 
+	class的写法用"-"连接两个单词. id,name 用下划线命名法
+-->
+
+<style>
+    textarea,
+    input[type="color"],
+    input[type="text"],
+    input[type="email"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime"],
+    input[type="datetime-local"],
+    input[type="week"],
+    input[type="month"]{
+        -webkit-box-sizing:border-box;
+        -ms-box-sizing:border-box;
+        box-sizing:border-box;
+        -webkit-appearance:none;
+    }
+
+    html, body{
+        min-height:100%;
+    }
+
+    #submit_form{ }
+
+    .container{
+        font:14px Arial, sans-serif;
+        max-width:640px;
+        box-sizing:border-box;
+        -webkit-box-sizing:border-box;
+        -ms-box-sizing:border-box;
+        margin:0 auto;
+        width:100%;
+        padding:0;
+        border:0 none;
+    }
+
+    h2{
+        font-size:18px;
+        font-weight:500;
+        line-height:32px;
+    }
+
+    .addr-item{
+        font-size:14px;
+        width:100%;
+        padding:3px;
+        overflow:hidden;
+        -webkit-box-sizing:border-box;
+        -ms-box-sizing:border-box;
+        font-family:arial, sans-serif;
+    }
+
+    .input-item input{
+        padding:5px;
+        border:1px solid #CCC;
+        line-height:24px;
+        background:#EEE;
+    }
+
+    .new-item label, .input-item label{
+        line-height:25px;
+    }
+
+    input[type=radio], input[type=checkbox]{
+        margin:2px 5px 5px;
+    }
+
+    #addr_submit_btn{
+        background: #cb3637;
+        padding: 12px 0;
+        color: #FFF;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 18px;
+        display: block;
+        width:98%;
+        max-width: 630px;
+        margin: 0 auto;
+    }
+
+    .submit{
+        text-align: center;
+        border-radius: 5px;
+        width: 100%;
+        position: fixed;
+        bottom: 5px;
+        left: 0;
+        margin: 0 auto;
+    }
+
+    .info-wraper input{
+        width:90%;
+        border-top:0;
+        border-right:0;
+        border-left:0;
+        border-bottom:1px solid #e5e5e5;
+        line-height:50px;
+        margin-left:5%;
+    }
+    .detailed-addr-span input{
+        width: 66%;
+    }
+    select{
+        margin-left: 5%;
+    }
+
+    .info-wraper p.input{
+        margin-bottom:10px;
+    }
+
+    .section{
+        padding:5px;
+    }
+
+    .other-requirement input{
+        width:100%;
+        padding:5px;
+        border:1px solid #e5e5e5;
+        line-height:24px;
+        background:#eee;
+        -webkit-box-sizing:border-box;
+        border-radius:3px;
+    }
+
+    .other-requirement label{
+        line-height:24px;
+    }
+
+    #submit_btn_head{
+        font-size:16px;
+        background:#cb3637;
+        border-radius:5px;
+        padding:5px;
+        color:#FFF;
+        text-decoration:none;
+        float:right;
+        line-height:18px;
+    }
+
+    #create_new_addr2{
+        font-size:16px;
+        float:right;
+        line-height:28px;
+        padding:0 10px 0 0;
+    }
+
+    #create_new_addr, #create_new_addr2{
+        color:#66a6ae;
+    }
+
+    .head{
+        clear:both;
+    }
+
+    .msg{
+        font-size:16px;
+        color:red;
+    }
+
+    .blue-link{
+        color:#66a6ae;
+        text-decoration:underline;
+    }
+
+    .tool-title{
+        font-weight:700;
+        font-size:20px;
+        color:#000;
+    }
+
+    .del-addr{
+        color:#CCC;
+        font-size:14px;
+        text-decoration:none;
+        margin-left:5px;
+    }
+
+    .order-sumary{
+        padding:10px;
+        border-bottom:1px solid #e5e5e5;
+    }
+
+    .original-total-pay{
+        color:#CCC;
+        font-size:14px;
+        text-decoration:line-through;
+    }
+
+    .total-num, .total-pay{
+        font-family:arial, sans-serif;
+        padding:5px;
+        color:orange;
+    }
+
+    .express-fetch-info{
+        border:1px solid #CCC;
+        color:#666;
+        width:100%;
+        height:100px;
+        padding:5px;
+        line-height:22px;
+    }
+
+    .fetch{
+        margin-bottom:0px;
+    }
+
+    .express-list li{
+        padding:0 0 10px 20px;
+        text-indent:-15px;
+    }
+
+    .receiver-addr{
+        line-height:31px;
+    }
+
+    .express-sent-sender-info{
+        padding:10px;
+        background:#FFFACD;
+        border-radius:5px;
+        border:1px solid #FFDEAD;
+        width:76%;
+        margin-bottom:25px;
+    }
+
+    .margin_b_30{
+        margin-bottom:30px;
+    }
+
+    input.receiver-input{  }
+
+    .list-item{
+        display:-webkit-box;
+        position:relative;
+        margin-bottom:20px;
+    }
+
+    .list-item .d{
+        -webkit-box-flex:1;
+    }
+
+    .tools .d{
+        margin-left:10px;
+        margin-top:-2px;
+    }
+
+    .p-pic{
+        border:1px solid #eee;
+        height:50px;
+        width:50px;
+        border-radius:4px;
+    }
+
+    .d-tit{
+        font-family:arial, sans-serif;
+        margin-bottom:5px;
+        font-size:14px;
+        font-weight:bold;
+        color:#555;
+        line-height:1.2em;
+    }
+
+    .d-main{
+        font-family:arial, sans-serif;
+        font-size:12px;
+        line-height:1.2em;
+        color:#666;
+        margin-top:3px;
+    }
+
+    .use{
+        color:#587b10;
+        border:1px solid #587b10;
+        text-decoration:none;
+        font-size:12px;
+        padding:3px 10px;
+        border-radius:4px;
+        position:absolute;
+        right:0px;
+        top:-3px;
+        line-height:1;
+    }
+
+    .none{
+        display:none;
+    }
+
+    .list-last{
+        text-align:right;
+        font-size:14px;
+    }
+
+    .tools li:last{
+        margin-bottom:0;
+        text-decoration:underline;
+    }
+
+    .isUse{
+        border:1px solid #88abda;
+        color:#88abda;
+    }
+
+    .temp-font-color{
+        font-size:16px;
+        color:gray;
+    }
+
+</style>
+
+<style>
+    /*section section-addr-div*/
+    .addr-box .detailed-addr-span .add-addr-info {
+        width: 60%;
+    }
+    .addr-box .detailedAddr-select{
+        margin: 0px;
+    }
+    .new-item .detailed-addr-span {
+        width: 60%;
+    }
+    .new-item #detailedAddr-select{
+        margin-left: 15px;
+    }
+    .wcpay-label{
+        display: inline-block;
+        width: 200px;
+        margin-top: 5px;
+    }
+</style>
+
+<div id="box">
+<form id="submit_form" action="{{if action}}${action}{{else}}/dashixiongwx/order/finish{{/if}}" method="POST">
+<input type="hidden" name="shop_name" value="${shop_name}">
+<input type="hidden" name="shop_type" value="${shop_type}">
+
+<div class="container">
+    <div style="margin-top: 0;height:62px;line-height:62px;text-align: center;color:#cb3637;border-bottom: 1px solid
+    #e5e5e5;">
+        <span class="checkout">结算中心</span></div>
+    <div class="order-sumary">
+            <p class="pt5 pl">
+                <span class="total-num">${total_num}</span>件东西，共<span class="original-total-pay" style="display:none;">${total_pay}</span><span
+                    class="total-pay">${total_pay.toFixed(1)}</span>元。
+                {{if tools.length>0}}<a href="#" class="new-href-css exchange-tool arrow fs16 analysis" analysis-position="use_tool@点击：使用道具" >使用道具</a>{{/if}}
+                <br>
+                {{if deliver_info}}
+
+            <div class="deliver-info">
+                <span>需加收</span><span class="total-num">${deliver_info.price}</span><span>元跑腿费。</span>
+            </div>
+            {{/if}}
+            </p>
+            <p>
+                <span style="display: none;" id="exchange_tool_name"></span>
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        {{if msg}}
+        <div class="msg">
+            ${msg}
+        </div>
+        {{/if}}
+
+        <div class="section section-addr-div" style="padding: 10px 10px 15px 10px;{{if !address.length}}border:none;{{/if}}">
+            <h2 class="head common-title">收货信息
+            {{if address.length>0}}
+            <a href="#" class="new_addr-btn new-href-css fs16 analysis arrow" analysis-position="add_addr@点击：更多地址">更多地址</a>
+            {{/if}}
+            </h2>
+            <input name="user_id" type="hidden" value="${user_id}"/>
+            <input name="wx_id" type="hidden" value="${wx_id}"/>
+            <input name="order_id" type="hidden" value="${order_id}"/>
+            <input name="w_id" type="hidden" value="${w_id}"/><!-- 当前仓库的id  -->
+            <input name="shop_id" type="hidden" value="${shop_id}"/><!-- 当前店铺的id  -->
+            <input id="is_express_info_fetch_new" name="is_express_info_fetch_new" type="hidden" value="1"/><!-- 取件信息默认是新的 -->
+            <input id="total_num" type="hidden" value="${total_num}"/>
+            <input id="total_pay" type="hidden" value="${total_pay}"/>
+            <input id="tool_ids" name="tool_ids" type="hidden" value=""/>
+            <input id="data_products" name="products" type="hidden" value="${JSON.stringify(products)}"/>
+            <input id="data_tools" name="tools" type="hidden" value=""/>
+            <input id="addr_id" name="addr[id]" type="hidden"/>
+            <input id="addr_name" name="addr[name]" type="hidden"/>
+            <input id="addr_mobile" name="addr[mobile]" type="hidden"/>
+            <input id="addr_shortTel" name="addr[shortTel]" type="hidden"/>
+            <input id="addr_addr" name="addr[address]" type="hidden"/>
+            <input id="addr_requirements" name="addr[requirements]" type="hidden"/>
+            <input id="wechat_pay" name="wechat_pay" type="hidden" value="afterpay"/>
+
+            <div class="addr-box">
+                {{if address && address.length > 0}}
+                <div class="addr-item" addr_id="${address[0].id}">
+                    <label class="addr-item-label">
+                        <span class="name">${address[0].name}</span>
+                        <span class="address">${address[0].address} </span>
+                        <a class="mobile">${address[0].mobile}</a>
+                        {{if address[0].shortTel != 0}}
+                        <a class="shortTel">(${address[0].shortTel})</a>
+                        {{/if}}
+                    </label>
+                </div>
+                {{/if}}
+                <div class="info-wraper hide-new-addr {{if address && address.length}}none{{/if}}">
+                    <p class="input"><input class="add-addr-info" id="input_addr_name" name="add-name" type="text" placeholder="姓名"/></p>
+                    <p class="input"><input class="add-addr-info" id="input_addr_mobile" name="add-mobile" type="text" placeholder="手机"/></p>
+                    <p class="input">
+                        <input class="add-addr-info" id="input_addr_shortTel" name="add-short-mobile" type="text" placeholder="短号（选填）"/>
+                    </p>
+                    {{if detailedAddress.length>0}}
+                        <select class="detailedAddr-select" id="detailedAddr-select">
+                        {{each(addr,i) detailedAddress}}
+                            <option value="${addr}">${addr}</option>
+                        {{/each}}
+                        </select>
+                    <span class="detailed-addr-span"><input class="add-addr-info" id="input_addr_addr" name="add-address" placeholder="地址如: xx区5栋206" type="text"/></span>
+                    {{else}}
+                    <p class="input"><input class="add-addr-info" id="input_addr_addr" name="add-address" placeholder="地址如: xx区5栋206" type="text"/></p>
+                    {{/if}}
+                </div>
+            </div>
+
+            <!--用户显示新增地址-->
+            <div id="display_new_add_addr" style="display: none;">
+                <label>
+                    <input type="radio" name="addr_select"/>
+                    <span class="add-name"></span>&nbsp;
+                    <span class="add-mobile"></span>&nbsp;
+                    <span class="add-short-mobile"></span>&nbsp;
+                    <span class="add-address"></span>&nbsp;
+                </label>
+            </div>
+        </div>
+
+        {{if express_info_sent}}
+        <div class="sent-div">
+            <h2 class="common-title">寄件信息 <a href="#" class="new-href-css arrow add-new-express fs16 orange analysis" analysis-position="add_express@点击：添加寄件信息">点击添加</a></h2>
+
+            <div class="info-wraper input-item"></div>
+            <div class="sent-info">
+                <span class="from_express_addr"></span><span style="display: none;">&nbsp;&nbsp;至&nbsp;&nbsp;</span><span
+                    id="to_express_addr"></span>
+            </div>
+        </div>
+        {{/if}}
+
+        <div class="section" style="padding: 5px 5px 5px 5px;">
+            {{if express&&express.type=='express_fetch'}}
+            <div class="section" style="border-bottom: 1px solid #e5e5e5;">
+                <h2 class="common-title">取件信息</h2>
+
+                <div class="fetch">
+                    <textarea style="border: 1px solid #e5e5e5;" class="express-fetch-info" name="express_info_fetch"
+                              id="express_info_fetch" rows="8" cols="40"
+                              placeholder="如 申通快递 美宜佳后面 刘德华 13511729888 或把你收到的短信粘贴到这里"></textarea>
+                </div>
+                <ul class="express-list">
+                    {{each(info, i) express.fetch_infos}}
+                    <li class="addr-item">
+                        <span class="express-info-fetch">${info.data}</span>
+                        <a express-info-id="${info.id}"
+                           href="/dashixiongwx/user/${user_id}/express/fetch/info/del/${info.id}" onclick="return false;"
+                           class="blue-link express-del-this">删除</a>
+                        <a href="#" onclick="return false;" class="blue-link express-use-this">使用</a>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+            {{/if}}
+
+            <div class="section" style="padding: 5px 5px 10px 5px;">
+                <h2 style="color: #666;">支付方式</h2>
+                <label class="wcpay-label"><input type="checkbox" name="wcpay-way" class="wcpay-way analysis" analysis-position="payway_after_pay@选择：货到付款" value="afterpay" checked/><span>货到付款</span></label><br>
+                <label class="wcpay-label weixin_browser"><input type="checkbox" name="wcpay-way" class="wcpay-way analysis" analysis-position="payway_wechat_pay@选择：微信支付" value="wcpay"/><span>微信支付</span></label>
+            </div>
+
+            <div class="section requirements" style="border: 0;padding: 5px 5px 100px 5px;">
+                <h2 class="common-title">其他吩咐</h2>
+
+                <div class="addr-item requirement">
+                    <label>
+                        <input type="checkbox"/><span>我只有百元大钞，有钱，就是任性</span>
+                    </label>
+                </div>
+                {{if shop_id!=27}}
+                <div class="addr-item requirement">
+                    <label>
+                        <input type="checkbox"/><span>宿舍有人碎觉，到了轻轻敲门</span>
+                    </label>
+                </div>
+                <div class="addr-item requirement">
+                    <label>
+                        <input type="checkbox"/><span>我在上课，到了电话，不要被老师发现</span>
+                    </label>
+                </div>
+                <div class="addr-item requirement">
+                    <label>
+                        <input type="checkbox"/><span>请在下课时间送来，辛苦了</span>
+                    </label>
+                </div>
+                {{/if}}
+                <div class="addr-item other-requirement" style="padding-left: 5px;">
+                    <label> 特别吩咐: </label> <input id="other_requirement" type="text" value=""/>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="submit analysis" analysis-position="click-submit-addr">
+            <div id="addr_submit_btn" onclick="return false;">提交订单</div>
+        </div>
+    </div>
+
+    <!--</form>-->
+
+    <!--道具兑换-->
+    {{if shop_id!=15}}
+    {{if tools.length}}
+    <div class="tools" style="display: none;">
+        <div class="tool-back-head-btn back-checkout" style="position: relative;">
+            <span id="tool-back-head-btn" class="analysis not-new-addr back-text"
+                  analysis-position="tool_back@点击：返回（使用道具)">返回</span>
+            <span class="checkout">使用道具</span>
+        </div>
+        <div class="tool-tips borde-bottom-line">
+            <span class="total-num">${total_num}</span>件东西，共<span class="original-total-pay" style="display:none;">${total_pay}</span><span
+                class="total-pay">${total_pay}</span>元。
+            <p>1.使用道具后总价小于10元的需要跑腿费的哦. 跑腿很辛苦的, 请谅解！</p>
+
+            <p>2.使用道具的订单不再返还人品咯! </p>
+        </div>
+        <ul class="list">
+            {{each(tool, i) tools}}
+            <li class="tool list-item {{if i>1}}none{{/if}}">
+                <a href="#" class="p"><img class="p-pic" width="40" height="40" src="${tool.img}" alt="${tool.title}"/></a>
+
+                <div class="d">
+                    <h4 class="d-tit"> ${tool.title} </h4>
+
+                    <p class="d-main"> ${tool.description} </p>
+                </div>
+                <a href="#" tool-id="${tool.id}" tool-tid="${tool.tId}" tool-type="${tool.type}" class="analysis use"
+                   onclick="return false;" analysis-position="exchange_tool@点击：使用（道具）">使用</a>
+            </li>
+            {{/each}}
+            {{if tools.length>2}}
+            <li class="list-last show-more-tool"><a href="#" class="analysis" onclick="return false" analysis-position="show_all_tool@点击：显示所有道具">显示所有道具>></a></li>
+            {{/if}}
+        </ul>
+        <div class="tool-submit">
+            <a id="exchange-tool-finish" class="analysis" analysis-position="finish_tool@点击：完成(使用道具)" href="#" onclick="return false;">完成</a>
+        </div>
+    </div>
+    {{/if}}
+    {{/if}}
+    <!--道具兑换-->
+
+    <!--添加送货信息-->
+    <div id="new_addr" class="new-item" style="position: relative;display: none;">
+        <div class="new-addr-head-btn back-checkout">
+            <span id="new-addr-back-head-btn" class="analysis not-new-addr back-text"
+                  analysis-position="new_addr_back@点击：退出（新建地址）">返回</span>
+            <span class="checkout">更多地址</span>
+        </div>
+        <!--<div style="position: relative;">
+            <div class="addr-box-two">
+
+            </div>
+            <div class="show-new-addr analysis" analysis-position="new_add_addr_info@新建送货信息">新建信息</div>
+        </div>-->
+
+        <div class="all-addrs">
+            {{each(addr, i) address}}
+            <div class="addr-item" addr_id="${addr.id}">
+                <label class="addr-item-label">
+                    <input type="radio" name="addr_select" {{if i == 0}}checked="checked"{{/if}} />
+                    <span class="name">${addr.name}</span>
+                    <span class="address">${addr.address} </span>
+                    <a class="mobile">${addr.mobile}</a>
+                    {{if addr.shortTel != 0}}
+                    <a class="shortTel">(${addr.shortTel})</a>
+                    {{/if}}
+                    <a href="/dashixiongwx/addr/del/${addr.id}" class="del-addr" onclick="return false;">删除</a>
+                </label>
+            </div>
+            {{/each}}
+            <div class="addr-item" addNewAddr="true">
+                <label class="addr-item-label orange">
+                    <input type="radio" name="addr_select" /> 新建地址
+                </label>
+            </div>
+        </div>
+
+        <p style="display: none;"><label><input id="addr_new_radio" name="addr_select" type="radio"/>姓名</label></p>
+
+        <div class="new-addr-submit analysis" analysis-position="add_addr_info_finish@点击：完成（新建地址）" >
+            <a id="new-addr-finish" href="#" onclick="return false;">完成</a>
+        </div>
+    </div>
+    <!--添加送货信息-->
+
+    <!--寄件信息-->
+    {{if express_info_sent}}
+    <div id="new-express-div" style="display: none;">
+        <div class="new-express-head-btn back-checkout">
+            <span id="new-express-back-head-btn" class="analysis back-text"
+                  analysis-position="new_express_back_head_btn@点击：返回（寄件信息）">返回</span>
+            <span class="checkout">寄件信息</span>
+        </div>
+        <div class="express-weight borde-bottom-line">
+            <span class="common-title">快件重量</span>
+            <label>
+                <input id="express_weight_min" type="radio" name="express_weight" value="小于1KG" checked="true">小于1KG
+            </label>
+            <label>
+                <input id="express_weight_max" type="radio" name="express_weight" value="大于1KG">大于1KG
+            </label>
+        </div>
+        <div class="borde-bottom-line express-fetch-person-info">
+            <p class="pl">
+                <label class="common-title">收件人信息</label><a href="#" class="express-a fs16 arrow orange analysis" analysis-position="add_express_fetch_info@点击：添加（收件人信息）" id="edit-fetch-person-info">点击添加</a>
+            </p>
+
+            <p>
+                <span id="receiver_tip" class="fs14 fetch-info-text"></span>
+            </p>
+        </div>
+        <div class="borde-bottom-line express-sender-info">
+            <p class="pl">
+                <label class="common-title">寄件人信息</label><a href="#" class="fs16 express-a arrow orange analysis" analysis-position="add_express_sender_info@点击：添加（寄件人信息）" id="edit-express-sender-info">点击添加</a>
+            </p>
+
+            <p>
+                <span id="sender_tip" class="fs14 fetch-info-text"></span>
+            </p>
+        </div>
+        <div class="express-company">
+            <p>
+                <label class="common-title">快递公司</label>
+            </p>
+            <select name="sent_info[company]">
+                {{if shop_id==1}}
+                <option>韵达</option>
+                <option>申通</option>
+                <option>圆通</option>
+                {{else}}
+                <option>申通</option>
+                <option>顺丰</option>
+                <option>天天</option>
+                {{/if}}
+            </select>
+        </div>
+        <div class="express-submit analysis" analysis-position="finish_add_express_info@点击：完成（寄件信息）">
+            <a id="express-finish" href="#" onclick="return false;">完成</a>
+        </div>
+    </div>
+    {{/if}}
+    <!--寄件信息-->
+
+    <!--收件人信息-->
+    {{if express_info_sent}}
+    <div class="receiver-div" style="display: none;">
+        <div class="receiver-head-btn back-checkout">
+            <span id="receiver-back-head-btn" class="analysis back-text"
+                  analysis-position="back_fetch_head_btn@点击：退出（收件人信息）">返回</span>
+            <span class="checkout">收件人信息</span>
+        </div>
+        <div class="receiver-city">
+             <span id="city">
+             <select name="sent_info[receiver_prov]" class="prov"></select>
+             <select name="sent_info[receiver_city]" class="city"
+                     disabled="disabled"></select>
+             <select name="sent_info[receiver_dist]" class="dist"
+                     disabled="disabled"></select><br/>
+             </span>
+        </div>
+        <div class="receiver-info">
+            <p>
+                <input id="reciever_info_street" name="sent_info[receiver_street]" class="receiver-input" type="text"
+                       value="" placeholder="地址，如:渔兴路18号"/>
+            </p>
+
+            <p class="item">
+                <input class="receiver-input receiver-input-adrr" type="text" name="sent_info[receiver_name]" value=""
+                       placeholder="姓名"/>
+            </p>
+
+            <p class="item">
+                <input class="receiver-input " id="reciever_info_mobile" type="text" name="sent_info[receiver_mobile]"
+                       value="" placeholder="手机"/>
+            </p>
+        </div>
+        <div class="receiver-submit analysis" analysis-position="finish_fetch_head_btn@点击：完成（收件人信息）">
+            <a id="receiver-finish" href="#" onclick="return false;">完成</a>
+        </div>
+    </div>
+    {{/if}}
+    <!--收件人信息-->
+    <!--寄件人信息-->
+    {{if express_info_sent}}
+    <div class="sender-info" style="display: none;">
+        <div class="sender-head-btn back-checkout">
+            <span id="sender-back-head-btn" class="analysis back-text"
+                  analysis-position="back_sender_head_btn@点击：退出（寄件人信息）">返回</span>
+            <span class="checkout">寄件人信息</span>
+        </div>
+        <div class="express-sent-new-sender-info">
+            <p>
+                <label>寄件人地址</label>
+            </p>
+
+            <p class="item">
+                <span id="city_sender">
+                    <select name="sent_info[sender_prov]" class="prov"></select>
+                    <select name="sent_info[sender_city]" class="city"
+                            disabled="disabled"></select>
+                    <select name="sent_info[sender_dist]" class="dist"
+                            disabled="disabled"></select>
+                    <br/>
+                    <input type="text" id="sender_street" name="sent_info[sender_street]"
+                           style="margin-top:25px;" value="" placeholder="地址，如:渔兴路18号"/>
+                </span>
+            </p>
+
+            <p class="item">
+                <input type="text" id="send_info_name" class="send-input" name="sent_info[sender_name]" value=""
+                       placeholder="姓名"/>
+            </p>
+
+            <p class="item margin_b_30">
+                <input type="text" id="sent_info_mobile" name="sent_info[sender_mobile]" value="" placeholder="手机"/>
+            </p>
+        </div>
+        <div class="sender-submit analysis" analysis-position="finish_sender_head_btn@点击：完成（寄件人信息）">
+            <a id="sender-finish" href="#" onclick="return false;">完成</a>
+        </div>
+    </div>
+    {{/if}}
+    <!--寄件人信息-->
+    </form>
+    <div id="dialog" style="display:none;">
+        <p>
+            <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+            <span id="dialog_msg">${possibleReach ? possibleReach.content : ''}</span>
+        </p>
+    </div>
+</div>
+
+<link rel="stylesheet" href="http://s.ksmimi.com/dashixiong_static/csspro/hot_sneaks/jquery-ui-1.10.4.custom.min.css">
+<link rel="stylesheet" href="http://s.ksmimi.com/dashixiong_static/csspro/addr_store.css?v=1.0.4">
+<script src="http://s.ksmimi.com/dashixiong_static/jspro/jquery-ui-1.10.4.custom.min.js?=1.0.0"></script>
+<script id="shop_data">
+    var win = window;
+    win.dsx = {
+        openId : "${user.openId}",
+        position : 'come-addr'
+    };
+</script>
+<script type="text/javascript" src="http://s.ksmimi.com/dsx/jspro/analysis.js?v=1.0.3"></script>
+<script type="text/javascript">
+
+//全局的try
+try{
+
+var $close_time = "${close_time}";
+var user_id = ${user_id},
+        isNewUser = ${isNewUser},
+        wx_id = '${wx_id}';
+var sign_id = ${sign_id},
+        sign_result_id = ${sign_result_id},
+        sign_title = '${sign_title}',
+        win = window,
+        doc = document,
+        $doc = $(doc),
+        total_pay = ${total_pay};
+
+$(function () {
+    var init = function () {
+        var radio = $('input[type=radio]')[0];
+        if (radio.id == 'addr_new_radio') {
+//				showNewAddressBook();
+        }
+        $(radio).attr('checked', true);
+    };
+    var $addr_box_two = $('.addr-box-two'),
+        $addr_box = $('.addr-box'),
+        $container = $('.container'),
+        $new_addr = $('#new_addr'),
+        $info_wrapper = $('.info-wraper'),
+        s_time;
+
+    function removeTempColor() {
+        clearTimeout(s_time);
+        s_time = setTimeout(function () {
+            $('.tempColor').removeClass('tempColor');
+        }, 2000);
+    }
+
+    $('.exchange-tool').click(function () {
+        $('.container').hide();
+        $('.tools').show();
+        return false;
+    });
+    $('#tool-back-head-btn, .tool-submit').click(function () {
+        $('.tools').hide();
+        $('.container').show();
+        window.scrollTo(0, 0);
+    });
+    $('.new_addr-btn').click(function () {
+        $('.container').hide();
+        $('#receiver-div').hide();
+        $('#new_addr').show();
+        $new_addr.find('.all-addrs').after( $addr_box.find('.info-wraper') );
+        return false;
+    });
+    $('#new-addr-back-head-btn').click(function () {
+        $addr_box_two.find('.addr-item').appendTo($addr_box);
+        $('.container').show();
+        $('#new_addr').hide();
+    });
+    $addr_box_two.click(function () {
+        $info_wrapper.hide();
+    });
+    //点击新建送货信息的完成按钮
+    var $all_addrs = $('.all-addrs');
+    $('.new-addr-submit').click(function () {
+        var $submit = $(this),
+            $addr_info_inputs = $('input.add-addr-info'),
+            addr_info = [],
+                $detailedAddr = $('.detailedAddr-select');
+        addr_info.push('<div class="addr-item" newAddr="true"><label class="addr-item-label tempColor"><input type="radio" name="addr_select" checked="checked">');
+        var input_length = $addr_info_inputs.size();
+        $addr_info_inputs.each(function (i) {
+            var $input = $(this),
+                    name = $input.attr('name');
+            addr_info.push([
+                '<span class="' + name + '">',
+                (i==(input_length-1) && ($detailedAddr.val()))?($detailedAddr.val()+$input.val()):$input.val(),
+                '</span>'
+            ].join(''));
+        });
+        addr_info.push('</label></div>');
+        //选择新建地址的时候才需要验证
+        if( !$new_addr.find('.info-wraper').is(':hidden') ) {
+            if(!$('#input_addr_name').val() || !$('#input_addr_mobile').val() || !$('#input_addr_addr').val()){
+                alert('请填写收货信息!');
+                win.scrollTo(0,10000);
+                return;
+            }
+        }
+
+        var $selected = $new_addr.find('.addr-item-label > input:checked'),
+            $addr_info = $( addr_info.join('') );
+        var $addr_item_selected = $selected.closest('.addr-item').clone();
+        if( $addr_item_selected.attr('addNewAddr') == 'true' ){//使用新地址
+            $selected.closest('.addr-item').before( $addr_info );
+            $addr_item_selected = $addr_info.clone();
+            $addr_info.trigger('click');
+        }
+
+        //将选中的项更新到“结账页”
+        $addr_item_selected
+            .find('input').remove().end()
+            .find('.del-addr').remove();
+        $addr_item_selected.find('.addr-item-label').addClass('tempColor').end().appendTo( $addr_box.empty() );
+        $new_addr.hide();
+        $container.show();
+        removeTempColor();
+        window.scrollTo(0, 0);
+    });
+
+    $new_addr.on('click', '.addr-item', function(){
+        var $item = $(this);
+        if( $item.attr('addNewAddr') == 'true' ){
+            $info_wrapper.show();
+        }else{
+            $info_wrapper.hide();
+        }
+    });
+
+    $('.section-addr-div').click(function () {
+        $('.new_addr-btn').trigger('click');
+    });
+    $addr_box.click(function (e) {
+        e.stopPropagation();
+    });
+    $('.add-new-express').click(function () {
+        $('.container').hide();
+        $('.receiver-div').hide();
+        $('#new-express-div').show();
+        return false;
+    });
+
+    $('#new-express-back-head-btn').click(function () {
+        $container.show();
+        $('#new-express-div').hide();
+        window.scrollTo(0, 0);
+    });
+
+    var $sent_info = $('.sent-info');
+    $('.express-submit').click(function () {
+        $('.add-new-express').hide();
+        $container.show();
+        $('.sent-div').click(function () {
+            $('.add-new-express').trigger('click');
+        });
+        if ($('#sent_info_mobile').val() && $('#sender_street').val() && $('.receiver-input-adrr').val() && $('.send-input').val() && $('#reciever_info_street').val() && $('#reciever_info_mobile').val()) {
+            $('.from_express_addr').attr("id", "from_express_addr");
+            $('.from_express_addr').siblings('span').show();
+        }
+        $('#to_express_addr').text($('.receiver-input-adrr').val());
+        $('.from_express_addr').text($('.send-input').val());
+        $('#new-express-div').hide();
+        $sent_info.addClass('tempColor');
+        removeTempColor();
+        window.scrollTo(0, 0);
+    });
+    $('#edit-fetch-person-info').click(function () {
+        $('#new-express-div').hide();
+        $('.receiver-div').show();
+        return false;
+    });
+
+    $('#receiver-back-head-btn').click(function () {
+        $('#new-express-div').show();
+        $('.receiver-div').hide();
+        window.scrollTo(0, 0);
+    });
+
+    $('.receiver-submit').click(function () {
+        $('#receiver_tip').text($('.receiver-input-adrr').val() + $('#reciever_info_mobile').val() + $('#reciever_info_street').val());
+        $('#edit-fetch-person-info').hide();
+        $('.express-fetch-person-info').click(function () {
+            $('#edit-fetch-person-info').trigger('click');
+        });
+        $('#new-express-div').show();
+        $('.receiver-div').hide();
+        $('#receiver_tip').addClass('tempColor');
+        removeTempColor();
+        window.scrollTo(0, 0);
+    });
+    $('#edit-express-sender-info').click(function () {
+        $('#new-express-div').hide();
+        $('.sender-info').show();
+        return false;
+    });
+
+    $('#sender-back-head-btn').click(function () {
+        $('#new-express-div').show();
+        $('.sender-info').hide();
+        window.scrollTo(0, 0);
+    });
+
+    $('.sender-submit').click(function () {
+        $('#sender_tip').text($('#send_info_name').val() + $('#sent_info_mobile').val() + $('#sender_street').val());
+        $('#edit-express-sender-info').hide();
+        $('.express-sender-info').click(function () {
+            $('#edit-express-sender-info').trigger('click');
+        });
+        $('#new-express-div').show();
+        $('.sender-info').hide();
+        $('#sender_tip').addClass('tempColor');
+        removeTempColor();
+        window.scrollTo(0, 0);
+    });
+
+    var useTool = function (user_tool_id) {
+        var ids = $('#tool_ids').val();
+        if (!ids) {
+            ids = user_tool_id;
+        } else {
+            ids += ',' + user_tool_id;
+        }
+        $('#tool_ids').val(ids);
+    };
+
+
+    var getOrderInfo = function () {
+        return {
+            total_num: $('#total_num').val() - 0,
+            total_pay: $('#total_pay').val() - 0,
+            str_products: $('#data_products').val()
+        };
+    };
+
+    var showCoupon = function (total_pay_new, total_pay_old) {
+        $('.total-pay').text(total_pay_new);
+        $('#total_pay').val(total_pay_new);
+        $('.original-total-pay').show();
+    };
+    var showNewAddressBook = function () {
+        $('#new_addr').show();
+        $('#create_new_addr').hide();
+        $('#create_new_addr2').hide();
+    };
+    var getRequirements = function () {
+        var requirements = [];
+        $('div.requirement').each(function (i, div) {
+            var isChecked = $(this).find('input').attr('checked');
+            if (isChecked) {//有特殊要求
+                requirements.push($(this).find('span').html());
+            }
+        });
+
+        var other_requirement = $('#other_requirement').val();
+        if (other_requirement) {
+            requirements.push(other_requirement);
+        }
+
+        if (total_pay >= 10) {
+            var deleteSignResult = {
+                'sign_id': sign_id,
+                'sign_result_id': sign_result_id,
+                'sign_title': sign_title
+            };
+//                TODO 下面的push位置要放到回调函数里面
+            if (sign_title) requirements.push('用户签到的奖品为:<label style="color:red;font-size:16px;font-weight:bold;">' + sign_title + '</label>');
+            $.post('/dashixiongwx/player/shop/draw/delete/result', {deleteSignResult: deleteSignResult}, function (data) {
+                if (data == 'success') {
+//                        requirements.push( '2亲，记得附上客户签到的奖品哦:' + sign_title);
+                }
+            });
+        }
+
+        $('#addr_requirements').val(requirements.join('\n'));
+
+    };
+
+    $('#create_new_addr,#create_new_addr2').click(function () {
+        showNewAddressBook();
+        $('#addr_new_radio, .show-new-addr').attr('checked', true);
+    });
+
+
+    var checkUseOfTool = function () {
+        var isToolUsed = false,
+                $use = $('.use');
+        if ($use.size() == 0) return true;
+        $use.each(function () {
+            if ($(this).hasClass('isUse')) {
+                isToolUsed = true;
+            }
+        });
+        return isToolUsed;
+    };
+
+    //按下提交, 准备数据, 然后让表单提交
+    var $submit_form = $('#submit_form');
+    $('#addr_submit_btn').click(function () {
+        var $addrSubBtn = $(this),
+                $parentAddrSubBtn = $addrSubBtn.closest('div');
+        try{
+            //获取特殊备注
+            getRequirements();
+            //获取服务器时间
+            $.get('/dashixiongwx/api/getServerTime', function (data) {
+                //后台传来的服务器时间
+                var count = data.indexOf(':');
+                var serverHour = data.substring(0, count) - 0;
+                var serverMinute = data.substring(count + 1, data.length) - 0;
+
+                if (serverMinute < 10) {
+                                           serverHour = serverHour + '0';
+                                           }
+
+                var serverTime = (serverHour + '' + serverMinute) - 0;
+                //营业时间
+                var close_time = "${close_time}";
+                close_time = close_time.replace(/\s*/ig, '');
+                var flag = false;
+                var timeArr = close_time.split('|');
+                for (var i = 0; i < timeArr.length; i++) {
+                                                             var arr = timeArr[i],
+                                                             time = arr.split(',');
+                                                             if (((time[0] - 0) < serverTime) && ((time[1] - 0) > serverTime)) {
+                                                             flag = true;
+                                                             break;//只要满足一次就可以下单
+                                                             } else {
+                                                             flag = false;
+                                                             }
+                                                             }
+                if (location.href.indexOf('zhimakaimen') > 0) flag = true;
+                if (!flag) {
+                               alert('抱歉，小店已打烊！');
+                               location.href = '/dashixiongwx/shop/' + shop_id + '?wx_id=' + wx_id;
+                               return;
+                               }
+
+                var $item = $addr_box.find('.addr-item');
+
+                if( $addr_box.find('.addr-item').size() ){
+                                                             if( !$addr_box.find('.addr-item').text() ){
+                                                             alert('请先填写收货信息!');
+                                                             return;
+                                                             }
+                                                             }else{
+                    if( !$addr_box.find('.info-wraper').is(':hidden') ) {
+                                                                            if(!$('#input_addr_name').val() || !$('#input_addr_mobile').val() || !$('#input_addr_addr').val()){
+                                                                            var obj = {
+                                                                            openId : dsx.openId,
+                                                                            position : 'click_submit_addr@没有填写送货信息',
+                                                                            content : {url:location.href,ua:navigator.userAgent}
+                                                                            };
+                                                                            win.analysis(obj, function(data){});
+                                                                            alert('请先填写收货信息!');
+                                                                            win.scrollTo(0,123);
+                                                                            return;
+                                                                            }
+                                                                            }
+                }
+
+                if ($('.from_express_addr').size() && !$('.from_express_addr').attr("id")) {
+                                                                                               alert('请先填写完整寄件信息!');
+                                                                                               return;
+                                                                                               }
+                if ($('textarea').size() && !$('textarea').val()) {
+                                                                      alert("请先填写取件信息！");
+                                                                      return;
+                                                                      }
+                if( !$addr_box.find('.addr-item').size() || $addr_box.find('.addr-item').attr('newAddr') ){//选择了新建地址
+                        var name = $('#input_addr_name').val();
+                        var mobile = $('#input_addr_mobile').val();
+                        var address = ($('.detailedAddr-select').val())?($('.detailedAddr-select').val()+$('#input_addr_addr').val()):$('#input_addr_addr').val();
+                        var shortTel = $('#input_addr_shortTel').val();
+                        $('#addr_id').val('');//没有这个id说明是一个新地址
+                        $('#addr_name').val(name);
+                        $('#addr_mobile').val(mobile);
+                        $('#addr_addr').val(address);
+                        $('#addr_shortTel').val(shortTel);
+
+                        name = $.trim(name);
+                        mobile = $.trim(mobile);
+                        address = $.trim(address);
+                        shortTel = $.trim(shortTel);
+                        if ((!name) || (!mobile) || (!address)) {
+                        alert('请先填写正确的送餐信息!短号可选择填写！');
+                        return;//没写联系方式不许提交表单
+                        }
+                        } else {//使用旧的地址
+                    $('#addr_id').val($item.attr('addr_id'));//有这个id说明是一个旧地址
+                    $('#addr_name').val($item.find('.name').text());
+                    $('#addr_mobile').val($item.find('.mobile').text());
+                    $('#addr_shortTel').val($item.find('.shortTel').text());
+                    $('#addr_addr').val($item.find('.address').text());
+                }
+
+                var infos = $('.express-info-fetch');
+                if (infos.size() == 0) {
+                    $('#is_express_info_fetch_new').val(1);
+                }
+
+                infos.each(function (i, span) {
+                    if ($(span).text() == $('#express_info_fetch').val()) {//不是new的,没必要再each
+                        $('#is_express_info_fetch_new').val('');
+                        return false;
+                    }
+                });
+
+                //增加一个“预计送达”的公告
+                if (${possibleReach.isShow}) {
+                    $('#dialog').dialog({
+                        modal: true,
+                        show: {
+                            effect: "fade",
+                            duration: 618
+                        },
+                        hide: {
+                            effect: "fade",
+                            duration: 618
+                        },
+                        buttons: {
+                            '我可以等': function () {
+                                $('#submit_form').submit();
+                                $(this).dialog("close");
+                            },
+                            '再考虑一下': function () {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+                    return;
+                }
+
+                /*if (isNewUser && !checkUseOfTool()) {
+                    if (confirm('这位爷，你还没使用道具呢，真要提交吗？')) {
+                        //直接提交表单
+                        $submit_form.submit();
+                    }
+                    return;
+                }*/
+
+                //直接提交表单
+                if (total_pay >= 10 && sign_title) alert('恭喜你获得' + sign_title + '，该奖品将随订单一同配送，请注意查收！');
+                $parentAddrSubBtn.css("background","#ccc");
+                $addrSubBtn.text('正在提交...');
+                $submit_form.submit();
+            });
+        } catch (e) {
+            var img_err = doc.createElement('img'),
+                jquery_err = $ || 'no jquery';
+            var agent = navigator.userAgent;
+            img_err.src = '/dashixiongwx/api/monitor/order/info?err=' + e.message + ',   stack:' + e.stack + ',jquery:' + jquery_err.toString() + '&ua=' + agent + '&userId=' + dsx.userId;
+        }
+    });
+
+    //--------------------
+    $('.del-addr').click(function (e) {
+        var yes = confirm('确定要删除这个地址么?');
+        if (yes) {
+            var a = this;
+            $.get(this.href, function (res) {
+                $(a).parents('div.addr-item').remove();
+            });
+        }
+
+    });
+
+    $('.express-use-this').click(function () {
+        var txt = $(this).parents('li').find('.express-info-fetch').text();
+        var val = $('#express_info_fetch').val();
+        var info_fetch = $('#express_info_fetch');
+        if (val) {
+            info_fetch.val([ val, txt ].join(' '));
+            return;
+        }
+        info_fetch.val(txt);
+
+    });
+
+    $('.express-del-this').click(function () {
+        var yes = confirm('确定要删除这个取件信息么?');
+        if (yes) {
+            var a = this;
+            $.get(this.href, function () {
+                $(a).parents('li').remove();
+            });
+        }
+
+    });
+
+    $('.show-more-tool').click(function () {
+        $(this).siblings('li').css({'display': '-webkit-box'});
+        $(this).remove();
+    });
+
+    //-------------------
+    $('.order-sumary').click(function () {
+        $('.exchange-tool').trigger('click');
+    });
+    $('.use').click(function () {
+        var $a = $(this);
+        var size = $a.parents('ul').find('.isUse').size();
+        if ($a.is('.isUse')) {
+            //$a.removeClass('isUse');
+            return;
+        }
+        if (size) {
+            alert('一次只能使用一个道具');
+            return;
+        }
+
+        var yes = confirm('确定使用本道具?');
+        if (yes) {
+            $('#submit_btn_head').click(function () {
+                $('#addr_submit_btn').trigger('click');
+            });
+            var tool_name = $a.closest('li').find('h4').text();
+            $('#exchange_tool_name').show();
+            $('#exchange_tool_name').text('已使用道具：' + tool_name);
+            var order_info = getOrderInfo();
+            var user_tool_id = $a.attr('tool-id');
+            $.post('/dashixiongwx/tool/use', {
+                str_products: order_info.str_products,
+                total_num: order_info.total_num,
+                total_pay: order_info.total_pay,
+                user_tool_id: user_tool_id,
+                tool_id: $a.attr('tool-tid'),
+                user_id: user_id
+            }, function (res) {
+                if (res.code) {
+                    alert('有问题, 重试看看能不能解决问题?');
+                    return;
+                }
+                $a.addClass('isUse');
+                if (res.type == 'coupon') {
+                    showCoupon(res.ret.total_pay.toFixed(1), order_info.total_pay.toFixed(1));
+                }
+                useTool(user_tool_id);
+                $('.exchange-tool').hide();
+
+            });
+        }
+    });
+
+    //---------------------
+    init();
+});
+
+
+//全局的catch
+} catch (e) {
+    var img_err_b = doc.createElement('img'),
+        jquery_err_b = $ || 'no jquery';
+    var agent = navigator.userAgent;
+    img_err_b.src = '/dashixiongwx/api/monitor/order/info?err=' + e.message + ',   stack:' + e.stack + ',jquery:' + jquery_err_b.toString() + '&ua=' + agent + '&userId=' + dsx.userId;
+}
+
+
+</script>
+
+<script type="text/javascript" charset="utf-8"
+        src="http://s.ksmimi.com/dashixiong_static/jspro/jquery.cityselect.js?v=1.0.0"></script>
+<script type="text/javascript" charset="utf-8">
+    var shop_id = ${shop_id};
+    $(function () {
+        $("#city").citySelect({
+            url: "city",
+            nodata: "none" //当子集无数据时，隐藏select
+        });
+
+        var p = {
+            url: "city",
+            prov: '广东',
+            nodata: "none" //当子集无数据时，隐藏select
+        };
+
+        p.city = '惠州'
+        if (shop_id != 1) {
+            p.city = '广州';
+        }
+
+        $("#city_sender").citySelect(p);
+
+        //-----------------------------
+        $('#new_sender_info_btn').click(function () {
+            $('.express-sent-new-sender-info').show();
+            $('.express-sent-sender-info').hide();
+        });
+
+
+    });
+</script>
+<script>
+
+    var $doc = $(document),
+            $wcpay_way = $('.wcpay-way');
+    $doc.ready(function(){
+
+        var ua = window.navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i)!='micromessenger'){
+            $('.weixin_browser').hide();
+        }
+
+        $wcpay_way.click(function(){
+            $wcpay_way.attr('checked',false);
+            $(this).attr('checked',true);
+            $('input[name="wechat_pay"]').val($(this).val());
+        });
+    });
+</script>
+
+
+
+
+
+

@@ -1,0 +1,42 @@
+<p>
+    <a href="/dashixiongwx/admin/shop/${shop_id}/takeaway/add">添加外卖单&gt;&gt;</a>
+</p>
+
+<table>
+	<tr>
+		<th>
+			序号
+		</th>
+		<th>
+			外卖店铺名
+		</th>
+		<th>
+			操作
+		</th>
+	</tr>
+
+{{each(takeaway, i) takeaways}}
+<tr>
+    <td>
+        ${i+1} 
+    </td>    
+    <td>
+        ${takeaway.name} 
+    </td>
+    <td>
+        <a href="/dashixiongwx/admin/shop/${shop_id}/takeaway/del/${takeaway.id}" onclick="ondel(this); return false;">删除</a> | 
+        <a href="/dashixiongwx/admin/shop/${shop_id}/takeaway/edit/${takeaway.id}">编辑</a> | 
+        <a href="/dashixiongwx/admin/shop/${shop_id}/takeaway/food/${takeaway.id}">菜单</a>
+    </td>
+</tr>
+{{/each}}
+
+</table>
+<script type="text/javascript" charset="utf-8">
+    var ondel = function (ele) {
+        var yes = confirm( '确定删除此外卖单?' );
+        if( yes ){
+            location.href = ele.href;        
+        }
+    };
+</script>

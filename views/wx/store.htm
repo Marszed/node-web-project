@@ -1,0 +1,359 @@
+
+<div class="container_div {{dsx_ver == '' ? 'dsx-common' : 'dsx-simple'}}">
+    <div id="guide">
+        {{if power>=6}}<span class="change-shop">换&nbsp;店</span>{{/if}}
+        <div class="note-box">
+            <div class="note">
+                {{if isNewClient=='true'}}
+                <a id="" onclick="return false;" href="#">点击图片即可选购</a>
+                {{else}}
+                福布斯排名第<a id="rank" onclick="return false;" href="/dashixiongwx/rp/{{user.openId}}?wx_id={{user.openId}}&timestamp={{sigObj.timestamp}}&sig={{sigObj.sig}}" class="last analysis" target="_blank" analysis-position="rank">
+                <label class="orange rank-num">-</label></a>位，
+                <span class="sign-li analysis" analysis-position="sign">签到</span><span id="sign-color-white">&gt;</span>
+                {{/if}}
+            </div>
+        </div>
+        <!-- 普通版，分类在左边 -->
+        {{if dsx_ver == ''}}
+        <ul class="menu clf">
+            <li class="menu-li fl">
+                <span class="btn-notice analysis" analysis-position="btn-notice@点击：公告按钮">
+                    公告
+                </span>
+            </li>
+            <li class="menu-li fl">
+                <span id="simple" class="ver-simple analysis" analysis-position="menu@点击：版本切换" alias="{{versionMark.id}}" status="{{versionMark.status}}">
+                    简洁版
+                </span>
+            </li>
+            <li class="menu-li fl analysis" analysis-position="bag">
+                <span class="bag">
+                    结账
+                    <img src="http://s.ksmimi.com/dsx/img/bag_red.png?v=1.0.2" class="bag-img"  alt=""/>
+                    <label class="bag-num">3</label>
+                </span>
+            </li>
+        </ul>
+        {{else}} <!-- 简单版，分类在左上角，默认隐藏的 -->
+        <ul class="menu clf">
+            <li class="menu-li fl analysis" analysis-position="menu">
+                <span class="section-tag-handle">
+                    分类
+                    <img src="http://s.ksmimi.com/dsx/img/menu_red.png?v=1.0.1"/>
+                </span>
+            </li>
+            <li class="menu-li fl analysis" analysis-position="menu@点击：版本切换">
+                <span id="quick" class="ver-common"  alias="{{versionMark.id}}" status="{{versionMark.status}}">
+                    快捷版
+                </span>
+            </li>
+            <li class="menu-li fl analysis" analysis-position="bag">
+                <span class="bag">
+                    结账
+                    <img src="http://s.ksmimi.com/dsx/img/bag_red.png?v=1.0.2" class="bag-img"  alt=""/>
+                    <label class="bag-num">3</label>
+                </span>
+            </li>
+        </ul>
+        {{/if}}
+    </div>
+
+    <div class="main clf {{if onRight == '1'}}side-flag{{/if}}">
+        <div class="section-list">
+            <div class="section-list-wrapper">
+                {{if dsx_ver == ''}}
+                <div class="section-tip">分类</div>
+                {{/if}}
+                <ul class="section-list-ul">
+                    {{each section_types as section i}}
+                    {{if section.product_num && section.className!='redemption'}}
+                    <li class="section-list-li" section_id="{{section.tagId}}">
+                        <a href="#section{{section.tagId}}" name="section_list_a" class="analysis {{if i == 0}}current_tag{{/if}}" analysis-position="menu-li@{{section.tagShortTitle}}{{if dsx_ver == ''}}(快捷版)-{{i+1}}{{/if}}">{{#section.tagShortTitle}}</a>
+                    </li>
+                    {{/if}}
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="change-side analysis" analysis-position="change-side-btn@点击：左右手切换"></div>
+        </div>
+        <div class="select-shop">
+            选学校
+        </div>
+        <div class="wrapper">
+            {{if notice}}
+            <div class="notice-box"><p class="notice notice-slideDown" {{if showNotice}}style="display:block;"{{/if}}><strong>大师兄({{config_obj.shopName}})公告: </strong>{{#notice.content}}</p></div>
+            {{else}}
+            <p class="notice-info"><strong>大师兄({{config_obj.shopName}})</strong>热烈“荒淫”你~啦啦啦^o^</p>
+            {{/if}}
+            <div class="banner-notice">
+                {{#notice.content}}
+                <img class="banner-close" src="http://s.ksmimi.com/dsx/img/close.png" />
+            </div>
+            <div class="sign-wrap none">
+               <div class="user none">
+                   <div class="p">
+                        <img src="{{if user.head}}http://img.ksmimi.com/uploads/heads/{{user.head}}{{else}}http://{{staticHost}}/dashixiong_static/img/default-p-pic.jpg{{/if}}" alt="{{user.nick}}" class="p-pic">
+                   </div>
+               </div>
+               <div class="sign-btn-wrap none">
+                                                  <a href="#" class="sign-btn analysis" analysis-position="sign-btn" id="good">签到</a>
+                                                  <a href="/dashixiongwx/rp/{{user.openId}}?wx_id={{user.openId}}&timestamp={{sigObj.timestamp}}&sig={{sigObj.sig}}" class="sign-btn last">兑换道具</a>
+                                                  </div>
+               <div class="story" id="story">
+                                                {{if shop_id!=15}}
+                                                <div class="list story-list">
+                                                <div gid="2" class="clf">
+                                                <div class="sing-div-img" kind="0"><img class="sign-img" src="{{env.imgpro}}/choujiang02.png" alt="道具"></div>
+                                                <div class="sing-div-img" kind="1"><img class="sign-img" src="{{env.imgpro}}/choujiang02.png" alt="人品"></div>
+                                                <div class="sing-div-img" kind="1"><img class="sign-img" src="{{env.imgpro}}/choujiang02.png" alt="人品"></div>
+                                                <div class="sing-div-img" kind="1"><img class="sign-img" src="{{env.imgpro}}/choujiang02.png" alt="人品"></div>
+
+                                                </div>
+                                                <div class="sign-result"></div>
+                                                <div class="sign-btns clf">
+                                                <a href="#" class="sign-btn analysis fl" analysis-position="sign-start@点击:开始抽奖"  id="sign-start" accesskey="s">开始抽奖</a>
+                                                <a href="#" class="sign-btn fl"  id="sign-stop" accesskey="s">停止</a>
+                                                </div>
+                                                </div>
+                                                {{else}}
+                                                <p style="margin:8px;">点击以下图片, 签到: </p>
+                                                <ul class="list story-list">
+                                                <li>
+                                                <div class="story-item" gid="2">
+                                                <img src="{{env.imgpro}}/yanchanghui.jpg" alt="">
+                                                <p>大声喊出内心的渴望“大师兄我爱你” </p>
+                                                </div>
+                                                </li>
+                                                <li>
+                                                <div class="story-item" gid="1">
+                                                <img src="{{env.imgpro}}/huabanxie.jpg" alt="">
+                                                <p>时尚时尚最时尚的滑板鞋送给大师兄摩擦</p>
+                                                </div>
+                                                </li>
+                                                </ul>
+                                                {{/if}}
+                                                </div>
+               <div id="show-sign-result">^_^</div>
+                <img class="banner-close" src="http://s.ksmimi.com/dsx/img/close.png" />
+            </div>
+
+
+            <div class="shop-body">
+              {{each sections as section index}}
+              {{if section.products.length && section.className != 'redemption'}}
+              <div class="stub" id="section{{section.tagId}}"></div>
+              <div class="section {{section.className}} {{if section.nPin >= 2}}promote-style{{/if}}" section="{{index+1}}" tagId="{{section.tagId}}" type="{{section.type}}" nPin="{{section.nPin}}">
+              <h4 class="section-title">
+              <span class="section-title-text">{{#section.tagName}}</span>
+              </h4>
+              <ul class="sections" alias="">
+              {{each section.products as product i}}
+                  {{if product.title}}
+                  <li class="section-li {{if product.strategyType}}{{product.strategyType}} pd-promote{{/if}} {{if product.productStatus == 2}} section-li-div-opacity {{/if}} " {{if product.rate}}rate="{{product.rate}}"{{/if}}>
+                      <div class="pd_wrap {{if product.limitStatus==1 && !product.limit}}purchase-box{{/if}} {{if product.limit && product.limitStatus==1}}finish-purchase{{/if}}" {{if product.limitStatus==1}}islimit="limit"{{/if}}>
+                      {{if product.limitStatus==1 }}<div class="purchase"></div>{{/if}}
+                      <div class="img_wrap">
+                          {{if index<2}}
+                            {{if agent}}
+                                <img class="product-img img_{{product.id}} analysis" name="product-img" analysis-position="product@{{env.upload}}/{{env.qn ? product.imgQN : product.img}}" pid="{{product.id}}" width="100%" data-original="{{env.upload}}/{{env.qn ? product.imgQN : product.img}}" src="{{env.upload}}/{{env.qn ? product.imgQN : product.img}}"/>
+                            {{else}}
+                                <img class="product-img img_{{product.id}} analysis" name="product-img" analysis-position="product@{{env.upload}}/HDP/{{env.qn ? product.imgQN : product.img}}" pid="{{product.id}}" width="100%" data-original="{{env.upload}}/HDP/{{env.qn ? product.imgQN : product.img}}" src="{{env.upload}}/HDP/{{env.qn ? product.imgQN : product.img}}"/>
+                            {{/if}}
+                          {{else}}
+                            {{if agent}}
+                                <img class="lazy-load-img product-img img_{{product.id}} analysis" name="product-img" analysis-position="product@{{env.upload}}/{{env.qn ? product.imgQN : product.img}}" pid="{{product.id}}" width="100%" src="http://a.ksmimi.com/store/src/img/lazy_bg.png" data-original="{{env.upload}}/{{env.qn ? product.imgQN : product.img}}"/>
+                            {{else}}
+                                <img class="lazy-load-img product-img img_{{product.id}} analysis" name="product-img" analysis-position="product@{{env.upload}}/{{env.qn ? product.imgQN : product.img}}" pid="{{product.id}}" width="100%" src="http://a.ksmimi.com/store/src/img/lazy_bg.png" data-original="{{env.upload}}/HDP/{{env.qn ? product.imgQN : product.img}}"/>
+                            {{/if}}
+                          {{/if}}
+                      <div class="actions">
+                      <div class="ac_plus" >+</div>
+                      <div class="num">0</div>
+                      <div class="trash">
+                      <img src="http://{{staticHost}}/dsx/img/trash.png" class="trash-img" alt=""/>
+                      </div>
+                      <div class="ac_minus analysis" analysis-position="ac_minus@点击:减少({{product.title}})">-</div>
+                      </div>
+                      </div>
+
+                      {{if product.promotePrice}}
+                      <h5><span class="pd-extra"></span><del>{{product.price}}元</del> <strong class="price">{{product.promotePrice}}元</strong>/<span class="unit">{{product.unit}}</span> <span class="title">{{product.title}}</span></h5>
+                      {{else}}
+                      <h5><span class="pd-extra"></span><strong class="price">{{product.price}}元</strong>/<span class="unit">{{product.unit}}</span> <span class="title">{{product.title}}</span></h5>
+                      {{/if}}
+                      <div class="pd_marker">
+                          <div class="pd_checkbox" name="promote"></div>
+                      </div>
+                      </div>
+                    <img class="oversell-img" src="http://s.ksmimi.com/dsx/img/sold_out.png?v=1.0.0" alt="售罄"/>
+                    <div class="section-extra"></div>
+                  </li>
+                  {{else}}
+                  <li class="section-li">
+                  <div class="pd_wrap"></div>
+                  </li>
+                  {{/if}}
+                  {{if (i+1)% 3 ==0 }}
+                  <li></li>
+                  {{/if}}
+              {{/each}}
+              </ul>
+              {{if section.ad}}
+              <img src="http://img.ksmimi.com/uploads/products/ad/{{section.ad}}" class="section_ad" />
+              {{/if}}
+              </div>
+                {{/if}}
+                {{/each}}
+
+            </div>
+            <div class="submit">
+                {{if dsx_ver == '_simple'}}
+                <p class="submit_actions"><a class="analysis check_bag" analysis-position="submit-btn" href="#" onclick="return false;">查看购物袋 &gt;</a></p>
+                {{/if}}
+                <form id="submit_form" action="/dashixiongwx/shop/addr?shop_id={{shop_id}}&userId={{user.userId}}&wx_id={{user.openId}}"
+                      method="POST">
+                    <input id="submit_products" name="products" type="hidden"  />
+                    <input type="hidden" name="shop_id" value="{{shop_id}}"  />
+                    <input type="hidden" id="get_current_value" name="user_id" value="{{user.id}}"  />
+                    <input type="hidden" name="shop_name" value="{{cur_shop.name}}"  />
+                    <input name="cur_warehouse_id" type="hidden" value="{{cur_warehouse_id}}"  />
+                    <input name="shopType" type="hidden" value="store" />
+                    <input id="input_total_num" name="total_num" type="hidden" value=""  />
+                    <input id="input_total_pay" name="total_pay" type="hidden" value=""  />
+                    <input id="sign_id" name="sign_id" type="hidden" value="" />
+                    <input id="sign_title" name="sign_title" type="hidden" value="" />
+                    <input id="sign_result_id" name="sign_result_id" type="hidden" value="" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div><!-- 购物袋 -->
+<div class="shopping-bag">
+    <div class="shopping-bag-title">
+        购物袋
+        <span class="shopping-back analysis" analysis-position="shopping-back">返回</span>
+    </div>
+    <div class="shopping-tips">
+        <p id="submit_info">你的购物袋中有<strong id="total_num"></strong>件东西，共<strong class="total_pay"></strong>元 </p>
+        <p id="submit_none" style="display:none;">购物袋里没有东西哦~</p>
+        <p id="submit_deliver_fee" style="display:none;">你的订单不足10元，要加1元跑腿费哟</p>
+    </div>
+    <ul class="shopping-list"></ul>
+    <div class="shoping-bag-redemption">
+        {{each sections as sect i}}
+        {{if sect.className=='redemption'}}
+        <ul class="sections redemption-product">
+            {{each sect.products as product j}}
+            {{if j==0}}<span class="redemption-title">加<label class="orange">{{if product.promotePrice}}{{product.promotePrice}}{{else}}{{product.price}}{{/if}}</label>元即可换购以下产品(点图选购)</span>{{/if}}
+            {{if j<2}}
+                <li class="section-li">
+                    <div class="pd_wrap purchase-box" islimit="redemption">
+                        <div class="img_wrap analysis" analysis-position="redemption@点击:n元换购产品">
+                            <img class="product-img img_{{product.id}}" pid="{{product.id}}" src="{{env.upload}}/{{env.qn ? product.imgQN : product.img}}" alt="" />
+                        </div>
+                        <h5>
+                            <del>{{product.price}}元</del>
+                            <strong class="price">{{product.promotePrice}}元</strong>/
+                            <span class="unit">{{product.unit}}</span>
+                            <span class="title">{{product.title}}</span>
+                        </h5>
+                    </div>
+                </li>
+            {{/if}}
+            {{/each}}
+        </ul>
+        {{/if}}
+        {{/each}}
+    </div>
+    <div id="submit_btn" class="shopping-btn unavailable analysis" analysis-position="shopping-more-submit">
+        进入结算中心
+        <span class="shopping-subBtn">￥<label class="total_pay"></label></span>
+    </div>
+
+
+</div>
+
+{{if !agent&&power>0}}
+<a href="#" id="top">TOP</a>
+{{/if}}
+<img src="http://s.ksmimi.com/dsx/img/loading.gif" class="none" />
+
+{{#require('global/jspro/jquery/jquery-1.11.2.min.js')}}
+<script id="shop_data">
+    var win = window;
+    win.dsx = {
+        shot : "{{shot}}",
+        openId : "{{user.openId}}",
+        wId : {{cur_warehouse_id}},
+        userId : {{user.id}},
+        agent: "{{agent}}",
+        shop_id : {{shop_id}},
+        timestamp : "{{sigObj.timestamp}}",
+        sig : "{{sigObj.sig}}",
+        isNewClient : {{isNewClient}},
+        showDeliverInfo : {{showDeliverInfo}},
+        notice_timeStamp:"{{notice_timeStamp}}",
+        power: {{power}},
+        deliver_fee: "{{config_obj.deliverFee}}",
+        sections : {{#sections_json}},
+
+    };
+</script>
+
+<script>
+    (function(win, $){
+        $.fn._on = function(){
+            var args = arguments,
+                    callback;
+            for(var i = 0, len = args.length; i < len; i++){
+                if( typeof args[i] == 'function' ){
+                    callback = args[i];
+                    args[i] = function(){
+                        var $target = $(this),
+                                target = this,
+                                fnName = $target.attr('name');
+                        try{
+                            dsx.fn[fnName] && dsx.fn[fnName].apply(target, arguments);
+                            callback.apply(target, arguments);
+                        }catch(e){
+                            callback.apply(target, arguments);
+                        }
+                    };
+                    break;
+                }
+            }
+            this.on.apply(this, args);
+            return this;
+        };
+    })(window, jQuery);
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.get('/dashixiongwx/shop/'+"{{shop_id}}"+'?wx_id='+"{{user.openId}}"+'&isAjax=1', function(res){});
+    });
+</script>
+
+{{#require('global/jspro/jquery-plugin/jquery.cookie.js', 'store')}}
+{{#require('global/jspro/lib/fastclick.min.js')}}
+{{#require('global/jspro/jquery-plugin/jquery.lazyload.min.js')}}
+{{#require('jspro/'+ (curShop.shopType+dsx_ver) +'.js')}}
+{{#require('global/jspro/analysis/analysis.js')}}
+
+{{each dynamicJS as style i}}
+{{if style.status==1}}
+    {{each style.applyShopIds as shopId i}}
+        {{if shopId==0}}
+            <script type="text/javascript" src="http://s.ksmimi.com/uploads/js/{{style.fileName}}"></script>
+        {{else}}
+            {{if shop_id == shopId}}
+            <script type="text/javascript" src="http://s.ksmimi.com/uploads/js/{{style.fileName}}"></script>
+            {{/if}}
+        {{/if}}
+    {{/each}}
+{{/if}}
+{{/each}}
+
+
+

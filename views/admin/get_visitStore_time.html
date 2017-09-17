@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .ops{
+            margin-bottom:20px;
+        }
+    </style>
+</head>
+<body>
+<h2>用户访问首页时间统计</h2>
+<div class="ops">
+    <a href="?y=${pre_date_y}&m=${pre_date_m}&d=${pre_date_d}">前一天</a>
+    <span class="current-date">当前日期为：${y}年${m}月${d}日</span>
+    <a href="?y=${next_date_y}&m=${next_date_m}&d=${next_date_d}">后一天</a>
+</div>
+<table>
+    <tr>
+        <td>用户ID</td>
+        <td>用户昵称</td>
+        <td>店号</td>
+        <td>访问首页所耗时间</td>
+        <td>时间</td>
+    </tr>
+    {{each(t, i) transArr}}
+    <tr>
+        <td>${t.userId}</td>
+        <td>${t.nick}</td>
+        <td>${t.shopId}</td>
+        <td>${t.transTime}</td>
+        <td>${t.startTimeStamp}</td>
+    </tr>
+    {{/each}}
+</table>
+</body>
+</html>

@@ -1,0 +1,604 @@
+<!--
+<link rel="stylesheet" href="http://s.ksmimi.com/dashixiong_static/csspro/jquery-ui.css">
+<script src="http://s.ksmimi.com/dashixiong_static/jspro/jquery-1.9.1.js"></script>
+<script src="http://s.ksmimi.com/dashixiong_static/jspro/jquery-ui.js"></script>
+-->
+
+
+
+<style>
+    li{
+        line-height: 17px;
+        padding : 10px;
+    }
+    .column {
+        width: 640px;
+        float: left;
+        padding-bottom: 100px;
+        margin: 0 22%;
+    }
+    .portlet {
+        margin: 0 1em 1em 0;
+        padding: 0.3em;
+    }
+    .portlet-header {
+        padding: 0.2em 0.3em;
+        margin-bottom: 0.5em;
+        position: relative;
+    }
+    .portlet-toggle {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        margin-top: -8px;
+    }
+    .portlet-content {
+        padding: 0.4em;
+    }
+    .portlet-placeholder {
+        border: 1px dotted black;
+        margin: 0 1em 1em 0;
+        height: 50px;
+    }
+    .section-container{
+        margin : 10px auto;
+    }
+    .product-list li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 30%; height: 158px; font-size: 12px; text-align: center; }
+    .product-name{
+        line-height : 14px;
+    }
+    .product-img{
+        margin-top : 10px;
+    }
+
+
+    .price{ font-size:12px; color:orange;}
+    #notice{
+        text-align : center;
+        background : #FFFACD;
+        display : none;
+        padding : 10px;
+    }
+    #change_action {
+        padding : 10px;
+    }
+    .action{
+        font-size : 12px;
+    }
+    .action a{
+        font-size : 12px;
+    }
+    .portlet-header a{
+        color : #40A0C0;
+        text-decoration : underline;
+    }
+    .offsale img{
+        opacity : 0.1;
+    }
+    .result-price{
+        color : orange;
+    }
+    .ui-autocomplete{
+        z-index : 9999;
+    }
+    .add-product-panel{
+        display : none;
+    }
+    .disable{
+        opacity : 0.5;
+    }
+    .sellout, .action-product-del, .action-status-onsale, .action-status-offsale, span.price{
+        margin-right:5px;
+    }
+
+    /* 重写jquery ui 的某些样式 */
+    .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited{
+        color : #40A0C0;
+        text-decoration : underline;
+        font-size : 12px;
+    }
+
+    /* style for iframe */
+    .iframe-box{
+        height: 550px;
+        width: 635px;
+        overflow: hidden;
+        position:fixed;
+        right:20px;
+        top: 120px;
+        z-index: -1;
+    }
+    #iframe_form{
+        margin-top: -65px;
+        right: -480px;
+        top: 125px;
+    }
+
+</style>
+<div class="iframe-box">
+    <iframe id="iframe_form" width="980" height="440" scrolling="no" frameborder="0"></iframe>
+</div>
+{{if power > 2}}
+<p class="add-section">
+    <a href="/dashixiongwx/admin/shop/${shop_id}/section/add">添加货架</a>
+</p>
+{{/if}}
+<div class="ui-widget add-product-panel">
+    <div class="add-product-panel-inner">
+        <p>
+            <label id="tags_label" for="tags">添加产品: </label>
+        </p>
+        <p>
+            <input id="tags" />
+        </p>
+    </div>
+</div>
+
+<div id="notice">
+    <div id="change_msg"> </div>
+    <div id="change_action"><a id="change_action_save" href="#" onclick="return false;"> 保存 </a> </div>
+</div>
+<div class="section-container">
+<div class="column">
+    {{each(section, i) sections}}
+    {{if section.isAvailable==1}}
+    <div sectionid="${section.id}" class="portlet">
+        {{else}}
+        <div sectionid="${section.id}" class="portlet disable">
+            {{/if}}
+            <div class="portlet-header">
+                <span class="section-name">${section.name} </span>
+                {{if power > 2}}
+                    <span class="action">
+                        {{if power != 3}}<a sectionid="${section.id}" class="action-section-del" href="/dashixiongwx/admin/shop/${shop_id}/section/${section.id}/del" onclick="ondel(this);return false;">删除</a> |{{/if}}
+                        <a sectionid="${section.id}" class="action-section-edit" href="/dashixiongwx/admin/shop/${shop_id}/section/${section.id}/edit">编辑</a> |
+                        <a sectionid="${section.id}" class="action-section-add-product" href="#" onclick="return false;">添加产品</a>
+                    </span>
+                {{/if}}
+            </div>
+            <div class="portlet-content">
+                <ul id="section_${section.id}" sectionid="${section.id}" class="product-list connectedSortable"> </ul>
+            </div>
+        </div>
+
+        {{/each}}
+    </div>
+</div>
+
+
+<script type="text/javascript" >
+/*
+ 作者提示: 以下代码风格太奔放, 数据层(M), 控制器(C), 展示层(V), 代码互相耦合, 不可学之！
+ */
+
+var $doc = $(document);
+
+if(!window.JSON){
+    alert('本页面需要使用浏览的JSON对象等高级属性, 你使用的浏览器没有这些, 功能将会受到影响!');
+    throw 'No JSON toolkit, maybe no forEach for Array Object, ethier.';
+}
+var ondel = function(ele){
+    var yes = confirm('真的要删除么?');
+    if(yes){
+        var $text = $('.action-section-del').text().substring(0,2);
+        var $sectionId = $(ele).attr('sectionid');
+        $.post('/dashixiongwx/admin/shop/${shop_id}/productop', {text: $text, sectionId: $sectionId}, function(res){});
+        location.href = ele.href;
+    }
+};
+
+var shop_id = '${shop_id}';
+var cur_warehouse_id = '${cur_warehouse_id}';
+var sections = {{html JSON.stringify(sections)}};
+
+$(function() {
+    //---------------------- 记录下现在所有货架、产品的排序 ------------//
+    var section_order = {{html JSON.stringify(section_order)}};//货架原始排序
+var section_product_order_map = {};//货架上的产品的原始排序
+
+
+//-------------------- 添加产品 ------------------
+var add_product_panel = {
+    init : function () {
+        this.input = $( '#tags' );
+        this.panel = $( '.add-product-panel' );
+        this.title = $( '#tags_label' );
+        this.close_btn = $( '#close_panel_btn' );
+
+        this.bindEvent();
+    },
+    bindEvent : function () {
+        var This = this;
+        this.close_btn.click(function () {
+            This.hide();
+        });
+    },
+    show :  function () {
+        this.title.text( '为"' + change.cur_adding_section_name + '"添加产品' );
+        this.input.focus();
+        this.panel.dialog({
+            modal: true
+        });
+    },
+    hide : function () {
+        this.panel.hide();
+    }
+};
+add_product_panel.init();
+
+//---------------------------------------------- 添加产品面板按钮 -------------------//
+$( '.action-section-add-product' ).click(function () {
+    var div = $(this).parents('div[sectionid]');
+    change.cur_adding_section_id = div.attr('sectionid');
+    change.cur_adding_section_name = div.find( '.section-name' ).text();
+
+    add_product_panel.show();
+});
+
+//---------------------------------------------- 为货架添加产品 ---------------//
+var products = {{html JSON.stringify(products_in_warehouse)}};
+var products_map = {};
+products.forEach(function (product, i) {
+    products_map[ product.id ]  = product;
+});
+
+//拼接一个产品的html
+var makeItemHtml = function (product) {
+    var html = [
+        (function(){
+            if( !product.productStatus ){
+                return '<li class="ui-state-default item offsale" productid="'+ product.id +'" product-status="'+ product.productStatus +'">';
+            }
+            return '<li class="ui-state-default item" productid="'+ product.id +'" product-status="'+ product.productStatus +'">';
+        })(),
+        '<div class="product-img">',
+                '<img src="http://img.ksmimi.com/uploads/products/'+ product.img +'" width="80" />',
+        '</div>',
+        '<div class="product-name">',
+        product.title,
+        '</div>',
+        '<div>',
+        {{if power > 2}}
+        '<a class="action-product action-product-del" href="#" onclick="return false;">删除</a>',
+        {{/if}}
+                '<span class="price">'+ product.price +' 元/'+ product.unit +'</span>',
+        '<span class="action-status">',
+                '<a status="0" class="action-status-onsale" href="/dashixiongwx/admin/shop/'+ shop_id +'/warehouse/'+ cur_warehouse_id +'/product/'+ product.code +'/status/update/0" productid="'+ product.id +'" onclick="return false;">上架</a>',
+                '<a status="1" class="action-status-offsale" href="/dashixiongwx/admin/shop/'+ shop_id +'/warehouse/'+ cur_warehouse_id +'/product/'+ product.code +'/status/update/1" productid="'+ product.id +'" onclick="return false;">下架</a>',
+                '<a status="2" class="action-status-offsale sellout" href="/dashixiongwx/admin/shop/'+ shop_id +'/warehouse/'+ cur_warehouse_id +'/product/'+ product.code +'/status/update/2" productid="'+ product.id +'" onclick="return false;">售罄</a>',
+                '<a status="3" class="stock" type="common" href="/dashixiongwx/admin/shop/'+ shop_id +'/warehouse/'+ cur_warehouse_id +'/product/'+ product.code +'/update/'+ product.title +'?is_frame=1" productid="'+ product.id +'" onclick="return false;">库存</a>',
+        '</span>',
+         '<div>',
+        '<a class="getProCount" href="#" wid="'+cur_warehouse_id+'" shop_id="'+shop_id+'" pcode="'+product.code+'" productid="'+ product.id +'" onclick="return false;">获取库存</a><input style="width: 80px; display: none;" class="proCount" type="text" />',
+        '</div>',
+        '</div>',
+        '</li>'
+    ];
+    return html.join( '' );
+};
+
+sections.forEach(function (section, i) {
+    if( !section.products || !section.products.length )return;
+    var html = [];
+    section.products.forEach(function (product, i) {
+        html.push( makeItemHtml( product ) );
+    });
+    $( '#section_'+section.id ).html( html.join('') );
+});
+
+//记录一下当前的每个货架上的产品排序
+$('ul.product-list').each(function(){
+    var product_order = [];
+    var $ul = $(this);
+    $ul.find('li').each(function(){
+        product_order.push( $(this).attr('productid') );
+    });
+    section_product_order_map[ $ul.attr('sectionid') ] = JSON.stringify(product_order);
+});
+
+section_order = section_order.join();
+var change = {};//用来保存排序的变更, 以便后端将这些改变保存起来
+change.product_order_changes = {};//这个对象记录每个货架上产品排序的变更, 为空说明排序没改变
+
+
+
+
+
+
+var new_section_order = [];//各个货架当前的排序用这个数组记录
+
+var noChanges = function ( isUpdate ) {
+    change.hasChanges = false;
+    $( '#change_msg' ).text( '' );
+    $( '#notice' ).hide();
+    if( isUpdate ){//isUpdate 为true的话就把当前最新的货架排序、货架内产品排序状态记录下来, 作为下次比对的基准
+        section_product_order_map = change. product_order_changes;
+        section_order = new_section_order;
+    }
+};
+var hasChanges = function ( msg ) {
+    change.hasChanges = true;
+    $( '#change_msg' ).text( msg || '有变化!' );
+    $( '#notice' ).show();
+};
+var paramsToArray = function (obj) {
+    if( !obj )return [];
+    var ret = [];
+    for( var p in obj ){
+        ret.push( obj[p] );
+    }
+    return ret;
+};
+
+var checkChange = function () {
+    var msg = '';
+    if( change.section_order_changed ){
+        msg = '货架顺序发生了改变...';
+    }
+
+
+    //遍历所有的ul, 发现产品顺序发生改变的ul, 就把这个改变给记录下来
+    $( 'ul.product-list' ).each(function (i, ul) {
+        ul = $( ul );
+        var section_id = ul.attr('sectionid');
+        var old_section_product_order = section_product_order_map[ section_id ];
+        var new_section_product_order = [];
+
+        ul.find('li').each(function(){
+            new_section_product_order.push( $(this).attr('productid') );
+        });
+
+        //序列化一下, 接下来就可以比对两个字符串, 以此作为是否有排序发生变化的依据
+        new_section_product_order = JSON.stringify( new_section_product_order );
+
+        if( new_section_product_order != old_section_product_order ){//货架上的产品的排序发生了改变
+            //记录下这个货架上产品顺序的改变
+            change.product_order_changes[ section_id ] = {
+                section_id : section_id,
+                new_order : new_section_product_order
+            }
+            return;
+        }
+        //货架上的产品顺序没有发生改变
+        change.product_order_changes[ section_id ] = null;
+        delete change.product_order_changes[ section_id ];
+
+    });//end each
+
+    var ary_product_order_changes = paramsToArray( change.product_order_changes )
+    //ary_product_order_changes 如果有元素, 说明某些货架的产品顺序发生了改变, 把这些改变告知用户
+    if( ary_product_order_changes.length ){//货架上产品顺序有改变
+        var tmp = [];
+        ary_product_order_changes.forEach(function(chg, i){
+            tmp.push( chg.section_id );
+        });
+        msg += '货架'+tmp.join()+'的产品顺序发生了改变';
+    }
+
+    if( !msg ){
+        noChanges();
+        return change;//将change 对象返回, 让调用者知道具体的变化
+    }
+    hasChanges( msg );
+    return change;//将change 对象返回, 让调用者知道具体的变化
+};
+
+//----------------------- 货架排序 -----------------------
+$( ".column" ).sortable({
+    handle: ".portlet-header",
+    cancel: ".portlet-toggle",
+    placeholder: "ui-state-highlight",
+    stop: function( event, ui ) {
+        new_section_order.length = 0;
+        var tmp = null;
+        $('.portlet').each(function(e){
+            tmp = $(this).attr('sectionid');
+            new_section_order.push(tmp);
+        });
+        if(new_section_order.length && new_section_order.join()!=section_order){
+            change.section_order_changed = {
+                ary_order : new_section_order
+            }
+            checkChange();
+            return;
+        }
+        //能运行到这里说明顺序跟原来一样
+        change.section_order_changed = null;
+        checkChange();
+    }
+});
+
+//----------------------- 货架上的产品排序 -----------------------
+$( ".product-list" ).sortable({
+    connectWith: ".product-list",
+    placeholder: "ui-state-highlight",
+    stop: function( event, ui ) {
+        checkChange();
+    }
+});
+
+$( ".portlet" )
+        .addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+        .find( ".portlet-header" )
+        .addClass( "ui-widget-header ui-corner-all" )
+        .prepend( "<span class='ui-icon ui-icon-minusthick portlet-toggle'></span>");
+
+$( ".portlet-toggle" ).click(function() {
+    var icon = $( this );
+    icon.toggleClass( "ui-icon-minusthick ui-icon-plusthick" );
+    icon.closest( ".portlet" ).find( ".portlet-content" ).toggle();
+});
+
+$( '#change_action_save' ).click(function(){
+    if( change.hasChanges ){
+        hasChanges( '正在保存...哼哼哈嘿!' );
+        change.ary_product_order_changes = paramsToArray( change.product_order_changes );//这个属性是为了方便后端遍历
+        $.post( '/dashixiongwx/admin/shop/${shop_id}/section/orderchange', {
+            change : JSON.stringify( change )
+        }, function (res, obj) {
+            if( !res.code ){
+                noChanges(true);
+            }
+        });
+    }
+});
+
+//-------------------- 删除产品 ------------------
+$( 'ul.product-list' ).delegate( 'a.action-product-del', 'click', function () {
+    var $text = this.text;
+    var $sectionId = $(this).parent().parent().parent().attr('sectionid');
+    var $pId = $(this).parent().parent().attr('productid');
+    $.post('/dashixiongwx/admin/shop/${shop_id}/productop', {text: $text, sectionId: $sectionId, pId: $pId}, function(res){});
+    $( this ).parents( 'li[productid]' ).remove();
+    checkChange();
+});
+
+
+
+
+
+//-------------------------- 搜索产品, 以便添加到货架上 ------------------------//
+$( "#tags" ).autocomplete({
+    width : 200,
+    source : function( request, response ) {//搜索结果如果返回, 主要的逻辑就在这个方法里
+        response( $.grep( products, function (product) {
+            if( /^\d+$/.test( request.term ) ){//如果是用id来搜索
+                return product.id == (request.term - 0);
+            }
+            return product.title.indexOf(request.term) != -1;
+        }) );
+    },
+
+    focus: function( event, ui ) {
+        $( "#tags" ).val( ui.item.title);
+        return false;
+    },
+    select: function( event, ui ) {
+        $( "#tags" ).val( '' );
+        var product = products_map[ ui.item.id ];
+        //拼接一个产品的dom结构然后插入到ul中
+        var $li = $( makeItemHtml( product ) );
+        $( 'ul[sectionid='+ change.cur_adding_section_id +']' ).prepend( $li );
+        //检查一下产品的状态, 以便在UI上正确反应产品的状态(上架/下架)
+        checkProductStatus( $li );
+        //接着触发一下排序检查
+        checkChange();
+        return false;
+    }
+}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {//搜索结果如何显示的逻辑, 就在这个方法里
+    return $( "<li class='search-result' id="+ item.id +">" ).append( "["+ item.id +"]<a><img src='http://img.ksmimi.com/uploads/products/"+ item.img+"' width='30' height='30' /> " + item.title+ " <span class='result-price'>" + item.price+ "</span>元/"+ item.unit +"</a>" ).appendTo( ul );
+};
+
+//-------------------------- 更改产品状态 ---------------------//
+var checkProductStatus = function ( $li ) {
+
+    if( $li.attr( 'product-status' ) - 0 == 0 ){//产品是上架状态, 显示下架按钮
+        $li.find( '.action-status-offsale' ).show();
+        $li.find( '.action-status-onsale' ).hide();
+        $li.removeClass( 'offsale' );
+        return;
+    }
+    //产品下架状态, 显示上架按钮
+    $li.find( '.action-status-onsale' ).show();
+    $li.find( '.action-status-offsale' ).hide();
+    $li.addClass( 'offsale' );
+};
+
+//上架/下架功能
+$( 'ul.product-list' ).delegate( '.action-status a', 'click', function () {
+    var $a = $( this );
+    var $li = $( this ).parents( 'li.item' );
+    $.get( this.href, function (res) {
+        var resObj = JSON.parse(res);
+        $li.attr( 'product-status', $a.attr( 'status' ) );
+        if( $a.attr('type') == 'common' ) return; //普通链接，点击后不影响其他链接所以后面的就不用运行了
+        if(resObj.code == 0){
+            checkProductStatus( $li );
+        }
+    });
+
+});
+
+$( 'li.item' ).each(function () {
+    checkProductStatus( $( this ) );
+});
+
+//iframe
+var $iframe_form = $('#iframe_form');
+var $iframe_box = $('.iframe-box');
+$iframe_form.load(function(){
+    var $iframe = $(this);
+    $iframe.height($iframe.contents().height());
+});
+$doc.on('click', '.stock', function(){
+    var $text = this.text;
+    var $sectionId = $(this).parent().parent().parent().parent().attr('sectionid');
+    var $pId = $(this).parent().parent().parent().attr('productid');
+    $.post('/dashixiongwx/admin/shop/${shop_id}/productop', {text: $text, sectionId: $sectionId, pId: $pId}, function(res){});
+
+    var href = $(this).attr('href');
+    href = href.replace(/(update\/[^\?\/]*)\/([^\?\/]*\?)/g, '$1／$2');
+    $iframe_form.attr('src', href);
+    $iframe_box.css("zIndex",1);
+});
+
+
+});//end dom ready
+</script>
+<script type="text/javascript">
+    $(function(){
+        $('.action-status-onsale').click(function(){
+            var $text = this.text;
+            var $sectionId = $(this).parent().parent().parent().parent().attr('sectionid');
+            var $pId = $(this).parent().parent().parent().attr('productid');
+            $.post('/dashixiongwx/admin/shop/${shop_id}/productop', {text: $text, sectionId: $sectionId, pId: $pId}, function(res){});
+        });
+        $('.action-status-offsale').click(function(){
+            var $text = this.text;
+            var $sectionId = $(this).parent().parent().parent().parent().attr('sectionid');
+            var $pId = $(this).parent().parent().parent().attr('productid');
+            $.post('/dashixiongwx/admin/shop/${shop_id}/productop', {text: $text, sectionId: $sectionId, pId: $pId}, function(res){});
+        });
+        $('.action-section-edit').click(function(){
+            var $text = this.text;
+            var $sectionId = $(this).attr('sectionid');
+            $.post('/dashixiongwx/admin/shop/${shop_id}/productop', {text: $text, sectionId: $sectionId}, function(res){});
+        });
+        $('.action-section-add-product').click(function(){
+            var $text = this.text;
+            var $sectionId = $(this).attr('sectionid');
+            $.post('/dashixiongwx/admin/shop/${shop_id}/productop', {text: $text, sectionId: $sectionId}, function(res){});
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function(e){
+        $('.getProCount').click(function(){
+            var $this = $(this);
+            var $shopId = $this.attr('shop_id');
+            var $productid = $this.attr('productid');
+            var $pcode = $this.attr('pcode');
+            var $wid = $this.attr('wid');
+            $.post('/dashixiongwx/admin/shop/'+$shopId+'/warehouse/'+$wid+'/product/'+$pcode+'/update/count', {isAjax: 1}, function(res){
+                var res = JSON.parse(res);
+                var count = res.count;
+                $this.siblings('.proCount').val(count);
+                $this.siblings('.proCount').show();
+            });
+        });
+        $('.proCount').blur(function(){
+            var $this = $(this);
+            var $shopId = $this.siblings('.getProCount').attr('shop_id');
+            var $productid = $this.siblings('.getProCount').attr('productid');
+            var $pcode = $this.siblings('.getProCount').attr('pcode');
+            var $wid = $this.siblings('.getProCount').attr('wid');
+            var $count = $this.val();
+            $.post('/dashixiongwx/admin/shop/'+$shopId+'/warehouse/'+$wid+'/product/'+$pcode+'/update/count/doupdate', {count: $count}, function(res){
+                alert('修改成功！');
+                $this.hide();
+            });
+        });
+    });
+
+
+</script>

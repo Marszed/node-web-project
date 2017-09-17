@@ -1,0 +1,65 @@
+<div id="layout">
+    <div id="content">
+        <div class="category">
+            <a href="/dashixiongwx/rp/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}">人品</a>
+            <a href="/dashixiongwx/myWealth/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}">我的财富</a>
+            <a href="/dashixiongwx/listWealth/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}" class="cur">福布斯财富榜</a>
+        </div>
+        <div class="categort-content">
+            <p class="description" id="rank" nick="${user.nick}"></p>
+            <ul class="ul-list wealth-list">
+                {{each(user, i) ret}}
+                <li>
+                    <div class="list-item">
+                        <div class="p">
+                            <a href="#" onclick="return false">
+                                {{if user.head}}
+                                <img class="p-pic" user_id="${user.userId}" src="${staticheads}${user.head}" alt="">
+                                {{else}}
+                                <img class="p-pic" user_id="${user.userId}" src="${defaultheads}" alt="">
+                                {{/if}}
+                            </a>
+
+                        </div>
+                        <div class="des">
+                            <a href="#" class="des-a" onclick="return false">
+                                <!-- <em class="list-index">${i+1}</em> -->
+                                <h3 class="d-tit">${user.nick}</h3> 
+                            </a>
+                            <div class="d-main">
+                                {{each(tool, i) user.tools}}
+                                <strong class="tool-tit">${tool.title}</strong><span class="num"> ${tool.num}</span> &nbsp;
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {{/each}}
+            </ul>  
+        </div>
+    </div>
+    <div id="layout-footer">
+    
+    </div>
+</div>
+<div id="footer"><a href="/dashixiongwx/shop/1/article/440">如何攒人品</a></div>
+<script src="http://s.ksmimi.com/dashixiong_static/jspro/jquery-1.10.2.js"></script>
+<script>
+    $(function(){
+        $.get('/dashixiongwx/getuserwealthRank/${user.openId}',function(obj){
+            var msg = '';
+            if(obj&& obj.rownum){
+                obj.rownum = obj.rownum-0;
+                if(obj.rownum == 1) msg += '恭喜你荣登福布斯首富';
+                if(obj.rownum == 2) msg += '恭喜你荣登福布斯巨富';
+                if(obj.rownum == 3) msg += '恭喜你荣登福布斯大亨';
+                if(obj.rownum > 3 && obj.rownum < 31) msg += '恭喜你荣登福布斯土豪,排名第'+obj.rownum+'名';
+                if(obj.rownum > 30) msg += '您目前在福布斯排第'+obj.rownum+'名';
+            }else{
+                msg +='你还在千里之外哦';
+            }
+            $('#rank').html(msg)
+        });
+    });
+</script>
+

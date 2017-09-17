@@ -1,0 +1,46 @@
+<style type="text/css" media="all">
+    p{
+        padding : 10px; 
+    } 
+</style>
+
+<form action="/dashixiongwx/weixin/dotest?isHj=1" method="post" accept-charset="utf-8">
+    <p>
+        <label for="">type</label>
+         <select name="msg[msgType]" id="msgType">
+             <option value="text" key="qrscene_2">text</option>
+             <option value="image" key="qrscene_2">image</option>
+             <option value="CLICK" key="key_store">进入小卖部</option>
+             <option value="CLICK" key="key_restaurant">进入餐厅</option>
+             <option value="CLICK" key="key_community">进入社区</option>
+             <option value="CLICK" key="key_my_order">我的订单</option>
+             <option value="CLICK" key="key_my_hire">招聘</option>
+             <option value="subscribe" key="qrscene_2">subscribe</option>
+             <option value="unsubscribe" key="qrscene_2">unsubscribe</option>
+         </select>
+    </p>
+    <p>
+        <label for="">picUrl</label><input type="text" name="msg[picUrl]" id="picUrl" value="" />
+    </p> 
+    <p>
+        <label for="">content</label><input type="text" name="msg[content]" id="content" value="" />
+    </p>
+    <p>
+        <label for="">eventKey</label><input type="text" name="msg[eventKey]" id="eventKey" value="qrscene_2" />
+    </p>
+    <p>
+        <label for="">fromUserName</label><input type="text" name="msg[fromUserName]" id="fromUserName" value="oXvPNjv6ZxctraFq85u4ro2m04S4" />
+    </p>
+    <p>
+        <input type="submit" name="" id="submit" value="提交" />
+    </p>
+</form>
+
+<script type="text/javascript">
+    var $eventKey = $('#eventKey');
+    $('#msgType').change(function(){
+        var $select = $(this),
+            val = $select.val();
+        $eventKey.val( $select.find('option:selected').attr('key') );
+    });
+</script>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .wrap{
+            padding: 0;
+            margin: 0 auto;
+            width: 100%;
+            height: 100%;
+            min-height: 450px;
+            background: #eeeeee;
+        }
+        .top{
+            width: 100%;
+            height: 50px;
+            background: #ff6000;
+        }
+        h2{
+            padding-top: 50px;
+            margin-bottom: 10px;
+            color: #989898;
+            text-align: center;
+            font-size:25px;
+        }
+        .content{
+            width: 90%;
+            height: 250px;
+            margin: 15% auto;
+        }
+        .full_time,.part_time{
+            margin: 0 auto;
+            text-align: center;
+            padding: 10px;
+            color: #989898;
+            font-size:20px;
+        }
+        .btn{
+            display: block;
+            margin:30px 20%;
+            width: 60%;
+            height: 40px;
+            background: #fe6200;
+            border-radius:3px;
+            color: white;
+            border: 0;
+            font-size: 20px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="top"></div>
+    <div class="content">
+        <h2>请选择应聘类型</h2>
+        <div class="full_time"><label><input value="1" name="radio" type="radio"/> 应 聘 全 职 </label></div>
+        <div class="part_time"><label><input value="2" name="radio" type="radio"/> 应 聘 兼 职 </label></div>
+        <input class="btn" type="button" value="确定">
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $('.btn').click(function(){
+            var radioVal = $('input:radio[name="radio"]:checked').val();
+            if( radioVal == 1 ){
+                location.href = 'http://www.ksmimi.com/dashixiongwx/shop/${shopId}/article/645';
+            }else if( radioVal == 2 ){
+                window.location.href = 'http://www.ksmimi.com/dashixiongwx/shop/${shopId}/employee/register?user_id=${userId}';
+            }else{
+                alert('请选择应聘类型!');
+            }
+        });
+    });
+</script>
+</html>

@@ -1,0 +1,101 @@
+<style>
+
+</style>
+<h1>圣诞"表白"礼物派送清单</h1>
+<input type="text" id="userId" placeholder="请输入用户ID"/>
+<input type="button" id="btn_delete" value="删除"/>
+<br/><br/>
+<table>
+    <th>序号</th>
+    <th>shopID</th>
+    <th>userID</th>
+    <th>To</th>
+    <th>地址</th>
+    <th>我想对Ta说</th>
+    <th>礼物</th>
+    <th>from</th>
+    <th>地址</th>
+    <th>电话</th>
+    <th>状态</th>
+    {{each(gift,i) gifts}}
+    <tr gift_id="${gift.id}" shop_id="${gift.shopId}" user_id="${gift.extra}">
+        <td>${i+1}</td>
+        <td>${gift.shopId}</td>
+        <td>${gift.extra}</td>
+        {{if gift.type_value.toUserName}}
+        <td>${gift.type_value.toUserName}</td>
+        <td>${gift.type_value.toUserAddr}</td>
+        <td>${gift.type_value.message_info}</td>
+        <td>${gift.type_value.gift_type}</td>
+        <td>${gift.type_value.fromUserName}</td>
+        <td>${gift.type_value.fromUserAddr}</td>
+        <td>${gift.type_value.fromUserTel}</td>
+        {{else}}
+        <td colspan="7">${gift.type_value}</td>
+        {{/if}}
+        {{if gift.status==1 }}
+            <td><a style="color: red;" class="send" href="#" onclick="return false">等待派送</a></td>
+        {{else}}
+            <td style="color: gray;">已经派送</td>
+        {{/if}}
+    </tr>
+    {{/each}}
+</table>
+
+        <iframe class="send-iframe" src="#" style="display: none;"></iframe>
+
+<script>
+    $(document).ready(function(){
+        var $send = $('.send');
+        $send.click(function(){
+            var o = $(this);
+            var id = $(this).closest('tr').attr('gift_id');
+            var shop_id = $(this).closest('tr').attr('shop_id');
+            var user_id = $(this).closest('tr').attr('user_id');
+            var obj = {
+                giftId : id,
+                shopId : shop_id,
+                userId : user_id
+            };
+//            if(confirm('确认现在派送？')){
+                $.get('/dashixiongwx/admin/shop/christmas/gift/send', {obj: obj},function(data){
+                    var obj = JSON.parse(data);
+                    if(obj.msg == 'sus'){
+                        var href = "/dashixiongwx/activity/christmas/shop/"+shop_id+"/user/"+user_id+"?auto_print=1";
+                        $('.send-iframe').attr({"src":href});
+
+                    }
+                });
+                var p = o.closest('td');
+                p.html('已经派送');
+                p.css({'color':'gray'});
+//            }
+
+        });
+    });
+</script>
+
+
+<script type="text/javascript">
+    document.onkeydown = function (e) {
+        var theEvent = window.event || e;
+        var code = theEvent.keyCode || theEvent.which;
+        if (code == 13) {
+            $("#btn_delete").click();
+        }
+    }
+</script>
+<script type="text/javascript">
+    $('#btn_delete').click(function(){
+        var r = confirm('确认删除吗?');
+        if(r == true) {
+            var userId = $('#userId').val()-0;
+            if(userId) {
+                $.post('/dashixiongwx/admin/deleteByUserId', {userId: userId}, function (res) {});
+                location.reload();
+            }
+        }else{
+            return false;
+        }
+    });
+</script>

@@ -1,0 +1,215 @@
+<style type="text/css" media="all">
+    h1{
+        margin-bottom : 20px; 
+        font-size : 20px;
+        color : #333;
+    }
+    .egg-container{
+        text-align : center; 
+    }
+    .msg{
+        background : #FFFACD; 
+        padding : 10px;
+        text-align : center;
+        margin-top : 10px;
+        border-radius: 5px;
+        border: 1px solid #FFDEAD;
+    }
+    .tool-img img{
+        border : 1px solid #CCC;              
+        margin : 10px 0;
+    }
+    .tool-title{
+        font-size : 20px;
+        color : #333;
+        margin-bottom : 10px;
+    }
+    .desc{
+        margin-bottom : 10px;         
+        line-height : 20px;
+    }
+    .digest{
+        background : #EEE; 
+        padding : 10px;
+    }
+
+</style>
+
+
+
+<div class="container">
+    <h1>大师兄小卖部，砸金蛋有豪礼</h1>
+    <p class="desc digest">
+        人生有四喜: 久旱逢甘露，他乡遇故知。洞房花烛夜，金蛋砸破时！
+    </p>
+    <p class="desc">
+        用你的手点击下面的金蛋，狠狠地点！直到它破掉为止~
+    </p>
+    <p class="msg loading" style="display:none;">
+        正在加载...
+    </p>
+    <div class="msg none" style="display:none;">
+        <p>
+            运气有点背哦！不用着急，还有<span class="num-remain">1</span>次机会，要不要再试试？ 
+        </p>
+        <p>
+           <a id="again" href="#" onclick="return false;" ontouchstart="egg.reset();return false;"> 再来一次！爷就不信了！ </a>  
+        </p>
+    </div>
+    <div class="msg nomore" style="display:none;">
+        <p>
+            最多3次机会哟~ 
+        </p>
+    </div>
+    <div class="msg tool" style="display:none;">
+
+    </div>
+
+    <p class="egg-container">
+         <img id="egg" src="" alt="这是一个金蛋..." ontouchstart="egg.beHit();return false;" />
+    </p>
+    
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+$(function () {
+    var user_id = ${user_id};
+    var egg_1 = 'http://img.ksmimi.com/uploads/articles/81aa158eda2a145fb37941b75335bc81.jpg';
+    var egg_2 = 'http://img.ksmimi.com/uploads/articles/15d4b324330db0d1455dd8587811dec9.jpg';
+    var egg_3 = 'http://img.ksmimi.com/uploads/articles/fd6339a5aa4f27c3ef72bdcce6c150c0.jpg';
+
+    var voice3 = 'http://img.ksmimi.com/uploads/articles/c2702788dde3c60c0b74970f4f8e57dd.wav';
+
+    var egg = {
+        init : function(){
+            this.egg = $( '#egg' );
+            this.loading = $( '.loading' );
+            this.tool = $( '.tool' );
+            this.none = $( '.none' );
+            this.again = $( '#again' );
+            this.tool_info = $( '.tool-info' );
+            this.nomore = $( '.nomore' );
+            this.num_remain = $( '.num-remain' );
+
+            this.bindEvent();
+            this.stage1();
+
+            this.click_num = 0;
+			this.voice3 = new Audio('http://img.ksmimi.com/uploads/articles/c2702788dde3c60c0b74970f4f8e57dd.wav');	
+			this.voice2 = new Audio('http://img.ksmimi.com/uploads/articles/28a6bb267aebc37504c58821727073a2.wav');	
+        },
+        bindEvent : function () {
+            var This = this;
+            if( !document.ontouchstart ){
+                this.egg.click(function () {
+                    This.beHit();
+                });
+                this.again.click(function () {
+                    This.reset();
+                });
+            }
+        },
+        showLoading :  function () {
+            this.loading.text( '正在加载...稍安勿躁...' );
+            this.loading.show();
+            this.tool.hide();
+            this.none.hide();
+        },
+        hideLoading : function () {
+            this.loading.hide();
+        },
+        stage1 : function () {
+            this.egg.attr( 'src', egg_1 );
+        },
+        stage2 : function () {
+            this.egg.attr( 'src', egg_2 );
+            this.voice2.play();
+        },
+        stage3 :  function () {
+            this.egg.attr( 'src', egg_3 );
+            this.voice3.play();
+            var This = this;
+            This.showLoading();
+            $.get( '/dashixiongwx/activity/8/whatinegg/'+user_id+'?ran='+Math.random(), function (res) {
+                This.hideLoading();
+                if( res.code == 1 ){
+                    This.showNoMore();
+                    return;
+                }
+                if( res.code == 2 ){
+                    This.showNoMore( '你已经赢取了金蛋里的道具了哦~留点给别人呗~' );
+                    return;
+                }
+                This.showRet( res.tool, res );
+            });
+        },
+        beHit : function () {
+            ++this.click_num;      
+            if( this.click_num == 1 ){
+                this.stage2();
+            }else if( this.click_num == 2 ){
+                this.stage3();
+            }
+        },
+        reset : function () {
+            this.click_num = 0;    
+            this.stage1();
+            this.hideLoading();
+            this.none.hide();
+            this.tool.hide();
+        },
+        showNone : function (res) {
+            this.none.show();
+            this.num_remain.text( res.num_remain );
+
+        },
+        showTool : function (tool) {
+            this.tool.show();
+            var html = [
+                '<p class="tool-img">',
+                    '哇！好腻害！你竟然砸出了这么牛B的豪礼: ',
+                '</p>',
+                '<p class="tool-img">',
+                    '<img width="80" src='+ tool.img +'>',
+                '</p>',
+                '<p class="tool-title">',
+                    tool.title,
+                '</p>',
+                '<p class="tool-desc">',
+                    tool.description,
+                    '。道具的使用方法<a target="_blank" href="http://www.ksmimi.com/dashixiongwx/shop/1/article/401">点击查看&gt;&gt;</a>',
+                '</p>'
+            ];
+            this.tool.html( html.join('') );
+        },
+        showNoMore : function ( str ) {
+            if( str ){
+                this.nomore.find( 'p' ).text( str );
+            }
+            this.nomore.show();
+        },
+        showRet : function (tool, res) {
+            if( !tool ){
+                this.showNone( res ); 
+                return;
+            }
+            this.showTool( tool );
+        }
+
+    };
+    egg.init();
+    
+    
+
+        
+});
+    
+    
+    
+</script>
+
+
+
+
+

@@ -1,0 +1,463 @@
+<style type="text/css" media="all">
+    .reply-action input{
+        border : 1px solid #DDD; 
+        line-height : 14px;
+        padding : 5px;
+        width : 300px;
+    } 
+    .send-sus{
+        color : green; 
+    }
+    .reply-tip{
+        color : orange; 
+    }
+    .reply-dot{
+        font-size : 0.5em;
+    }
+    .load-more, .new-msg{
+        background : #FFEFD5;
+        border : 1px dashed #DDD;
+        padding : 10px;
+        text-align : center;
+    }
+    .load-more a, .new-msg a {
+        display : block; 
+    }
+    .loading{
+        width : 19px; 
+        display : none;
+    }
+    .new-msg{
+
+    }
+    .user-info{
+        background : #FFF;
+        margin-bottom : 10px; 
+    }
+    .user-info li{
+        list-style-type : disc; 
+    }
+    .avatar{
+        vertical-align : center; 
+    }
+    .send-msg-to-user{
+    
+    }
+    .send-msg-to-user input{
+        border : 1px solid #DDD;
+        width : 70%;
+        padding : 5px;
+        line-height : 14px;
+    }
+    .send-msg-to-user a{
+        padding : 6px;
+        background : #40A0C0;
+        color : #FFF;
+    }
+    .content{
+        max-width : 400px; 
+        line-height : 18px;
+    }
+
+</style>
+
+    <table border="0" class="user-info">
+         <tr>
+             
+             <td>
+                <ul>
+                    <li>
+                        Nick: ${session_user.nick}
+                    </li>
+                    <li>
+                        ID: ${session_user.id}
+                    </li>
+                    <!--
+                    <li>
+                        Email: ${session_user.email}
+                     </li>
+                    -->
+                    <li>
+                        <a target="_blank" href="/dashixiongwx/admin/shop/${shop_id}/user/profile/${session_user.id}">用户资料</a> | <a target="_blank" href="/dashixiongwx/admin/shop/${shop_id}/order/list/${session_user.id}/${session_user.nick}">过往订单&gt;&gt;</a>
+                     </li>
+                </ul>
+             </td>
+            <td class="avatar">
+                {{if session_user.head}}
+                    <img width="100" src="http://img.ksmimi.com/uploads/heads/${session_user.head}" />
+                {{else}}
+                    <img width="100" src="'http://s.ksmimi.com/dashixiong_static/img/human_head.jpg'" />
+                {{/if}}
+             </td>
+         </tr>
+         <tr>
+             <td class="send-msg-to-user" colspan="2">
+                 <input id="send_msg_input" userid="${session_user.id}" type="text" name=""  value="" placeholder="给“${session_user.nick}”发送微信消息" />
+                 <a id="send_btn" href="#" onclick="return false;">发送</a>
+             </td>
+         </tr>
+    </table>
+     
+
+<table>
+    <thead>
+        <tr style="display:none;" class="new-msg-tr">
+            <td colspan="5">
+                <div class="new-msg">
+                    <a href="#" onclick="return false;">
+                        有条<span id="nums"></span>新消息
+                    </a>
+                </div>        
+            </td>
+        </tr>
+        <tr>
+            <th>
+		    	发送者
+		    </th>
+            <th>
+		    	Nick
+		    </th>
+		    <th>
+		    	时间
+		    </th>
+		    <th>
+		    	内容
+		    </th>
+		    <th>
+		    	回复
+		    </th>
+	    </tr> 
+    </thead>
+    <tbody id="msg_list"> </tbody>
+    <tr class="load-more-tr">
+        <td colspan="5">
+            <div class="load-more">
+                <a href="#" onclick="return false;">
+                    加载更多 
+                </a>
+            </div>        
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript" charset="utf-8">
+    var shop_id = ${shop_id};
+    var session_user_id = ${session_user.id};
+    var session_user = {{html JSON.stringify(session_user)}};
+    var msgs = {{html JSON.stringify(msgs)}};
+
+    //拼接每一条msg信息
+    var make_item = function (msg) {
+        console.log( msg )
+        var user_info = session_user;
+        if( msg.fromUserId.indexOf( 's_' ) == 0 ){//id以"u_"开头的消息都是公众账号
+            user_info = {
+                id : 's_' + shop_id,
+                nick : shop_id + '号店'
+            };
+        }
+            
+        msg.content = msg.content.replace(/\n/ig, '</br>');
+        var html = [
+            '<tr class="msg" mid="'+ msg.id +'">',
+	        	'<td>',
+                    //'<a href="/dashixiongwx/admin/shop/'+ shop_id +'/msg/'+ user_info.id +'/list">',
+                        '<img width="50" src="'+  (user_info.head || 'http://s.ksmimi.com/dashixiong_static/img/shop_logo.jpg' ) +'" />',
+                    //'</a>',
+	        	'</td>',
+                '<td>',
+                '<a target="_blank" href="/dashixiongwx/admin/shop/'+ shop_id +'/order/list/'+ user_info.id +'/'+ user_info.nick+'">',
+	        		user_info.nick || msg.fromUserId,
+	        	'</td>',
+	        	'<td>',
+	        		msg.intime,
+	        	'</td>',
+	        	'<td class="content">',
+	        		msg.content,
+                    //富媒体内容的显示
+                    (function(){
+                        if (msg.msgType == 'image'){
+                        return [
+                            '<div>',
+                                '<a target="_blank" href="'+ msg.ext.picUrl +'">',
+                                    '<img src="'+ msg.ext.picUrl +'" alt="" width="80" />',
+                                '</a>    ',
+                            '</div>'].join('');
+                        }
+                        if(msg.msgType == 'voice'){
+                            return '<a class="download-voice" target="_blank" href="/dashixiongwx/shop/'+ shop_id +'/download/media/'+msg.ext.mediaId+'" onclick="return false;">点击下载</a>';
+                        }
+                     })(),
+                    //是否显示已回复
+                    (function () {
+                        var span = '<span class="reply-tip" style="display:none;">';
+                        if( msg.reply ){
+                            span = '<span class="reply-tip">';
+                        }
+                        return [
+                            span,  
+                                '<span class="reply-dot">●</span><span>已回复</span>',
+                            '</span>'
+                        ].join( '' );
+                    })(),
+                    
+	        	'</td>',
+	        	'<td class="reply-action">',
+                    (function () {
+                        if( msg.fromUserId.indexOf( 's_' ) == 0 ){
+                            return '';
+                        }
+                        var ht = [
+                            '<span>',
+                            '<img class="loading" src="http://s.ksmimi.com/dashixiong_static/img/loading.gif" alt="" />',
+                            '&nbsp;<input type="text" class="reply-input" value="" />',
+                            '<a targetId="'+ msg.id +'" from="'+ msg.toUserId +'" to="'+ msg.fromUserId +'" class="reply" type="del" onclick="return false;" href="#"> 回复</a>',
+                            '<span style="visibility:hidden;" class="send-sus">发送成功!</span>',
+                            '</span>'
+                        ]; 
+                        return ht.join( '' );
+                    })(),
+                    
+	        	'</td>',
+	        '</tr>'
+        ];
+        return html.join('');
+    };
+
+    var make_items = function (ms) {
+        var html = [];
+        ms.forEach(function (msg, i) {
+            html.push( make_item( msg ) );
+        });     
+        return html.join('');
+    };
+    
+    $( '#msg_list' ).html( make_items(msgs) );
+
+
+    $( 'tbody' ).delegate( '.reply', 'click', function () {
+        var input = $(this).siblings( 'input' );
+        var reply = input.val();
+        var send_sus = $(this).siblings( '.send-sus' );
+        var loading = input.siblings( '.loading' );
+        if( !reply )return;
+        var url = '/dashixiongwx/admin/shop/'+ shop_id +'/reply';
+        var p = {
+            'msg[fromUserId]' : $(this).attr( 'from' ),
+            'msg[toUserId]' : $(this).attr( 'to' ),
+            'msg[content]' : reply,
+            'msg[targetId]' : $(this).attr( 'targetId' ),
+            'msg[msgType]' : 'text'
+        }
+        
+        loading.show();
+        $.post( url, p, function (res) {
+            loading.hide();
+            if( !res.code ){
+                send_sus.html( '<span style="color:green">发送成功</span>' );
+            }else{
+                send_sus.html( '<span style="color:red">发送失败'+ JSON.stringify(res.err) +'</span>' );
+            }
+            send_sus.css({
+                visibility : 'visible'
+            });
+            if( !res.code ){
+                input.val('');
+                input.parents( 'tr' ).find( '.reply-tip' ).show();//显示“已回复”
+                input.blur();
+            }
+            setTimeout(function () {
+                send_sus.css({
+                    visibility : 'hidden'
+                });    
+            },3000);
+        });
+
+    });//end click
+    
+    $( 'tbody' ).delegate( '.reply-input', 'keyup', function (e) {
+        if(e.keyCode == 13){
+            var btn = $( this ).siblings( '.reply' );
+            btn.trigger( 'click' );
+        }
+    });
+
+    $( 'tbody' ).delegate('.download-voice', 'click', function () {
+        $.get( this.href, function (res) {
+            location.href = res.url;
+        });
+    });
+    
+    var limit = 30;
+    $( '.load-more' ).click(function () {
+        var last_msg_id = $('tr.msg').last().attr('mid');
+        var url = '/dashixiongwx/admin/shop/'+ shop_id +'/msg/'+ session_user_id +'/list/'+ last_msg_id +'/'+limit
+        $.get( url, function (res) {
+            if( res.code ){
+                alert(res.msg);
+                return;
+            }
+            $( '#msg_list' ).append( make_items(res.msgs) );
+            if( res.msgs.length < limit ){
+                $( '.load-more' ).hide();
+                $( '.load-more-tr' ).hide();
+            }
+
+        });
+    });
+
+    //---------------给用户发送微信消息 ---------------//
+    //----------------UI(View)
+    var ui = {};
+    ui.send_input = $( '#send_msg_input' );
+    ui.send_btn = $( '#send_btn' );
+    //--------------- Data(Model)
+    var msger = $( {} ); 
+    msger.send_msg = function (msg) {
+        var This = this;
+        var url = '/dashixiongwx/admin/shop/'+ shop_id +'/reply';
+        var p = {
+            'msg[fromUserId]' : msg.fromUserId,
+            'msg[toUserId]' : msg.toUserId,
+            'msg[content]' : msg.content,
+            'msg[msgType]' : 'text'
+        }
+        this.trigger( 'before_send', [ msg ]);
+        $.post(url, p, function (res) {
+            This.trigger( 'after_send', [ res, msg ] );
+        });
+    };
+    
+    //----------------- Bind Event(Controller)
+    ui.send_input.keyup(function (event) {
+        if( event.keyCode == 13 ){
+            ui.send_btn.trigger( 'click' );
+        }
+    });
+    ui.send_btn.click(function () {
+        msger.send_msg({
+            fromUserId : 's_1',
+            toUserId : 'u_' + ui.send_input.attr( 'userid' ),
+            content : ui.send_input.val() 
+        }); 
+    });
+
+
+    msger.bind( 'before_send', function (e, msg) {
+        console.log( msg );
+        ui.send_input.val('');
+        ui.send_input.attr( 'placeholder', '正在发送...' );
+    });
+    msger.bind( 'after_send', function (e, res, msg) {
+        if( !res.code ){
+            ui.send_input.attr( 'placeholder', '发送成功!' );
+            setTimeout(function () {
+                ui.send_input.val('');
+                ui.send_input.focus();
+                ui.send_input.attr( 'placeholder', '再来一发!?' );
+            }, 618);
+            return;
+        }
+
+        ui.send_input.attr( 'placeholder', '发送失败'+ res.msg );
+        setTimeout(function () {
+            ui.send_input.val( msg.content );
+            ui.send_input.focus();
+            ui.send_input.attr( 'placeholder', '再来一发!?' );
+        }, 1000);
+
+    });
+
+        
+
+
+</script>
+<!--socket.io -->
+<script src="http://www.ksmimi.com:6889/socket.io/socket.io.js"></script>
+<script type="text/javascript" >
+    var shop_id = ${shop_id};
+	var askPermission = function(){
+		if(!window.webkitNotifications){
+			alert('你不是chrome浏览器没有办法开启桌面提醒-_-%');
+			return;
+		}
+		window.webkitNotifications.requestPermission(function(){
+			console.log(window.webkitNotifications.checkPermission());
+		});
+	};
+
+    var notifications = [];
+    var closeAllNotifications = function () {
+        notifications.forEach(function (n, i) {
+            n.cancel();
+        });
+    };
+
+
+	var notify = function(notify, noSound){
+		if( window.webkitNotifications && window.webkitNotifications.checkPermission() == 0 ){
+			var icon = 'http://www.dangercove.com/html5-notifications/img/icon.png';
+
+			// Create a new notification
+			var notification = window.webkitNotifications.createNotification(icon, notify.fromUserId, notify.content);
+			notification.show();
+            notifications.push( notification );
+			setTimeout(function(){
+				notification.cancel();
+			}, 8000);
+		}
+	}
+
+
+
+	//-------------------- 用户动作响应
+	var btn_ask_permission = $('a.ask-permission');
+	btn_ask_permission.click(function(){
+		askPermission();
+	});
+
+	//-------------------- 初始化设置
+	if( !(window.webkitNotifications && window.webkitNotifications.checkPermission()) ){
+		btn_ask_permission.hide();
+	}
+</script>
+<script>
+var socket = io.connect('http://'+ location.host +':6889');
+var msgs_pushed = [];
+
+var sound_msg_come = null;
+var play_sound = function () {
+    if( !sound_msg_come ) {
+	    sound_msg_come = new Audio('http://s.ksmimi.com/dashixiong_static/res/di_la_la.mp3');	
+    }
+    sound_msg_come.play();
+};
+
+var show_unread_num = function () {
+    $( '#nums' ).text( msgs_pushed.length );
+    $( '.new-msg-tr' ).show();
+    play_sound();
+};
+var clear_unread = function () {
+    msgs_pushed.length = 0;
+    $( '.new-msg-tr' ).hide();
+    location.reload();
+};
+
+$( '.new-msg' ).click(function () {
+    clear_unread();
+});
+
+//通过这个请求上报一下自己的店铺id
+socket.emit('report_shop_id', {
+    shop_id : shop_id
+});
+socket.on('message', function (data) {
+	console.log(data);
+	notify(data, true);
+    msgs_pushed.push( data );
+    show_unread_num();
+});
+
+</script>
+

@@ -1,0 +1,52 @@
+{
+  "name": "dashixiong",
+  "description": "送货到床边",
+  "version": "1.0.0",
+  "author": {
+    "name": "auscar",
+    "email": "auscar@126.com"
+  },
+  "contributors": [
+    {
+      "name": "3Q ",
+      "email": "yongjy@126.com"
+    }
+  ],
+  "dependencies": {
+    "art-template": "~3.0.1",
+    "cheerio": "^0.18.0",
+    "express": "3.0.6",
+    "formidable": "1.0.15",
+    "gm": "~1.17.0",
+    "iconv-lite": "^0.4.4",
+    "jpush-sdk": "3.1.0",
+    "jqtpl-dsx": "1.0.4",
+    "mkdirp": "^0.5.0",
+    "mobile-agent": "0.0.8",
+    "mysql": "git://github.com/felixge/node-mysql",
+    "node-markdown": "0.1.1",
+    "node-schedule": "^0.1.15",
+    "qn": "~0.2.2",
+    "redis": "0.11.0",
+    "request": "^2.53.0",
+    "wechat": "0.8.3",
+    "wechat-pay": "^0.1.1",
+    "weixin-api-dsx": "0.0.1"
+  },
+  "devDependencies": {
+    "express": "3.0.6",
+    "imageinfo": "^1.0.4",
+    "weixin-api-dsx": "0.0.1"
+  },
+  "main": "index",
+  "engines": {
+    "node": "*"
+  },
+  "homepage": "https://github.com/visionmedia/express",
+  "_id": "dashixiong@2.0",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "private": true
+}

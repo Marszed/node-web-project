@@ -1,0 +1,385 @@
+<style>
+    table, td, th{
+        border : 1px solid #CCC;
+    }
+    h1{
+        padding : 10px;
+        font-size : 20px;
+    }
+    .money {
+        padding : 10px;
+    }
+    .good{
+        font-size : 18px;
+        color : green;
+    }
+    .bad{
+
+        color : red;
+    }
+    .order-create{
+        color : red;
+    }
+    .order-delivering{
+        color : green;
+    }
+    .order-receive{
+        color : #CCC;
+    }
+    .add-product{
+        margin : 10px;
+    }
+    .tag-product{
+        margin : 10px;
+    }
+    .onsale{
+        color : green;
+    }
+    .offsale{
+        color : red;
+    }
+    #import_products{
+        display : none;
+        margin : 10px;
+        padding : 10px;
+        border : 1px solid #CCC;
+    }
+    td{text-align:center;}
+</style>
+
+<p class="add-product">
+    <a href="/dashixiongwx/admin/shop/${shop_id}/product/add">添加产品&gt;&gt;</a>
+    {{if power>3&&(products&&products.length==0 || !products) }}
+    或 <a id="import_action" href="#" onclick="return false;">从别的分店导入(仅初始化时用)</a>
+    {{/if}}
+</p>
+<div id="import_products">
+    <form action="/dashixiongwx/admin/shop/${shop_id}/product/import" method="post" accept-charset="utf-8">
+        <p><label for="shop_id">分店id</label> <input type="text" name="from_shop_id" value="" id="from_shop_id"> <input type="submit" value="导入&rarr;"></p>
+    </form>
+</div>
+<p>
+    总共有${products.length}件产品
+    {{if status_type == 'onsale'}}
+    <span class="onsale">已上架</span>
+    {{else status_type == 'offsale'}}
+    <span class="offsale">已下架</span>
+    {{/if}}
+</p>
+<!--
+<p class="tag-product">
+	<a href="/dashixiongwx/admin/shop/${shop_id}/product/list/all">全部</a> | 
+	<a href="/dashixiongwx/admin/shop/${shop_id}/product/list/onsale">已上架</a> | 
+	<a href="/dashixiongwx/admin/shop/${shop_id}/product/list/offsale">已下架</a>
+</p>
+-->
+<div>
+    <h4>
+        <a id="to_w_btn" href="#" onclick="return false;">导出到仓库</a> | <a id="to_shop_btn" href="#" onclick="return false;">导出到分店</a>
+        {{if power == 10 }}| <a href="#" class="clear_data" onclick="return false;">一键清空本店产品数据</a>{{/if}}
+    </h4>
+    <p id="to_w_panel">
+        将选中的产品信息导出到仓库<input id="to_w_id" type="text" name="" id="" value="" placeholder="填写仓库id" /><input id="export_btn" type="submit" name="" id="" value="导出到仓库" />
+    </p>
+    <p id="to_shop_panel" style="display:none;">
+        将选中的产品信息导出到分店<input id="to_shop_id" type="text" name="" id="" value="" placeholder="填写分店id" /><input id="export_btn_to_shop" type="submit" name="" id="" value="导出到分店" />
+    </p>
+    <p>
+        <a href="/dashixiongwx/admin/shop/${shop_id}/product/sort/by/sectionid" style="font-size: 28px;color: red;" >按货架排序</a>
+    </p>
+</div>
+
+
+<table>
+    <tr>
+        <th>
+            全选<input id="select_all" type="checkbox" value="" />
+            在货架上<input id="select_onsell_all" type="checkbox" value="" />
+        </th>
+        <th>
+            货架名称
+        </th>
+        <th>
+            产品id
+        </th>
+        <th>
+            条码
+        </th>
+        <th>
+            图片
+        </th>
+        <th>
+            产品名称
+        </th>
+        <th>
+            价格
+        </th>
+        <th>
+            促销价
+        </th>
+
+        {{if power>=3 }}
+        <th>
+            成本
+        </th>
+        <th>
+            利润率
+        </th>
+        {{/if}}
+
+        <th>
+            单位
+        </th>
+        <!--<th>
+            是否在货架上
+        </th>-->
+        <!--
+        <th>
+            状态
+        </th>
+        -->
+        <th>
+            操作
+        </th>
+    </tr>
+
+    {{each(product, i) products}}
+    <tr>
+        {{if product.isexit == 'true'}}
+        <td>
+            <input class="checkbox-product" type="checkbox" pid="${product.id}" isexit="${product.isexit}"/>
+        </td>
+        {{else}}
+        <td>
+            <input class="checkbox-product" type="checkbox" pid="${product.id}"/>
+        </td>
+        {{/if}}
+        <td alias="${product.sid}">
+            ${product.sna}
+        </td>
+        <td id="${product.id}" >
+            ${product.id}
+        </td>
+        <td>
+            ${product.code}
+        </td>
+        <td>
+            <a class="action" type="edit" href="/dashixiongwx/admin/shop/${shop_id}/product/${product.id}/update">
+                <img src="http://img.ksmimi.com/uploads/products/${product.img}" width="50" />
+            </a>
+        </td>
+        <td>
+            <a href="/dashixiongwx/admin/shop/${shop_id}/product/${product.id}/trend/30?title=${product.title}">${product.title}</a>
+        </td>
+        <td>
+            ${product.price} 元
+        </td>
+        <td>
+            {{if !product.promotePrice }}
+            无
+            {{else}}
+            ${product.promotePrice} 元
+            {{/if}}
+        </td>
+        {{if power>=3 }}
+        <td>
+            ${product.cost} 元
+        </td>
+        <td>
+            ${product.profit_rate}
+        </td>
+        {{/if}}
+        <td>
+            ${product.unit}
+        </td>
+        <!--
+        <td class="status">
+            {{if product.productStatus == 0 }}
+            <span style="color:green">正常</span>
+            {{else product.productStatus == 1}}
+            <span style="color:#CCC">下架</span>
+            {{else product.productStatus == 2}}
+            <span style="color:red">售罄</span>
+            {{/if}}
+        </td>
+        -->
+        <!--<td class="exit" isexit="${product.isexit}">
+            {{if product.isexit == 'true'}}
+            <span style="color: red;">在货架上</span>
+            {{else}}
+            不在货架上
+            {{/if}}
+        </td>-->
+        <td>
+            <a class="action" type="edit" href="/dashixiongwx/admin/shop/${shop_id}/product/${product.id}/update?p=${query.p}">编辑</a>&nbsp;
+            <a class="delProduct" type="delete" href="/dashixiongwx/admin/shop/${shop_id}/product/${product.id}/delete">删除</a>
+            <!--
+            <a class="action" type="on_sale" href="/dashixiongwx/admin/shop/${shop_id}/product/${product.id}/status/update/0" onclick="return false;">上架</a> |
+            <a class="action" type="off_sale" href="/dashixiongwx/admin/shop/${shop_id}/product/${product.id}/status/update/1" onclick="return false;">下架</a> |
+            <a class="action" type="sold_out" href="/dashixiongwx/admin/shop/${shop_id}/product/${product.id}/status/update/2" onclick="return false;">售罄</a>&nbsp;
+            -->
+        </td>
+    </tr>
+    {{/each}}
+
+</table>
+<script type="text/javascript">
+    var $doc = $(document);
+
+    var invoke = function(ele, fn){
+        console.log(ele);
+        $.get(ele.href+'?isAjax=1', fn);
+    };
+    var changeStatus = function(ele, status_code){
+        var $td= $(ele).parents('tr').find('.status');
+        switch (status_code){
+            case 0:
+                $td.html('<span style="color:green">正常</span>');
+                break;
+            case 1:
+                $td.html('<span style="color:#CCC">下架</span>');
+                break;
+            case 2:
+                $td.html('<span style="color:red">售罄</span>');
+                break;
+        }
+    };
+
+    $('.action').click(function(){
+        var a = this;
+        if(this.type == 'on_sale'){
+            invoke(this, function(res){
+                changeStatus(a, 0);
+            });
+        }else if(this.type == 'off_sale'){
+            invoke(this, function(res){
+                changeStatus(a, 1);
+            });
+
+        }else if(this.type == 'sold_out'){
+            invoke(this, function(res){
+                changeStatus(a, 2);
+            });
+        }
+    });
+
+    $('#import_action').click(function(){
+        $('#import_products').toggle();
+    });
+
+    var reset_checkbox = function () {
+        $( 'input[type=checkbox]' ).prop( 'checked', false );
+    };
+
+    //导出到指定仓库
+    $( '#export_btn' ).click(function () {
+        var to_w_id = $( '#to_w_id' ).val();
+        var selected = $( 'input[type=checkbox]:checked' );
+        var ids = [];
+
+        if( !to_w_id ){
+            alert( '要有仓库ID!' )
+            return;
+        }
+
+        selected.each(function (i, ele) {
+            if(  $(ele).attr('pid') ){
+                ids.push( $(ele).attr('pid') );
+            }
+        });
+
+        $.post( '/dashixiongwx/admin/shop/'+DSX.shop.id+'/product/export', {
+            to_w_id: to_w_id,
+            ids : ids.join()
+        }, function (res) {
+            if( !res.code ){
+                alert( '更新成功!' );
+                reset_checkbox();
+                return;
+            }
+            alert(res.msg);
+        });
+
+    });
+
+    //导出到指定分店的产品列表
+    $( '#export_btn_to_shop' ).click(function () {
+        var to_shop_id = $( '#to_shop_id' ).val();
+        var selected = $( 'input[type=checkbox]:checked' );
+        var ids = [];
+
+        if( !to_shop_id ){
+            alert( '要有店铺ID!' )
+            return;
+        }
+
+        selected.each(function (i, ele) {
+            if(  $(ele).attr('pid') ){
+                ids.push( $(ele).attr('pid') );
+            }
+        });
+
+        $.post( '/dashixiongwx/admin/shop/'+DSX.shop.id+'/product/export', {
+            to_shop_id : to_shop_id,
+            ids : ids.join()
+        }, function (res) {
+            if( !res.code ){
+                alert( '更新成功!' )
+                reset_checkbox();
+                return;
+            }
+            alert( '更新失败!' )
+        });
+
+    });
+
+    //导出功能的显示与隐藏
+    $( '#to_w_btn' ).click(function () {
+        $( '#to_w_panel' ).show();
+        $( '#to_shop_panel' ).hide();
+    });
+    $( '#to_shop_btn' ).click(function () {
+        $( '#to_w_panel' ).hide();
+        $( '#to_shop_panel' ).show();
+    });
+
+    //全选, 取消全选
+    $( '#select_all' ).change(function () {
+        $( '.checkbox-product' ).prop( 'checked', this.checked );
+    });
+
+    //在货架上
+    $( '#select_onsell_all').click(function(){
+        if(this.checked) {
+            $( '.checkbox-product' ).each(function(){
+                if($(this).attr('isexit') == 'true'){
+                    $(this).prop('checked', true);
+                }
+            });
+        }else{
+            $( '.checkbox-product' ).each(function(){
+                if($(this).attr('isexit') == 'true'){
+                    $(this).prop('checked', false);
+                }
+            });
+        }
+    });
+
+    $( '.clear_data').click(function(){
+        $.post('/dashixiongwx/admin/shop/${shop_id}/product/clear/data', function(res){
+            location.reload();
+        });
+    });
+
+    $doc.on('click', '.delProduct', function(){
+        var cf = confirm('确定要删除改产品吗？');
+        if( !cf ) return false;
+    });
+
+
+</script>
+
+
+
+
+

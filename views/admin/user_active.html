@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .con{
+            float: left;
+            width: 500px;
+        }
+        span{
+            font-size: 20px;
+            display: block;
+            width: 260px;
+            height: 30px;
+            margin-bottom: 10px;
+        }
+        .rate{
+            width: 530px;
+            font-weight: bold;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+        .link{
+            margin-left: 320px;
+            margin-top: -40px;
+            width: 100px;
+            height: 30px;
+        }
+        table tr td{
+            font-size: 14px;
+            text-align: center;
+            width: 100px;
+        }
+        .content{
+            width: 500px;
+            margin-left: 510px;
+            border-left: 1px solid #409FBF;
+            border-top: 1px solid #409FBF;
+            border-right: 1px solid #409FBF;
+            color: #546F72;
+        }
+        .cen{
+            text-align: center;
+            font-weight: bolder;
+        }
+        .inf{
+            width: 100%;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #409FBF;
+        }
+        .content2{
+            width: 500px;
+            margin-left: 510px;
+            margin-top: 20px;
+            border-left: 1px solid #409FBF;
+            border-top: 1px solid #409FBF;
+            border-right: 1px solid #409FBF;
+            color: #546F72;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="con">
+        {{if status=='oneweek'}}
+        <span>一周之内继续购买的用户数据</span><div class="link"><a href="javascript:history.go(-1);">返回</a></div>
+        <div class="rate">${userNum}人中，仍有${continueNum}人继续购买，总购买数为：${allNum}&nbsp;&nbsp;&nbsp;&nbsp;保留率：${(allorderTwos/allorderOverOnes*100).toFixed(2)}%</div>
+
+        {{else}}
+        <span>一月之内继续购买的用户数据</span><div class="link"><a href="javascript:history.go(-1);">返回</a></div>
+        <div class="rate">${userNum}人中，仍有${continueNum}人继续购买，总购买数为：${allNum}&nbsp;&nbsp;&nbsp;&nbsp;保留率：${(allorderTwos/allorderOverOnes*100).toFixed(2)}%</div>
+
+        {{/if}}
+        <table>
+            <tr>
+                <td>序号</td>
+                <td>用户ID</td>
+                <td>到店数</td>
+                <td>购买数</td>
+            </tr>
+            {{each(data,i) datas}}
+            <tr>
+                <td>${data.row}</td>
+                <td>${data.userId}</td>
+                {{if data.count}}
+                <td>${data.count}</td>
+                {{else}}
+                <td>0</td>
+                {{/if}}
+                <td>${data.orderNum}</td>
+            </tr>
+            {{/each}}
+        </table>
+
+    </div>
+    <div class="content">
+        {{if status=='oneweek'}}
+        <div class="inf cen">一周内新用户数据分析</div>
+        {{else}}
+        <div class="inf cen">一月内新用户数据分析</div>
+        {{/if}}
+        <div class="inf">推广来了${newUserIds}个新客户</div>
+        <div class="inf">${orderOverZero}个新用户下了单，共产生${newNums}个单</div>
+        <div class="inf">平均每人下了${pjOrders}单</div>
+        {{if status=='oneweek'}}
+        <div class="inf">一周内为每天业绩增加了${(newNums/7).toFixed(2)}个订单</div>
+        {{else}}
+        <div class="inf">一月内为每天业绩增加了${(newNums/30).toFixed(2)}个订单</div>
+        {{/if}}
+        <div class="inf">另有${orderTwos}人下了2单以上</div>
+        <div class="inf">活跃客户转化率为${(orderTwos/newUserIds*100).toFixed(2)}%</div>
+
+    </div>
+    <div class="content2">
+        {{if status=='oneweek'}}
+        <div class="inf cen">一周内所选用户数据分析</div>
+        {{else}}
+        <div class="inf cen">一月内所选用户数据分析</div>
+        {{/if}}
+        <div class="inf">总人数${userNum}</div>
+        <div class="inf">购买1次的人数为${allorderOnes}，转化率为${(allorderOnes/userNum*100).toFixed(2)}%</div>
+        <div class="inf">购买2次及以上的人数为${allorderTwos}，活跃客户转化率为${(allorderTwos/userNum*100).toFixed(2)}%</div>
+        <div class="inf">保留率为${(allorderTwos/allorderOverOnes*100).toFixed(2)}%</div>
+
+
+    </div>
+</div>
+</body>
+</html>

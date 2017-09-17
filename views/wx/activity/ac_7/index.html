@@ -1,0 +1,126 @@
+<style type="text/css" media="all">
+    h1{
+        margin-bottom : 20px; 
+    }
+    .bubble{
+        background : #FFF;    
+    }    
+    .head .img{
+        border : solid 1px #DDD; 
+        margin : 10px;
+        padding : 5px;
+        background : #FFF;
+    }
+    .employee{
+        float : left; 
+    }
+    .head .client{
+        position : absolute;
+        bottom : 0px;
+        right : 0px;
+    }
+
+    .bubble{
+        float : left; 
+        width : 67%;
+        padding : 10px;
+        margin : 10px 0 0 20px;
+        line-height : 24px;
+    }
+    .user{
+        border-radius : 5px;
+        background : #CCC; 
+        border : 1px solid #EEE;
+        position : absolute;
+        bottom: 10px;
+        width : 90%;
+        padding : 10px;
+        margin : 10px;
+        height : 50%;
+    }
+    .content{
+        line-height : 22px;
+    }
+    .btn{
+        padding : 10px; 
+        background : #66a6ae;
+        color : #FFF;
+        border-radius : 5px;
+        text-decoration : none;
+    }
+    .dashboard{
+        margin-top : 50px; 
+        text-align : center;
+    }
+    .choice span{
+        padding-left : 10px; 
+    }
+
+</style>
+
+<h1> for one night 一夜情调戏客服MM特别活动！</h1>
+<div class="dialog">
+     <div class="shop">
+         <div class="head">
+             <span class="img employee">
+                <img class="" width="50" src="http://wx.qlogo.cn/mmopen/4pMCbPQfkyDk13NypPHmN1NxpWETX8icIa6T96zlvPKwchTicvnq7wvL2dz6SzoYn9NrWOLyTVvqYZxMFUw4zuQtcL45rCddgI/0" alt="客服头像" />
+             </span>
+         </div>  
+        <div class="bubble"> 我是大师兄客服, 我叫小蔡。我们来玩剪刀石头布吧~ 赢了有奖品送，输了你要给我亲一下! 三局两胜哦! </div>
+     </div>
+     <div class="user">
+        <div class="head">
+            <span class="img client">
+                <img class="" width="50" src="http://wx.qlogo.cn/mmopen/5LeWjCa2iapCuECAC5icGgMTFFIq6UaOYAiajUuhb5cGBuyvkYoynjRLCMfX60K5hkod3RERKeZbctY9hXX2Hosj5UIzKnRdFzY/0" alt="客服头像" />
+            </span>
+        </div>
+        <p>
+            请选择： 
+        </p>
+        <div class="dashboard">
+            <div class="content"> </div>
+            
+            <div class="select">
+                <a href="#" class="btn come-on"> 谁怕谁? 来吧!</a>
+                <a href="#" class="btn i-lose">这样啊, 那我认输吧！</a>  
+            </div>
+            <div class="choice" style="display:none;">
+                <div>
+                    <span> 
+                        <img width="80" src="http://s.ksmimi.com/dashixiong_static/img/jiandao_user.jpg" alt="" />
+                    </span>
+                    <span> 
+                        <img width="80" src="http://s.ksmimi.com/dashixiong_static/img/shitou_user.jpg" alt="" />
+                    </span>
+                    <span>
+                        <img width="80" src="http://s.ksmimi.com/dashixiong_static/img/bu_user.jpg" alt="" />
+                    </span>
+                </div>
+
+                <div>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+     </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    var select_board = $( '.select' );
+    var choice_board = $( '.choice' );
+    $( '.come-on' ).click(function () {
+            select_board.hide();
+            choice_board.show();
+    });
+    $( '.i-lose' ).click(function () {
+            select_board.hide();
+    });
+    
+</script>
+
+
+
+
+

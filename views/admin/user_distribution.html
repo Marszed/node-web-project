@@ -1,0 +1,36 @@
+<style type="text/css" media="all">
+    .building{
+        margin-bottom : 20px; 
+    } 
+    .title{
+        text-align : center; 
+    }
+    .has-bought{
+        color : #FFF;
+        background : green; 
+    }
+</style>
+
+{{each(building, i) buildings}}
+    <div class="building">
+        ${building.num}
+         <table border="0">
+            <tr>
+                <th class="title" colspan="${building[0].length}">${i+1}栋</th>
+            </tr>
+            {{each(row, i) building}}
+            <tr>
+                {{each(room, i) row}}
+                {{if room.has_bought}}
+                <td class="has-bought">
+                {{else}}
+                <td>
+                {{/if}}
+                    ${ room.row }${room.col}
+                </td>
+                {{/each}}
+            </tr>
+            {{/each}}
+         </table>
+    </div>
+{{/each}}

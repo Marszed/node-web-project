@@ -1,0 +1,3 @@
+#禁止所有浏览器收录网站的首页
+User-agent:*
+Disallow:/*store.htm$

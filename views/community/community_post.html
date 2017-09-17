@@ -1,0 +1,49 @@
+<div class="content" xmlns="http://www.w3.org/1999/html">
+    <form name="sendform" id="submit_form" action="/dashixiongwx/shop/${shop_id}/community/dopost?wx_id=${wx_id}" enctype="multipart/form-data" method="POST">
+        <input type="hidden" name="shop_name" value="${shop_name}">
+        <div class="section">
+            <h2 class="head"><img class="pencil" src="http://s.ksmimi.com/dashixiong_static/img/pencil.jpg" alt="" />
+                来，发个贴
+            </h2>
+            <textarea id="content" name="content" ></textarea>
+
+            <div class="footer">
+                <!--暂时取消了社区发帖，上传图片的功能-->
+                <!--<span class="upspan"><a class="upimg">传张靓照</a><input style="display: none;" class="upfile" type="file" name="img"/></span><br>-->
+                <span><a class="submit" href="#" onclick="return false;">欧了，发帖</a></span>
+            </div>
+        </div>
+    </form>
+</div>
+<!--   ===========================对上传文件样式设置==============-->
+<!--<style type="text/css">
+     /* 暂时取消了社区发帖，上传图片的功能*/
+    /*.upspan{text-align:center;background:#cb3637;width: 100%;display: block;border-radius:3px;height: 32px;line-height: 32px;font-size:16px;border-left: 1px;border-right: 1px;}*/
+    .upimg{text-decoration:none;color:#FFF;cursor:pointer;display: block;} /*按钮选择变宽*/
+</style>-->
+
+<script type="application/javascript" charset="utf-8">
+    var submit_in_head = $( '.head .submit' );
+    $( '.submit' ).click(function () {
+        if( !$('#content').val() ){
+            return;
+        }
+        $( '#submit_form' ).submit();
+    });
+
+    $( '#content' ).focus(function () {
+        submit_in_head.show();
+    });
+    /*    ==========================上传文件处理=======暂时取消了社区发帖，上传图片的功能=========*/
+/*    $(function(){
+        var $upimg = $('.upimg'),
+                $upfile = $('.upfile');
+        $upimg.click(function(){
+            $upfile.trigger('click');
+        });
+        $upfile.change(function(){
+            var $elem = $(this);
+            $upimg.html( $elem.val() );
+        });
+    });*/
+</script>

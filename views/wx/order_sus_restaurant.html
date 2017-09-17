@@ -1,0 +1,98 @@
+<style>
+	h1{
+		font-size : 20px;	
+		line-height : 24px;
+		margin-bottom : 5px;
+	}
+	h2{
+		line-height : 22px;
+		border-bottom : 1px dashed #CCC;		
+		padding : 8px 8px 8px 0;
+		margin-bottom : 10px;
+		color : #888;
+
+	}
+	ul{
+		margin-bottom : 25px;	
+		list-style : disc inside;
+	}
+	li{
+		color : #333;	
+	}
+	.num{
+		color : #CCC;
+	}
+	.total-pay, .total-num{
+		color : orange;	
+		font-size : 18px;
+	}
+	.back-to-store{
+		margin-bottom : 15px;	
+	}
+
+    .back-to-store a {
+        color : #66a6ae;
+    }
+    .express-info{
+        margin-bottom : 25px; 
+    }
+    .express-info p{
+        line-height : 25px;
+    }
+    .express-info label{
+        text-decoration : underline;
+    }
+    .margin_b_30{
+        margin-bottom : 30px; 
+    }
+    .margin_b_10{
+        margin-bottom : 10px; 
+    }
+    .mb10{margin-bottom:10px;}
+    .mb20{margin-bottom:20px;}
+</style>
+
+
+<div class="container">
+	<h1>下单成功，大师兄马上就来</h1>
+	<div class="back-to-store">
+        <a href="/dashixiongwx/shop/${shop_id == 10 ? 6 : shop_id}?wx_id=${wx_id}">&lt;&lt;再买点别的</a>
+	</div>
+    {{if rp-0 > 0}}
+    <div class="mb20">恭喜你获得<b class="total-pay">${rp}</b>个人品, 大师兄在确认收货后立马发放到你的账户~</div>
+    {{/if}}
+
+	<h2>收货信息</h2>
+	<ul class="info">
+		<li>${address.name}</li>
+		<li>${address.mobile}</li>
+        {{if address.shortTel}}
+        <li>${address.shortTel}</li>
+        {{/if}}
+        <li>${address.address}</li>
+	</ul>
+    
+    <h2>
+        购物袋信息(<strong class="total-num">${total.total_num}</strong>份快餐，共
+        <strong class="total-pay">${total.total_pay.toFixed(1)}</strong>
+        元。)
+    </h2>
+	<ul class="bag">
+		{{each(product, i) total.list}}
+		<li>
+		<p><span class="title">${product.title}</span> <strong class="price">${product.price}元</strong>/<span class="unit">${product.unit}</span> <span class="num">x${product.set.length}</span></p>
+		</li>
+		{{/each}}
+	</ul>
+
+	{{if total.snapshot.requirements}}
+	<h2>其他吩咐</h2>
+		<ul class="bag">
+			{{each(requirement, i) total.snapshot.requirements}}
+			<li>
+				<p>${requirement}</p>
+			</li>
+			{{/each}}
+		</ul>
+	{{/if}}
+</div>

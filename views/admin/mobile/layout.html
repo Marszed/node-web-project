@@ -1,0 +1,96 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	<title>${shop_id}号店管理处 - 大师兄微信小卖部</title> 
+    <link rel="stylesheet" type="text/css" href="http://s.ksmimi.com/dashixiong_static/csspro/??reset.css,widget/navigator/navigator.default.css" />
+    <script type="text/javascript" src="http://s.ksmimi.com/dashixiong_static/jspro/??zepto.js,extend/touch.js,extend/iscroll.js,extend/highlight.js,extend/parseTpl.js"></script>
+    <script type="text/javascript" src="http://s.ksmimi.com/dashixiong_static/jspro/??gmu.max.js,navigator.max.js"></script>
+    <script type="text/javascript" src="http://s.ksmimi.com/dsx/jspro/json2.min.js"></script>
+    <style type="text/css">
+    body{margin: 0;padding: 0;color:#4f6b72; font-family:"微软雅黑","Microsoft YaHei", sans-serif;background:url(http://s.ksmimi.com/imgpro/grid.png) repeat 0 0;}
+    .left-fixed{background:#f1f1f1; display: -webkit-box; }
+    .left-fixed>div{display: -webkit-box; -webkit-box-flex: 1; }
+    #logo{width:40px; height:40px; -webkit-box-flex: 0; }
+    .ui-scroller{ float: left;}
+    li{margin-bottom:6px;}
+    a{text-decoration:none; color:#40A0C0;}
+    table{margin:5px 2% 15px 2%;width:96%;}
+    th, td{padding:10px;}
+    th{text-align:left;}
+    th span{font-weight:normal;}
+    .box{max-width:640px;margin:0 auto;background:#fff;overflow:hidden;}
+    .client-name{line-height:1.5em; padding:10px 5px;}
+    .requirement{color:#FF1493;}
+    .tab-menu{border-bottom-width:0;margin:5px 0 15px;width:100%;border-radius:5px; border-top-width:3px; border-top-color:green;}
+    .tab-menu td{border-bottom-width:1px;}
+    .tab-menu td.active{border-bottom-width:0;}
+    .none{display: none;}
+    .time-text{font-size:12px;color:#999;padding-left: 2px;}
+    .action-todo-del{font-size: 12px;white-space:nowrap;}
+    .nowrap{white-space:nowrap;}
+    .a-td a{display:inline-block;width:50%;text-align:center;float: left;}
+    #nav ul{display:table;table-layout:fixed;white-space:nowrap;width auto;}
+    #nav li{display:table-cell;line-height:40px;font-size:16px;font-weight:bold;text-align:center;-webkit-box-flex:1;-webkit-box-align:center;-webkit-box-pack:center;}
+    #nav li>a{padding:0 15px;color:#40A0C0;text-decoration:none;display:block;width:100%;-webkit-box-sizing:border-box;}
+    </style>
+</head> 
+<body> 
+    <div class="box">
+    
+        <div class="left-fixed">
+            <div id="logo"><img src="http://s.ksmimi.com/dashixiong_static/img/logo.png" alt="" /></div>
+            <div id="nav">
+                <ul>
+
+                    <li class="${index}"><a href="/dashixiongwx/shop/${shop_id}?wx_id=wx_323mmdiVsds2fbklsdopwvMMn&zhimakaimen=1" target="_blank">小卖部首页(${shop_id})</a></li>
+                    <li class="${msg_list}"><a href="/dashixiongwx/admin/shop/${shop_id}/msg/list">消息管理</a></li>
+                    {{if power>=2}}
+                    <li><a href="/dashixiongwx/admin/shop/${shop_id}/warehouse/list">仓库管理</a></li>
+                    <li><a href="/dashixiongwx/admin/shop/${shop_id}/expressinfofetch/list#mp.weixin.qq.com">快递取件</a></li>
+                    <li><a href="/dashixiongwx/admin/shop/${shop_id}/notice/list">公告管理</a></li>
+                    <li><a href="/dashixiongwx/admin/shop/${shop_id}/section/list">货架管理</a></li>
+                    <li><a href="/dashixiongwx/admin/shop/${shop_id}/article/list">社区管理</a></li>
+                    <li><a href="/dashixiongwx/admin/shop/${shop_id}/motto/list/all">小票箴言</a></li>
+                    <li><a href="/dashixiongwx/admin/shop/${shop_id}/leavestatus">离开状态</a></li>
+                    {{if power>=3 }}
+                    <li class="${order_list}"><a href="/dashixiongwx/admin/shop/${shop_id}/order/list?type=Valid">业绩查询</a></li>
+                    <li><a href="/dashixiongwx/admin/shop/${shop_id}/unconfirmorder/list">未确认订单</a></li>
+                    <li><a href="/dashixiongwx/admin/shop/${shop_id}/user/list/all">用户管理</a></li>
+                    <li><a href="/dashixiongwx/admin/shop/${shop_id}/finance">财务管理</a></li>
+                    <li><a href="/dashixiongwx/admin/shop/${shop_id}/dateresume">运营统计</a></li>
+                    <li><a href="/dashixiongwx/admin/shop/${shop_id}/setting/list">本店管理</a></li>
+                    {{if power>=4}}
+                    <li><a href="/dashixiongwx/admin/shop/${shop_id}/msg/listall">所有消息管理</a></li>
+                    {{if power>=6 }}
+                    <li><a href="/dashixiongwx/admin/shop/list/all">分店管理</a></li>
+                    {{/if}}
+                    {{/if}}
+                    {{/if}}
+                    {{/if}}
+                    <li><a href="/dashixiongwx/admin/logout">退出</a></li>
+                </ul>
+            </div>
+        </div>
+        {{html body}}	
+    </div>
+
+<script type="text/javascript">
+    (function(){
+         var $leftBtn = $('.left-fixed .left a'),
+             $nav = $('#nav');
+
+         $nav.navigator().on('select', function(){
+             $leftBtn.removeClass('ui-state-active');
+         });
+
+         $leftBtn.click(function(){
+             $nav.navigator('unselect');
+             $(this).addClass('ui-state-active');
+         });
+
+     })();
+</script>
+</body> 
+</html> 

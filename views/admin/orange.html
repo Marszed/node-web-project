@@ -1,0 +1,135 @@
+<style>
+	h1{
+		font-size : 18px;	
+		line-height : 24px;
+		margin-bottom : 5px;
+		text-align : center;
+	}
+	h2{
+		line-height : 18px;
+		border-bottom : 1px dashed #888;		
+		padding : 8px 8px 8px 0;
+		margin-bottom : 10px;
+		color : #888;
+
+	}
+	ul{
+		margin-bottom : 25px;	
+		list-style : disc inside;
+	}
+	li{
+		color : #333;	
+	}
+	.num{
+		color : #CCC;
+	}
+	.total-pay, .total-num{
+		color : orange;	
+		font-size : 18px;
+	}
+	.back-to-store{
+		margin-bottom : 15px;	
+	}
+	.qr{
+		text-align : center;	
+	}
+	.qr img {
+		width : 90%;	
+	}
+
+	.say{
+		color : #000;
+		text-align : left;			
+		font-weight : 900;
+		font-size : 18px;
+		padding : 10px 0;
+	}
+	.qr-head{
+		margin-top : 10px;	
+	}
+	.qr-head, .qr-foot{
+		text-align : center;	
+		font-size : 14px;
+	}
+	.shop-name{
+		color : #000;	
+		font-weight : 700;
+	}
+	.info-backup{
+		margin : 90px 0;	
+		text-align : center;
+		border-top: solid 1px #888;
+	}
+	.info-backup h4{
+		margin : 0 0 20px 0;	
+	}
+	.info-block{
+		margin-top : 20px;	
+	}
+	.print{
+		text-align : center;	
+	}
+	.print a{
+		padding : 10px;	
+		display : block;
+	}
+	.print a:hover{
+		background : #40A0C0;	
+		color : #FFF;
+	}
+	.shop-group{
+		border : 1px solid #000;	
+		font-size : 18px;	
+		line-height : 24px;
+		margin-bottom : 5px;
+		text-align : center;
+	}
+	.intime{
+		font-size : 10px;		
+	}
+	@media print{
+		#nav,.print,.shortcut,.nobackup{
+			display : none;	
+		}	
+		ul,ol{
+			font-size : 12px;	
+			line-height : 12px;
+		}
+		
+
+	}
+</style>
+
+<div class="print">
+	<a onclick="window.print();return false;" href="#">打印送货单</a>
+</div>
+
+<p class="shortcut">
+【按P键即可打印】
+</p>
+
+<div class="container">
+	<p class="say">
+		二师兄昨天省亲归来，从家乡带了点特产——廉江红橙。在这里和大家分享一下~ 请笑纳~ 送完即止哦~
+	</p>
+	<p class="qr-head">微信扫扫, 送货上门</p>
+	<div class="qr">
+		<img src="http://s.ksmimi.com/dashixiong_static/img/qr.jpg"	/>
+	</div>
+	<p class="qr-foot">货到付款, 方便快捷</p>
+	<p>
+		来跟我们吹吹水吧: 新浪微博【 @大师兄小卖部】
+	</p>
+
+</div>
+
+
+<script>
+	$(document).keyup(function(e){
+		if(e.keyCode == 80){
+			window.print();
+		}else if(e.keyCode == 68){
+			location.href = $('#remove_backup').attr('href');
+		}
+	});
+</script>

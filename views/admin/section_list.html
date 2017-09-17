@@ -1,0 +1,91 @@
+<style>
+	table, td, th{
+		border : 1px solid #CCC;	
+	}
+	h1{
+		padding : 10px;
+		font-size : 20px;	
+	}
+	.money {
+		padding : 10px;	
+	}
+	.good{
+		font-size : 18px;
+		color : green;	
+	}
+	.bad{
+
+		color : red;
+	}
+	.order-create{
+		color : red;	
+	}
+	.order-delivering{
+		color : green;	
+	}
+	.order-receive{
+		color : #CCC;	
+	}
+	.add-section{
+		margin : 10px;	
+	}
+</style>
+
+<p class="add-section">
+	<a href="/dashixiongwx/admin/shop/${shop_id}/section/add">添加货架</a>
+</p>
+
+<table>
+	<tr>
+		<th>
+			id
+		</th>
+		<th>
+			排序
+		</th>
+		<th>
+			名称
+		</th>
+		<th>
+			内容
+		</th>
+		<th>
+			操作
+		</th>
+	</tr>	
+
+{{each(section, i) sections}}
+	<tr>
+		<td>
+			${section.id}	
+		</td>
+		<td>
+			${section.showOrder}	
+		</td>
+		<td>
+			${section.name}
+		</td>
+		<td>
+			${section.content}
+		</td>
+		<td>
+			&nbsp;<a class="action" type="del" href="/dashixiongwx/admin/shop/${shop_id}/section/${section.id}/del" onclick="ondel(this); return false;">删除</a> | 
+			&nbsp;<a class="action" type="edit" href="/dashixiongwx/admin/shop/${shop_id}/section/${section.id}/edit">编辑</a>
+		</td>
+	</tr>
+{{/each}}
+
+</table>
+<script type="text/javascript" >
+	var ondel = function(ele){
+		var yes = confirm('真的要删除么?');
+		if(yes){
+			location.href = ele.href;	
+		}
+	
+	};
+</script>
+
+
+
+

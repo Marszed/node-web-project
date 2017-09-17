@@ -1,0 +1,28 @@
+<style type="text/css" media="all">
+    .menu{
+        padding : 10px; 
+    } 
+    h3{
+        font-size : 18px;  
+        padding : 0 0 10px 0;
+    }
+    .mk-qr{
+        padding : 10px;
+    }
+    input{
+        border : 1px solid #DDD; 
+        padding : 5px;
+    }
+</style>
+
+<div class="menu">
+    <a class="action" type="qr" target="_blank" href="/dashixiongwx/admin/qr/make?scene_id=${shop_id}&shopId=${shop_id}">${shop_id}号店二维码&gt;&gt;</a>
+</div>
+
+<div class="mk-qr">
+    <h3>生成任意(小于1000)场景id:</h3>
+    <form action="/dashixiongwx/admin/qr/make" method="get" target="_blank" accept-charset="utf-8">
+        <label for="">场景id: </label><input type="hidden" name="shopId" id="" value="${shop_id}" /><input type="text" name="scene_id" id="" value="" /> &nbsp;<a class="action" type="qr" href="/dashixiongwx/shop/${shop_id}/qr"><input type="submit" name="" id="" value="生成" /></a>
+    </form>
+</div>
+

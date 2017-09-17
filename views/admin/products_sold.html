@@ -1,0 +1,262 @@
+<style>
+	table, td, th{
+		border : 1px solid #CCC;
+		padding : 5px;
+	}
+	table{
+		width : 80%;
+        border-collapse: collapse;
+	}
+	h1{
+		padding : 10px;
+		font-size : 20px;
+	}
+	.money {
+		padding : 10px;
+	}
+	.good{
+		font-size : 18px;
+		color : green;
+	}
+	.bad{
+
+		color : red;
+	}
+	.order-create{
+		color : red;
+	}
+	.order-delivering{
+		color : green;
+	}
+	.order-receive{
+		color : #CCC;
+	}
+    .shot{
+        background-color: #eeeeee;
+        display: none;
+        height: 25px;
+        text-align: center;
+    }
+    .shot td{
+        color: #666;
+        font-size: 18px;
+    }
+</style>
+
+{{if !daylimit}}
+<h1>
+    <a href="/dashixiongwx/admin/shop/${shop_id}/product/sold/${pre_date_y}/${pre_date_m}/${pre_date_d}">
+		&lt;&lt;前一天
+	</a>
+        {{if start_time}}
+            &nbsp;${start_time} 至 ${end_time}&nbsp;各产品销售情况
+        {{else}}
+		    ${m}月${d}日各产品销售情况
+        {{/if}}
+        <a href="/dashixiongwx/admin/shop/${shop_id}/product/sold/${next_date_y}/${next_date_m}/${next_date_d}">
+		后一天&gt;&gt;
+	</a>
+</h1>
+{{else}}
+<h1>最近${daylimit}天的产品销售情况</h1>
+{{/if}}
+
+<p>
+    <a href="?daylimit=30">最近30天</a> |
+    <a href="?daylimit=60">最近60天</a> |
+    <a href="?daylimit=90">最近90天</a> |
+    <a href="?daylimit=120">最近120天</a> |
+    <a href="?daylimit=150">最近150天</a>
+</p>
+
+<p>
+    开始时间： <input type="date" class="start_time" placeholder="如：2014-09-01" /> 结束时间： <input type="date" class="end_time" placeholder="如：2014-09-10" /> <input type="button"  class="check_profit" value="查询"/>
+    &nbsp;&nbsp;&nbsp;&nbsp;排序规则：<select name="sortProfit" id="sortProfit">
+
+    </select>
+</p>
+
+<p>
+收入<span>${actual_income && actual_income.toFixed(2)}</span>元，利润<span>${ (total.total_pay-total.total_cost).toFixed(1) }</span>元
+</p>
+<table>
+	<tr>
+		<th>
+			产品id
+		</th>
+		<th>
+			名称
+		</th>
+<!--        <th>
+            条形码
+        </th>-->
+        <th>
+            数量
+            {{if Count!=0}}
+            (共:${Count})
+            {{/if}}
+
+        </th>
+		<th>
+			利润
+		</th>
+        <th>
+            利率
+        </th>
+	</tr>
+{{each(product, i) total.list}}
+    <tr class="shot">
+        <td colspan="5">
+            ${product.sna}&nbsp;&nbsp;(总毛利率：${product.srate}%)
+        </td>
+    </tr>
+    <tr aliasid="${product.sid}" aliasna="${product.sna}"  alias="${product.srate}">
+		<td class="productIds" idVal="${product.id}">
+			${product.id}
+		</td>
+		<td>
+            <a href="/dashixiongwx/admin/shop/${shop_id}/product/${product.id}/trend/30?title=${product.title}">${product.title}</a>
+		</td>
+<!--        <td>
+            <img class="code" src=""/>
+        </td>-->
+		<td>
+			${product.set.length} ${product.unit}
+		</td>
+		<td>
+			${product.profit} 元
+		</td>
+        <td>
+            ${product.rate}%
+        </td>
+	</tr>
+{{/each}}
+
+</table>
+
+<script type="text/javascript">
+    var $start_time = $('.start_time'),
+        $end_time = $('.end_time'),
+        $check_profit = $('.check_profit');
+
+    $check_profit.click(function(){
+        location.href = '?start_time=' + $start_time.val() + '&end_time=' + $end_time.val();
+    });
+</script>
+<script type="text/javascript" src="http://${staticHost}/dsx/jspro/jquery.cookie.js"></script>
+<script type="text/javascript" charset="utf-8">
+    (function(){
+        var $tr = $('tr');//获取表格中所有的行元素tr
+        var secId = $tr.eq(1).attr('aliasid');//保存一个对象做比较
+
+        $tr.each(function(i,v){//便利所有tr
+            var aliasId = $(v).attr('aliasid');//获取没行tr的货架id
+            if(aliasId){//如果货架id存在
+                if(secId != aliasId){//第一次与第二次的货架id不相等
+                    $(v).prev().show();
+                }
+                secId = aliasId;//否则，secId保存当前的货架id作为下一次的比较
+            }
+        });
+    })();
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var $select = $('#sortProfit');
+
+        var flag = $.cookie('status');
+        //alert(flag);
+        //第一次加载(没cookie)
+        if(!flag){
+            $select.append($('<option id="op2" value="0" >请选择...</option>'));
+            $select.append($('<option id="op2" value="1" >按数量排序</option>'));
+            $select.append($('<option id="op3" value="2" >按利润排序</option>'));
+        }
+        //当有cookie时
+        if(flag){
+            if(flag==0){
+                $select.empty();
+                $select.append($('<option id="op2" value="0" >请选择...</option>'));
+                $select.append($('<option id="op2" value="1" selected>按数量排序</option>'));
+                $select.append($('<option id="op3" value="2" >按利润排序</option>'));
+            }
+            if(flag==1){
+                $select.empty();
+                $select.append($('<option id="op2" value="0" >请选择...</option>'));
+                $select.append($('<option id="op2" value="1" selected>按数量排序</option>'));
+                $select.append($('<option id="op3" value="2" >按利润排序</option>'));
+            }else if(flag==2){
+                $select.empty();
+                $select.append($('<option id="op2" value="0" >请选择...</option>'));
+                $select.append($('<option id="op2" value="1" >按数量排序</option>'));
+                $select.append($('<option id="op3" value="2" selected>按利润排序</option>'));
+            }
+        }
+
+        $("#sortProfit").change(function(){
+            var sortRole = $(this).val();//取到选中的value
+            if(flag){
+                if(flag==0){
+                    $select.empty();
+                    $select.append($('<option id="op2" value="0" >请选择...</option>'));
+                    $select.append($('<option id="op2" value="1" selected>按数量排序</option>'));
+                    $select.append($('<option id="op3" value="2" >按利润排序</option>'));
+                }
+                if(flag==1){
+                    $select.empty();
+                    $select.append($('<option id="op2" value="0" >请选择...</option>'));
+                    $select.append($('<option id="op2" value="1" selected>按数量排序</option>'));
+                    $select.append($('<option id="op3" value="2" >按利润排序</option>'));
+                }else if(flag==2){
+                    $select.empty();
+                    $select.append($('<option id="op2" value="0" >请选择...</option>'));
+                    $select.append($('<option id="op2" value="1" >按数量排序</option>'));
+                    $select.append($('<option id="op3" value="2" selected>按利润排序</option>'));
+                }
+                $.cookie('status',sortRole,{expires:30,path:'/'});
+            }
+            if(!flag){
+                $.cookie('status',sortRole,{expires:30,path:'/'});
+            }
+            $.get('/dashixiongwx/admin/shop/${shop_id}/product/sold/${y}/${m}/${d}/sort',{sortRole:sortRole},function(res){
+                window.location.reload();
+            });
+        });
+    });
+
+</script>
+<script type="text/javascript">
+    $(function(){
+        //去掉了利润排行榜条形码
+/*
+        var pIds = [];
+        var arr = [];
+        $('.productIds').each(function(doEle, i){
+            var pids = $(this).attr('idVal');
+            pIds.push(pids);
+        });
+        $.get('/dashixiongwx/admin/shop/${shop_id}/product/sold/${y}/${m}/${d}',{pIds:pIds,flag:1},function(res){
+            var obj = JSON.parse(res);
+            var $code = $('.code');
+            obj.forEach(function(doEle, i){
+                var o = {};
+                o.id = doEle.id;
+                o.code = doEle.code;
+                arr.push(o);
+            });
+            for(var i=0;i<pIds.length;i++) {
+                for(var j=0;j<arr.length;j++) {
+                    if(pIds[i] == arr[j].id) {
+                        var url = 'http://apps.99wed.com/baiduapp/barcode/barcode.php?codebar=BCGean13&text='+ arr[j].code +'&resolution=2&thickness=30';
+                        $('.code').eq(i).attr('src',  url);
+                    }
+                }
+            }
+
+        });
+*/
+
+    });
+</script>
+
+

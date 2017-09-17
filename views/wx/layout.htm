@@ -1,0 +1,34 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="robots" content="nofollow">
+	<title> 呼叫大师兄</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{{env.imgpro}}/favicon.ico" />
+    <link rel="bookmark" type="image/x-icon"  href="{{env.imgpro}}/favicon.ico" />
+
+    {{#require('global/csspro/base.css')}}
+    {{#require('csspro/'+ (curShop.shopType+dsx_ver) +'.css')}}
+
+    {{each dynamicStyles as style i}}
+    {{if style.status==1}}
+    {{each style.applyShopIds as shopId i}}
+        {{if shopId==0}}
+        <link rel="stylesheet" type="text/css" href="http://s.ksmimi.com/uploads/css/{{style.fileName}}" />
+        {{else}}
+            {{if shop_id == shopId}}
+            <link rel="stylesheet" type="text/css" href="http://s.ksmimi.com/uploads/css/{{style.fileName}}" />
+            {{/if}}
+        {{/if}}
+    {{/each}}
+    {{/if}}
+    {{/each}}
+
+</head>
+<body>
+    ${include}
+</body>
+</html>

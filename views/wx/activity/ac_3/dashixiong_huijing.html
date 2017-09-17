@@ -1,0 +1,931 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 	
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 	
+        <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1"/>	
+        <title>        		    		    	大师兄惠经店		            	</title> 	
+        <link rel="stylesheet" type="text/css" href="http://s.ksmimi.com/csspro/v0.93/base.css" />	
+        <link rel="stylesheet" type="text/css" href="http://s.ksmimi.com/dashixiong_static/csspro/shop.css" />	
+        <script src="http://s.ksmimi.com/jspro/v0.93/jquery.js" type="text/javascript"></script>	
+        <style>		
+            body{			
+                background-image: url(http://s.ksmimi.com/imgpro/grid.png);			
+                background-repeat: repeat;			
+                background-size: auto;			
+                background-color : #CCC;			color : #888;		
+            }		
+            .container{			
+                width:80%;			
+                max-width:500px;			
+                background : #FFF;			
+                padding : 20px;			
+                margin :  10px auto;			
+                border-bottom : 1px solid #CCC;			
+                border-right : 1px solid #CCC;		
+            }		
+            .note{			
+                color : #CCC;			
+            }		
+            li{			
+                line-height : 24px;				
+            }		
+            a{			
+                color : orange;			
+                }	
+                </style>
+    </head> 
+    <body> 	
+<style>
+body{
+	background : #EEE;	
+	max-width : 640px;
+	margin : 0 auto;
+}	
+#guide{
+	margin : 0 auto;
+	padding : 10px 0;
+	font-size : 14px;	
+	background : #E9F01D;	
+	color : #888;
+	text-align : center;
+
+	position : fixed;
+	top : 0;
+
+	width : 100%;
+	z-index : 9999;
+	max-width : 640px;
+}
+
+li{
+	float : left;	
+	width : 33.333333%;
+	overflow : hidden;
+	margin : 0 0 15px 0;
+	/*
+	height : 220px;
+	*/
+}
+
+ul{
+	display : block;
+	overflow : hidden;
+	
+}
+h4{
+	font-size : 22px;	
+	font-weight : 700;
+	color : #333;
+	padding : 10px;
+	border-bottom : 1px dashed #CCC;
+	margin-bottom : 15px;
+}
+h5{
+	padding : 10px;	
+}
+#submit_deliver_fee{
+	color : red;
+	font-size : 24px;
+}
+#total_num, #total_pay{
+	color : orange;
+	font-size : 24px;	
+}
+#total_pay{
+    text-decoration:line-through;
+}
+.container_div{
+	background : #EEE;
+}
+.pd_wrap{
+	margin:0 10px;	
+}
+.section{
+	margin-bottom : 50px;	
+}
+
+.shop-body{
+	margin-top : 30px;	
+}
+.product-img{
+	position : absolute;				
+	top : 0px;
+	left : 0;
+	width:100%;
+}
+.img_wrap{position:relative;}
+
+.actions div{
+	background : red;
+	width : 33.33333%;
+	float : left;
+	text-align : center;
+	font-size : 18px;	
+	line-height : 30px;
+}
+
+.num{
+}
+.actions{
+	display : none;
+	width : 100%;
+	position : absolute;
+	bottom : 0;
+}
+li.selected{
+}
+li.selected .actions{
+	display : block;
+}
+
+.actions .num{
+	background : orange;
+}
+.actions .ac_plus{
+	background : green;
+}
+.submit {
+	text-align : center;
+	font-size : 18px;
+	line-height : 30px;
+}
+
+.price{
+	color : orange;
+}
+.submit_actions{
+	border : 1 solid #CCC;	
+	background : #40A0C0;
+}
+.submit_actions a {
+	display : block;
+	color : #FFF;
+	line-height : 48px;
+}
+
+.closed{
+	color : red;
+	margin : 34px 0 0 10px;
+
+}
+.notice, .notice-info{
+	color : red;
+	margin : 34px 0 0 10px;
+	line-height : 24px;
+	padding : 10px 0;
+}
+.notice h4{
+    line-height : 30px;
+    color : #FF1493;
+}
+.notice-info{
+	color : green;
+}
+
+.ad{
+	margin-top : 40px;
+}
+
+</style>
+<div class="container_div">
+	<h3 id="guide">点击图片即可选购, 页面底部 <a href="#submit_form">结账(免费)</a></h3>
+
+    <div class="notice">
+        <h4>女生节特别企划：一分钟里, 以下产品下单不要钱！抢到就是你的, 收货地址必须为女生宿舍哦。在这个淫雨纷飞, 春心荡漾的季节里, 好好向你们班女生表示一下吧~ 切记莫要太贪心，因为还有很多人跟你同时抢呢~ 先下手为强！</h4>
+    </div>
+	
+	<div class="shop-body">
+		
+		
+		
+		
+		
+		
+		<div class="section">
+			<h4>【抢】休闲食品</h4>
+			<ul id="sections">
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="10" original="http://img.ksmimi.com/uploads/products/c6b74b7ec216031b683bd8c786bc84ad.jpg"  title="【雀巢】脆脆鲨 巧克力味" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">1元</strong>/<span class="unit">根</span> <span class="title">【雀巢】脆脆鲨 巧克力味</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="437" original="http://img.ksmimi.com/uploads/products/856bcff03332aeca69f4cf40b503f125.jpg"  title="【绿箭】薄荷口香糖 5片装" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">1.5元</strong>/<span class="unit">条</span> <span class="title">【绿箭】薄荷口香糖 5片装</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="28" original="http://img.ksmimi.com/uploads/products/a5b783a09c53d3670de7a988abe75abd.jpg"  title="【金芙纤麦】夹心饼干 牛奶味" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">0.5元</strong>/<span class="unit">条</span> <span class="title">【金芙纤麦】夹心饼干 牛奶味</span></h5>
+						
+					</div>
+				</li>
+				
+				<li style="clear:both;width:100%;">	
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="46" original="http://img.ksmimi.com/uploads/products/ae4505a166d5a171ede9c0014ea8692d.jpg"  title="【乐事】薯片 美国经典原味" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">3元</strong>/<span class="unit">包</span> <span class="title">【乐事】薯片 美国经典原味</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="44" original="http://img.ksmimi.com/uploads/products/e4fa5464cdb2021cd7fe6cc77dcce288.jpg"  title="【乐事】薯片 清新清爽黄瓜味" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">3元</strong>/<span class="unit">包</span> <span class="title">【乐事】薯片 清新清爽黄瓜味</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="22" original="http://img.ksmimi.com/uploads/products/f0c7efd8698ca5134b754ef63eff5032.jpg"  title="咪咪虾条 儿时经典味道" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">0.5元</strong>/<span class="unit">包</span> <span class="title">咪咪虾条 儿时经典味道</span></h5>
+						
+					</div>
+				</li>
+				
+				<li style="clear:both;width:100%;">	
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="100" original="http://img.ksmimi.com/uploads/products/4b3f5baf87d925720881c20d255fdf65.jpg"  title="【无穷】爱辣小翅 大师兄说好吃" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">1.2元</strong>/<span class="unit">包</span> <span class="title">【无穷】爱辣小翅 大师兄说好吃</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="93" original="http://img.ksmimi.com/uploads/products/d712b741fc361747e0ddf16df2e375eb.jpg"  title="【爽口佳】香辣鸭肉 二师兄最爱！" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">1.5元</strong>/<span class="unit">包</span> <span class="title">【爽口佳】香辣鸭肉 二师兄最爱！</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="21" original="http://img.ksmimi.com/uploads/products/0f750ea9f0a67b74cf47693fad7e07d0.jpg"  title="【无穷】爱辣鸡米" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">1元</strong>/<span class="unit">包</span> <span class="title">【无穷】爱辣鸡米</span></h5>
+						
+					</div>
+				</li>
+				
+				<li style="clear:both;width:100%;">	
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="45" original="http://img.ksmimi.com/uploads/products/3e500bedc91f93c224f35fae92a26abf.jpg"  title="【洽洽】香瓜子 葵花籽 奶香味 150g" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">5.5元</strong>/<span class="unit">包</span> <span class="title">【洽洽】香瓜子 葵花籽 奶香味 150g</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="69" original="http://img.ksmimi.com/uploads/products/8dd662fd30a98c623d6548955ffd93eb.jpg"  title="【海牌】韩国风味海苔" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">0.9元</strong>/<span class="unit">包</span> <span class="title">【海牌】韩国风味海苔</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="25" original="http://img.ksmimi.com/uploads/products/1ab153ca5f8f11069e260a4da79dd113.jpg"  title="【乖媳妇】山椒凤爪 辣爽好吃" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">2.8元</strong>/<span class="unit">包</span> <span class="title">【乖媳妇】山椒凤爪 辣爽好吃</span></h5>
+						
+					</div>
+				</li>
+				
+				<li style="clear:both;width:100%;">	
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="77" original="http://img.ksmimi.com/uploads/products/6b7527535d57fdde7d26901beb01e475.jpg"  title="【乐天LOTTE】小熊饼 巧克力夹心" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">4.5元</strong>/<span class="unit">盒</span> <span class="title">【乐天LOTTE】小熊饼 巧克力夹心</span></h5>
+						
+					</div>
+				</li>
+				
+				
+			</ul>	
+		</div>
+		
+		
+		
+		<div class="section">
+			<h4>【抢】饮料</h4>
+			<ul id="sections">
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="161" original="http://img.ksmimi.com/uploads/products/3820ef93bb70ffd6f6b12fd5e7ab0bd7.jpg"  title="【怡宝】饮用纯净水 555ml" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">2元</strong>/<span class="unit">瓶</span> <span class="title">【怡宝】饮用纯净水 555ml</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="79" original="http://img.ksmimi.com/uploads/products/0085e1ced9b062923c7181d14943345e.jpg"  title="【冷饮】广氏菠萝啤 330ml" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">2.5元</strong>/<span class="unit">罐</span> <span class="title">【冷饮】广氏菠萝啤 330ml</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="13" original="http://img.ksmimi.com/uploads/products/773fd6736b2dd3a09601174f61b4e92d.jpg"  title="维他奶 豆浆原味" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><del>3元</del> <strong class="price">2.5元</strong>/<span class="unit">盒</span> <span class="title">维他奶 豆浆原味</span></h5>
+						
+					</div>
+				</li>
+				
+				<li style="clear:both;width:100%;">	
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="105" original="http://img.ksmimi.com/uploads/products/8a89a2ce91b381086538f261b05c9910.jpg"  title="【冷饮】雪碧" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">2.5元</strong>/<span class="unit">罐</span> <span class="title">【冷饮】雪碧</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="82" original="http://img.ksmimi.com/uploads/products/d97c4845c4a6606d9f75b5c8881b731e.jpg"  title="【冷饮】维他柠檬茶" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">2.5元</strong>/<span class="unit">盒</span> <span class="title">【冷饮】维他柠檬茶</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="478" original="http://img.ksmimi.com/uploads/products/1a311990c1a9e38a4484ad5d2ebd2f18.jpg"  title="【康师傅】冷饮 冰红茶 600ml" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">3.5元</strong>/<span class="unit">瓶</span> <span class="title">【康师傅】冷饮 冰红茶 600ml</span></h5>
+						
+					</div>
+				</li>
+				
+				<li style="clear:both;width:100%;">	
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="47" original="http://img.ksmimi.com/uploads/products/420f09b0e5f44656d082740c0fff1bd7.jpg"  title="【伊利】经典纯牛奶" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">3元</strong>/<span class="unit">包</span> <span class="title">【伊利】经典纯牛奶</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="81" original="http://img.ksmimi.com/uploads/products/37b6cf432f0d7f6dcccf4ebaf43cb148.jpg"  title="【冷饮】加多宝 310ml" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">3.3元</strong>/<span class="unit">罐</span> <span class="title">【冷饮】加多宝 310ml</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="80" original="http://img.ksmimi.com/uploads/products/134c3199ba276d8cbaa8d835cf47303f.jpg"  title="【冷饮】百威啤酒 330ml" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">5.5元</strong>/<span class="unit">罐</span> <span class="title">【冷饮】百威啤酒 330ml</span></h5>
+						
+					</div>
+				</li>
+				
+				<li style="clear:both;width:100%;">	
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="90" original="http://img.ksmimi.com/uploads/products/78ed33363401fe270c0b2d0a850168ef.jpg"  title="【冷饮】统一阿萨姆奶茶 500ml" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">3.8元</strong>/<span class="unit">瓶</span> <span class="title">【冷饮】统一阿萨姆奶茶 500ml</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="71" original="http://img.ksmimi.com/uploads/products/6e35b30cbf82fb2c7e6d094e828f16bc.jpg"  title="【美汁源】果粒橙 450ml" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">3.5元</strong>/<span class="unit">瓶</span> <span class="title">【美汁源】果粒橙 450ml</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="72" original="http://img.ksmimi.com/uploads/products/d744641e895fccaeed353e944e99f1a8.jpg"  title="【天地一号】苹果醋饮料饭前开胃饭后舒胃" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">4.5元</strong>/<span class="unit">瓶</span> <span class="title">【天地一号】苹果醋饮料饭前开胃饭后舒胃</span></h5>
+						
+					</div>
+				</li>
+				
+				<li style="clear:both;width:100%;">	
+				</li>
+				
+				
+			</ul>	
+		</div>
+		
+		
+		
+		<div class="section">
+			<h4>【抢】方便面</h4>
+			<ul id="sections">
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="1" original="http://img.ksmimi.com/uploads/products/fcc7255ee450a40af55b014374cbc311.jpg"  title="【康师傅】红烧牛肉面" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">3.5元</strong>/<span class="unit">桶</span> <span class="title">【康师傅】红烧牛肉面</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="2" original="http://img.ksmimi.com/uploads/products/91d4a240da0a3ae6d9b48b13b1fc0cf8.jpg"  title="【康师傅】鲜虾鱼板面" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">3.5元</strong>/<span class="unit">桶</span> <span class="title">【康师傅】鲜虾鱼板面</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="3" original="http://img.ksmimi.com/uploads/products/5273745a7947fb3c6f33915e8d70a651.jpg"  title="【统一】老坛酸菜牛肉面" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">3.5元</strong>/<span class="unit">桶</span> <span class="title">【统一】老坛酸菜牛肉面</span></h5>
+						
+					</div>
+				</li>
+				
+				<li style="clear:both;width:100%;">	
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="31" original="http://img.ksmimi.com/uploads/products/5122bf83e1078a4a250edef83be0eeb9.jpg"  title="【日清】合味道杯面 海鲜风味" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">4.5元</strong>/<span class="unit">杯</span> <span class="title">【日清】合味道杯面 海鲜风味</span></h5>
+						
+					</div>
+				</li>
+				
+				
+			</ul>	
+		</div>
+		
+		
+		
+		<div class="section">
+			<h4>【抢】饱腹佳品</h4>
+			<ul id="sections">
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="135" original="http://img.ksmimi.com/uploads/products/2e1a1fd6f593bb978226dbbc98f6f7ee.jpg"  title="【双汇】鸡肉香肠" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">1元</strong>/<span class="unit">根</span> <span class="title">【双汇】鸡肉香肠</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="9" original="http://img.ksmimi.com/uploads/products/67bcae7a8839713f7b172ff60d2d0a6a.jpg"  title="【双汇】玉米火腿肠" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">1元</strong>/<span class="unit">根</span> <span class="title">【双汇】玉米火腿肠</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="128" original="http://img.ksmimi.com/uploads/products/8a4c1ead0910956dc34548b069a3cc7b.jpg"  title="【回头客】欧式蛋糕 168g 鸡蛋味" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">5元</strong>/<span class="unit">包</span> <span class="title">【回头客】欧式蛋糕 168g 鸡蛋味</span></h5>
+						
+					</div>
+				</li>
+				
+				<li style="clear:both;width:100%;">	
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="88" original="http://img.ksmimi.com/uploads/products/7755758f8eaa6ffe978438d5a1b08905.jpg"  title="【泰奇】八宝粥 经典" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">4.5元</strong>/<span class="unit">罐</span> <span class="title">【泰奇】八宝粥 经典</span></h5>
+						
+					</div>
+				</li>
+				
+				
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+							<img width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<img class="product-img" id="97" original="http://img.ksmimi.com/uploads/products/5c9a7acbac4bdf65f3763b81e05fb765.jpg"  title="【银鹭】好粥道 薏仁红豆粥" class="product-img" width="100%" src="http://s.ksmimi.com/dashixiong_static/img/product_bg.jpg" />
+							<div class="actions"><div class="ac_plus">+</div><div class="num">0</div><div class="ac_minus">-</div></div>
+						</div>
+
+						
+						<h5><strong class="price">3.8元</strong>/<span class="unit">罐</span> <span class="title">【银鹭】好粥道 薏仁红豆粥</span></h5>
+						
+					</div>
+				</li>
+				
+				
+			</ul>	
+		</div>
+		
+		
+		
+		<div class="submit">
+			<p id="submit_info"><strong id="total_num"></strong>件东西共<strong id="total_pay"></strong>元.女生节，不要钱！ </p>
+			<p id="submit_none" style="display:none;">购物袋里没有东西哦~</p>
+			<p id="submit_deliver_fee" style="display:none;">收货地址一定要是女生宿舍哦~</p>
+			<p class="submit_actions"><a id="submit_btn" href="#" onclick="return false;">下单(免费)! &gt;&gt;</a></p>
+            <form id="submit_form" action="/dashixiongwx/activity/addr?userId=${user_id}&wx_id=${wx_id}" method="POST">
+				<input id="submit_products" name="products" type="hidden"  />
+                <input type="hidden" name="shop_id" value="${shop_id}"  />
+                <input type="hidden" name="user_id" value="${user_id}"  />
+                <input type="hidden" name="shop_name" value="${shop_name}"  />
+                <input name="cur_warehouse_id" type="hidden" value="${cur_warehouse_id}"  />
+			</form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="http://s.ksmimi.com/dashixiong_static/jspro/jquery.lazyload.js"></script>
+<script type="text/javascript">
+	var bag = [];//购物袋
+	var addProductNum = function(ele){
+		var $li = $(ele).parents('li');
+		var $num = $li.find('.num');
+		var num = $num.html();
+		var price = $li.find('.price').html();//产品单价
+		var unit = $li.find('.unit').html();//产品单位
+		var title = $li.find('.title').html();//产品名称
+		num -= 0;
+        if( num >=1 )return;
+		++num;
+		price = parseFloat(price);
+		$num.html(num);
+
+		console.log(unit , title);
+
+		//往购物袋里加一个东西
+		bag.push({
+			id : ele.id,
+			price : price,
+			unit : unit,
+			title : title
+		});
+
+		//检查一下跑腿费
+		checkDeliverFee();
+
+	};
+	var reduceProductNum = function(ele){
+		var $li = $(ele).parents('li');
+		var $num = $li.find('.num');
+		var num = $num.html();
+		var $img = $li.find('.product-img');
+		num -= 0;
+		--num;
+		if(num<=0){
+			num=0;
+			$li.removeClass('selected');
+		}
+		$num.html(num);
+		
+		//从购物袋中拿掉一个东西
+		$.each(bag, function(i, product){
+			if(product.id == $img.attr('id')){//找到需要拿掉的商品
+				bag.splice(i,1);
+				return false;//马上结束循环
+			}
+		});
+
+		checkDeliverFee();
+	};
+	
+	var count = function(){
+		var total_pay = 0;
+		var total_num = 0;	
+		$('.selected').each(function(i, v){
+			var num = $(this).find('.num').html();
+			var price = $(this).find('.price').html();
+			num -= 0; price = parseFloat(price);
+			total_num += num;//累加一下看看总共有多少件产品
+			total_pay += (price*num);
+		});
+		return {
+			total_pay : total_pay.toFixed(1),//取得1位小数, 会不会因为这个亏钱啊...?
+			total_num : total_num	  
+		};
+	}
+	var checkDeliverFee = function(){
+		$('#submit_deliver_fee').show();
+	};
+	
+	var showInfo = function(){
+		var total = count();
+		if(!total.total_num){
+			$('#submit_none').show();
+			$('#submit_info').hide();
+			return;	
+		}
+
+		$('#submit_none').hide();
+		$('#submit_info').show();
+		$('#total_num').html(total.total_num);
+		$('#total_pay').html(total.total_pay);
+	};
+
+
+	$('img.product-img').click(function(e){
+		this.blur();
+		$('#notice').html('添加了一件 '+this.title);
+		$(this).parents('li').addClass('selected');
+		addProductNum(this);
+		showInfo();
+		e.stopPropagation();
+	});
+	
+	$('.actions .ac_plus').click(function(){
+		$(this).parents('li').find('img.product-img').trigger('click');
+	});
+	$('.actions .ac_minus').click(function(e){
+		reduceProductNum(this);
+		showInfo();
+		e.stopPropagation();
+	});
+
+	$('#submit_btn').click(function(){
+		var json_str = [];
+		if(bag.length){
+			$.each(bag, function(i, product){
+				json_str.push('{"id":'+product.id+',"price":'+product.price+', "title":"'+product.title+'", "unit":"'+product.unit+'"}') ;
+			});				
+		}else{
+			return;
+		}
+		json_str = json_str.join(',');
+		$('#submit_products').val('['+ json_str +']');
+		$('#submit_form').submit();
+	});
+
+	showInfo();
+
+	$(function(){
+		var now = new Date().getHours();
+		if(now >=0 && now<8 ){
+			$('.closed').show();
+		}	
+	});
+	
+
+
+	//------------------------ lazyload -----------------------------//
+	
+	$('img.product-img').lazyload({
+		effect : "show"
+	});
+</script>	</body> </html>

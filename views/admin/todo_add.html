@@ -1,0 +1,27 @@
+<style>
+	h1{
+		font-size : 32px;	
+		padding : 20px;
+	}
+	p{
+		margin : 20px 10px;	
+	}
+	input {
+		line-height : 28px;	
+		border : 1px solid #CCC;
+	}
+	.submit{
+		padding : 5px;	
+	}
+    .content{
+        width : 300px; 
+        padding 5px;
+    }
+</style>
+
+
+<h1>添加Todo</h1>
+<form action="/dashixiongwx/admin/shop/${shop_id}/todo/doadd" method="post">
+	<p><label>内容</label> <input class="content" name="content" type="text" /> *</p>	
+	<p><input class="submit" type="submit" value="提交" /></p>	
+</form>

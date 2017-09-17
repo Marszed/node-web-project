@@ -1,0 +1,45 @@
+<style>
+	h1{
+		font-size : 32px;	
+		padding : 20px;
+	}
+	p{
+		margin : 20px 10px;	
+	}
+	input {
+		line-height : 28px;	
+		border : 1px solid #CCC;
+	}
+	.submit{
+		padding : 5px;	
+	}
+</style>
+
+<h1>添加产品</h1>
+
+<form action="/dashixiongwx/admin/shop/${shop_id}/product/doadd" enctype="multipart/form-data" method="post">
+	<p><label>标题</label> <input name="title" type="text" /> *</p>	
+	<p><label>图片</label> <input name="img" type="file" /> *</p>	
+	<p><label>条码</label> <input id="code_val" name="code" type="text" /><a id="code_btn" href="#" onclick="return false;">查看条码</a><img id="code" src=""/> </p>(无条码的产品需要自编。自编条码格式:20+五位分店id+五位产品id)
+	<p><label>价格</label> <input name="price" type="text" /> *</p>	
+	<p><label>促销价格</label> <input name="promotePrice" type="text" /> </p>	
+	<p><label>进货成本</label> <input name="cost" type="text" /> *</p>
+	<p><label>单位</label> <input name="unit" type="text" /> *</p>
+	<p><label>产品状态(0 正常, 1 下架, 2 售罄)</label> <input name="productStatus" type="text" value="1" /> *</p>	
+	<p><input class="submit" type="submit" value="提交" /></p>	
+</form>
+<script type="text/javascript" charset="utf-8">
+	var code_val;
+	var getCode = function(){
+		code_val = $('#code_val').val();
+		var url = 'http://apps.99wed.com/baiduapp/barcode/barcode.php?codebar=BCGean13&text='+ code_val +'&resolution=2&thickness=30';
+		$('#code').attr('src',  url);
+	};
+	$('#code_btn').click(getCode);
+
+	//------- 初始化 ---------- //
+	code_val = $('#code_val').val();
+	if(code_val){
+		getCode();
+	}
+</script>	

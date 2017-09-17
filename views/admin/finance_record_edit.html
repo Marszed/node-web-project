@@ -1,0 +1,29 @@
+<style>
+	h1{
+		font-size : 32px;	
+		padding : 20px;
+	}
+	p{
+		margin : 20px 10px;	
+	}
+	input {
+		line-height : 28px;	
+		border : 1px solid #CCC;
+	}
+	.submit{
+		padding : 5px;	
+	}
+</style>
+
+
+<h1>修改财务记录</h1>
+
+<form action="/dashixiongwx/admin/shop/${shop_id}/finance/doedit/${y}/${m}/${d}/${record.id}" method="post">
+	<input name="record[id]" type="hidden" value="${record.id}" />
+	<p><label>摘要</label> <input name="record[digest]" type="text" value="${record.digest}" /></p>	
+	<p><label>借方</label> <input name="record[inCount]" type="text" value="${record.inCount}" /></p>	
+	<p><label>贷方</label> <input name="record[outCount]" type="text" value="${record.outCount}" /></p>	
+	<p><label>结余</label> <input name="record[remain]" type="text" value="${record.remain}"/></p>	
+	<p><label>备注</label> <input name="record[comment]" type="text" value="${record.comment}" /></p>	
+	<p><input class="submit" type="submit" value="提交" /></p>	
+</form>

@@ -1,0 +1,83 @@
+<style type="text/css" media="all">
+    .add-comment{
+        border : 1px dashed #DDD;
+        padding : 10px;
+        margin : 10px 10px 10px 0;
+        background :  #FFFACD;
+    }
+    .user{
+        color : orange; 
+    }
+</style>
+
+<h1>
+    给用户<span class="user">${target_user.nick}</span>添加备注
+</h1>
+
+<div class="add-comment">
+    <form action="/dashixiongwx/admin/shop/${shop_id}/user/comment/doadd" method="post" accept-charset="utf-8">
+        <label for="">添加备注: </label>
+        <input type="text" name="content" id="" value="" /> <input type="submit" name="" id="" value="添加" />
+        <input type="hidden" name="target_user_id" id="" value="${target_user_id}" />
+        <input type="hidden" name="author_name" id="" value="${user.nick}" />
+    </form>
+</div>
+<table>
+	<tr>
+		<th>
+		    编号
+		</th>
+        <th>
+			时间
+		</th>
+		<th>
+			内容
+		</th>
+		<th>
+		    备注人
+		</th>
+        <th>
+            操作 
+        </th>
+	</tr>
+
+
+{{each(comment, i) comments}}
+
+	<tr>
+        <td>
+            ${i+1} 
+        </td>
+		<td class="client-status">
+	        ${comment.timeTxt}		
+		</td>
+		<td>
+		    ${comment.content}	
+		</td>
+		<td>
+		    ${ comment.authorName }
+		</td>
+		<td>
+            <a href="/dashixiongwx/admin/shop/${shop_id}/user/${target_user_id}/comment/del/${comment.id}" class="action-del" onclick="return false;">删除</a>
+            <!--
+			    <a href="#" class="action-edit" onclick="return false;">编辑</a>
+            -->
+		</td>
+	</tr>
+
+{{/each}}
+
+</table>
+
+<script type="text/javascript" charset="utf-8">
+    $( '.action-del' ).click(function () {
+        var yes = confirm( '确定要删除这条备注么?' );
+        if( yes ){
+            location.href = this.href;
+        }
+    });
+</script>
+
+
+
+

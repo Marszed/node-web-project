@@ -1,0 +1,53 @@
+<style>
+	body{
+		background-image : none;			
+		background-color : #EEE;
+	}
+	h1{
+		font-size : 1.5em;	
+	}
+	h3{
+
+	}
+	h4{
+		padding : 5px;	
+		border-bottom : dashed 1px #CCC;
+	}
+	img{
+	}
+	h1, h3, .content{
+		padding : 5px;	
+	}
+    ol{
+        list-style-type : decimal;
+    }
+    ol,ul{
+        padding-left : 20px; 
+    }
+	p{
+		padding-bottom : 10px;	
+	}
+
+	.content img{
+		padding-bottom : 20px;	
+		width : 100%;
+	}
+	.content{
+		line-height : 1.5em;	
+		margin : 0 0 20px 0;
+	}
+	.name{
+		padding : 5px;	
+	}
+	.mine{
+		padding : 10px;	
+	}
+</style>
+
+<h1>${article.title}</h1>
+<h2>文章预览</h2>
+<h3>发表时间: ${article.intime}</h3>
+
+<div class="content">
+	{{html  article.content}}
+</div>

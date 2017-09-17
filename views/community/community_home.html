@@ -1,0 +1,28 @@
+
+<div class="banner">
+    <img src="http://s.ksmimi.com/dsx/img/com_banner_bg.jpg" alt="我们一起吹吹水" />
+</div>
+<ul class="tags clf" id="tags">
+    {{each(change, i) ArticleCategory}}
+    {{if i==0}}
+    <li class="tags-li"><a id="${change.id}" href="#" class="tags-li-a current">${change.name}</a></li>
+    {{else}}
+    <li class="tags-li"><a id="${change.id}" href="#" class="tags-li-a">${change.name}</a></li>
+    {{/if}}
+    {{/each}}
+</ul>
+<ul class="articles clf"></ul>
+<ul class="article-list"></ul>
+<div class="load-more">
+    <a href="#" onclick="return false;">点击查看更多</a>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    var dsx = {
+        articles : {{html JSON.stringify(articles)}},
+        shop_id : ${shop_id},
+        nextIndex : ${nextIndex},
+        wx_id : '${wx_id}'
+    };
+
+</script>

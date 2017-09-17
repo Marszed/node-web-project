@@ -1,0 +1,49 @@
+<style>
+	h1{
+		font-size : 32px;	
+		padding : 20px;
+	}
+	p{
+		margin : 20px 10px;	
+	}
+	input,textarea {
+        padding : 5px;
+		border : 1px solid #CCC;
+        width : 300px;
+        font-size : 14px;
+	}
+    textarea{
+        height : 100px; 
+    }
+    label{
+        width : 100px; 
+    }
+	.submit{
+		padding : 5px;	
+	}
+</style>
+
+
+<h1>添加外卖单</h1>
+<form action="/dashixiongwx/admin/shop/${shop_id}/takeaway/doadd" method="post">
+    <table border="0">
+        <tr>
+            <td><label>店铺名称</label></td>
+            <td><input name="name" type="text" /> *</td>
+        </tr>
+        <tr>
+            <td><label>地址</label></td>
+            <td><input name="address" type="text" /> *</td>
+        </tr>
+        <tr>
+            <td><label>简介</label></td>
+            <td><input name="description" type="text" /> *</td>
+        </tr>
+        <tr>
+            <td><label>电话(每行一个)</label></td>
+            <td><textarea name="tels" /></textarea></td>
+        </tr>
+
+    </table>
+    <p><input class="submit" type="submit" value="提交" /></p>	
+</form>

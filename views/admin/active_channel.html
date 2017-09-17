@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        h1{
+            font-size: 32px;
+            padding: 20px;
+        }
+        input{
+            line-height: 28px;
+        }
+        .info{
+            padding: 10px;
+        }
+        .submit{
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+        .tip{
+            margin: 20px 10px;
+        }
+        .warShopId{
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<form action="/dashixiongwx/admin/shop/${shop_id}/active/dochannel" method="post">
+    <h1>渠道信息</h1>
+    <div  class="info">
+        <span>注：*为必填项</span>
+    </div>
+    <div class="info">
+        最近输入的渠道ID为&nbsp;<span class="lastId"></span>
+    </div>
+    <div class="info">
+        <a href="/dashixiongwx/admin/shop/${shop_id}/queryChannelInfo" target="_blank">查询所有渠道信息</a>
+    </div>
+    <div class="info">
+        <span>渠道ID：</span>
+        <input type="text" required class="qId" name="channel[qId]" placeholder="请输入渠道ID"/>
+        <span class="tip">*</span>
+        <span class="warning"></span>
+    </div>
+    <div class="info">
+        <span>店&nbsp;&nbsp;&nbsp;&nbsp;号：</span>
+        <input type="text" required class="shopId" name="channel[shopId]" placeholder="请输入店号"/>
+        <span  class="tip">*</span><span class="warShopId">只能输入数字</span>
+    </div>
+    <div class="info">
+        <span>备&nbsp;&nbsp;&nbsp;&nbsp;注：</span>
+        <input type="text" required class="mark" name="channel[mark]" placeholder="请输入备注"/>
+        <span  class="tip">*</span>
+    </div>
+    <div class="info">
+        <input type="submit" class="submit" value="提交"/>
+    </div>
+</form>
+</body>
+<script type="text/javascript">
+    $(function(){
+        $.get('/dashixiongwx/admin/shop/${shop_id}/query/lastId', function(id){
+            if(id=='0'){
+                $('.lastId').html(id);
+                $('.lastId').css('font-weight', 'bold');
+                return;
+            }
+            var jsonId = JSON.parse(id);
+            $('.lastId').html(jsonId.qId);
+            $('.lastId').css('font-weight', 'bold');
+        });
+    });
+</script>
+<script type="text/javascript">
+    $('.qId').blur(function(e){
+        var qId = $(this).val().trim();
+        if(qId){
+            if(isNaN(qId)){
+                $('.warning').html('只能输入数字');
+                $('.warning').css('color', 'red');
+                return;
+            }
+            if(qId>50000){
+                $.post('/dashixiongwx/admin/shop/${shop_id}/query/qId',{id:$('.qId').val()},function(data){
+                    $('.warning').html(data);
+                    $('.warning').css('color', 'red');
+                    return;
+                });
+            }else{
+                $('.warning').html('渠道ID必须大于50000');
+                $('.warning').css('color', 'red');
+            }
+        }else{
+            return;
+        }
+
+    });
+</script>
+<script type="text/javascript">
+    $('.shopId').blur(function(e){
+        var shopId = $(this).val().trim();
+        if(shopId){
+            if(!isNaN(shopId)){
+                $('.warShopId').hide();
+            }else{
+                $('.warShopId').show();
+            }
+        }
+    });
+</script>
+</html>

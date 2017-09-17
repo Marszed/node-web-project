@@ -1,0 +1,347 @@
+<style>
+	body{
+		background-image : none;			
+		background-color : #FFF;
+	}
+	h2{
+		font-size : 1.5em;	
+	}
+	h3{
+        font-size : 14px;
+	}
+	h4{
+		padding : 5px;	
+		border-bottom : dashed 1px #CCC;
+	}
+	img{
+	}
+	h2, h3, .content{
+		padding : 8px;	
+	}
+	p{
+		padding-bottom : 10px;	
+	}
+    ol{
+        list-style-type : decimal;
+    }
+    ol,ul{
+        padding-left : 20px; 
+    }
+    
+
+	.content img{
+		padding-bottom : 20px;	
+		width : 100%;
+	}
+	.content{
+		line-height : 1.5em;	
+		margin : 0 0 20px 0;
+	}
+	.name{
+		padding : 5px;	
+	}
+	.mine{
+		padding : 10px;	
+	}
+    .comments input {
+        border : 1px solid #DDD; 
+        line-height : 24px;
+    }
+    .comment-list{
+        padding : 10px; 
+    }
+    .comment-time{
+        font-size : 12px;
+        color : #CCC;
+    }
+    .comments h2{
+        border-bottom : 1px solid #DDD;  
+    }
+    .user-nick{
+	    color : #40A0C0;
+    }
+    .mine{
+        vertical-align : top; 
+        margin-bottom : 100px;
+    }
+    .item{
+        padding : 0;
+        border-bottom : 1px dashed #DDD;  
+        line-height : 31px;
+        vertical-align : middle;
+    }
+    .author{
+        color : #40A0C0; 
+    }
+    .btn{
+        background : #40A0C0; 
+        color : #FFF;
+        padding : 5px;
+        text-decoration : none;
+    }
+    .back-to-community{
+        color : #40A0C0;
+    }
+    .icon{
+        width : 16px; 
+        height : 16px; 
+    }
+    .article-info span{
+        padding-right 5px; 
+        color : #AAA;
+    }
+    .icon{
+        position : relative;
+        top: -2px;
+        opacity : 0.6;
+    }
+    .guest-note{
+        background : #FFFAF0;  
+        border : 1px dashed #DDD;
+        margin : 10px;
+        padding : 10px;
+        text-align : center;
+    }
+    .guest-note-top{
+        border : none;
+        border-bottom : 1px dashed #DDD;
+        padding : 10px;
+        margin : 0;
+        text-align : center;
+    }
+    .like{
+        text-align : center;      
+        margin-bottom : -9px;
+    }
+    .like-btn{
+        background : #40A0C0;
+        color : #FFF;
+        padding : 10px;
+        border-radius: 15px;
+        text-decoration : none;
+    }
+    .likes{
+        margin : 10px 10px;
+        text-align : center; 
+        font-size : 12px;
+    }
+    .like-users{
+        border : 1px solid #DDD;  
+        padding : 10px;
+        background : #EEE;
+        border-radius: 5px;
+    }
+    .like-users-arrow-wraper{
+        text-align : center; 
+    }
+    .like-users-arrow{
+        display : inline-block;
+        width: 0px;
+        height: 0;
+        border-top: 0px solid #F00;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid #EEE;
+        border-left: 10px solid transparent;
+        position : relative;
+        top : 2px;
+        left : -10px;
+    }
+    .like-users-arrow2{
+        width: 0px;
+        height: 0;
+        display : inline-block;
+        border-top: 0px solid #F00;
+        border-right: 11px solid transparent;
+        border-bottom: 11px solid #DDD;
+        border-left: 11px solid transparent;
+        position : relative;
+        top : 2px;
+        left : 15px;
+    }
+    .like-user{
+        color : #009ACD;
+    }
+</style>
+{{if user}}
+
+{{else}}
+<p class="guest-note guest-note-top">
+    微信搜索服务号“大师兄小卖部”，关注我们吧！啤下面咯~
+</p>
+{{/if}}
+<h2>${article.title}</h2>
+<h3>
+    <a class="back-to-community" href="/dashixiongwx/shop/${shop_id}/community">&lt;&lt;社区首页</a> 
+    <span class="article-info">
+        <span class="author"><img class="icon" src="http://s.ksmimi.com/dashixiong_static/img/human_head.jpg" alt="" />${article.author||'游客'}</span>
+        <span><img class="icon" src="http://s.ksmimi.com/dashixiong_static/img/clock.jpg" alt="" />${article.intime}</span> 
+        <span><img class="icon" src="http://s.ksmimi.com/dashixiong_static/img/eye.jpg" alt="" />${article.viewCount}</span>     
+        <span><img class="icon" src="http://s.ksmimi.com/dashixiong_static/img/like.png" alt="" /><span class="like-num">${likes.length}</span></span>     
+    </span>
+</h3>
+
+<div class="content">
+	{{html  article.content}}
+</div>
+
+{{if user}}
+<p class="like">
+    <a class="like-btn" href="#" onclick="return false;">
+        <img class="like-action" src="http://s.ksmimi.com/dashixiong_static/img/like.png" alt="" />
+        <img class="like-already" style="display:none;" src="http://s.ksmimi.com/dashixiong_static/img/like_already.png" alt="" />
+        赞一下</a>
+</p>
+{{/if}}
+<div class="like-users-arrow-wraper">
+    <span class="like-users-arrow2"></span>
+    <span class="like-users-arrow"></span>
+</div>
+<p class="likes">
+    <span class="like-users-wraper">
+        <span class="like-users"> </span>
+    </span>
+    
+</p>
+
+<div class="comments">
+	<h2>评论</h2>
+    <div class="comment-list"></div>
+
+{{if user}}
+	<p class="mine">
+        <span class="">${user.nick}</span> <input id="comment" type="text" /> <a class="btn" href="#" onclick="return false;">评论</a>
+	</p>
+    
+{{else}}
+    <p class="guest-note">
+        内有恶犬，胆小勿入！——大师兄小卖部
+	</p>
+{{/if}}
+</div>
+<script type="text/javascript">
+    var comments = {{html JSON.stringify(comments)}};
+    var likes = {{html JSON.stringify(likes)}};
+    var shop_id = ${shop_id};
+    var article_id = ${article.id};
+
+    //----------------- 一些UI --------------
+    var $comment_list = $( '.comment-list' );
+    var $comment = $( '#comment' );
+    var $like_users = $( '.like-users' );
+    //---------------------------------------
+
+    var make_comment_item_html = function (obj) {
+        var html = [
+            '<p class="item">',
+                '<span class="user-nick">', obj.nick, '</span>  ',
+                '<span class="user-comment">', obj.content, '</span>',
+                '<span class="comment-time">', obj.intime, '</span>',
+            '</p>'
+        ];
+        return html.join('');
+    };
+
+    var show_comments = function (cmmts) {
+        var html = [];
+        comments.forEach(function (comment) {
+            html.push( make_comment_item_html( comment ) );
+        });
+        $( '.comment-list' ).html( html.join('') );
+    };
+
+    show_comments( comments );
+
+    //显示出喜欢这个文章的有谁
+    var show_likes = function (likes) {
+        if( !likes || !likes.length ){
+            $like_users.html( '觉得屌就赞一下呗!' );
+            return;
+        }
+
+        
+        //反序
+        likes.reverse();
+        var len = likes.length;
+        var str = '';
+        if( len >5 ){
+            likes.length = 5;
+            str = '等'+ len +'人';
+        }
+        var html = [];
+        likes.forEach(function (like) {
+            html.push('<span class="like-user">'+ like.nick +'</span>');
+        });
+        html = html.join( ',' );
+        html += str+' 觉得这个很屌';
+        $like_users.html( html );
+    };
+    show_likes( likes );
+
+</script>
+
+{{if user}}
+<script type="text/javascript">
+    var user = {{html JSON.stringify(user)}};
+    var likes =  {{html JSON.stringify(likes)}};
+    var article = {{html JSON.stringify(article)}};
+
+    var showLike = function () {
+        $( '.like-already' ).show();
+        $( '.like-action' ).hide();   
+    };
+    
+    var user_like_this_article = false;
+    for(var i=0 ; i<likes.length; i++){
+        if( likes[i].userId == user.id ) {
+            user_like_this_article = true; 
+        }
+    }
+    if( user_like_this_article ){
+        showLike();
+    }
+    
+    var isPosting = false; 
+	$('.btn').click(function(){
+        if( isPosting ) return;
+        var val = $comment.val();
+        if( !val )return;
+        
+        isPosting = true;
+		//ajax 提交评论内容					
+		$.post('/dashixiongwx/shop/'+shop_id+'/community/comment', {
+            content : val,
+            article_id : article_id,
+            author_id : article.userId
+		}, function (res) {
+            isPosting = false;
+            var html = make_comment_item_html({
+                nick : user.nick,
+                content : val,
+                intime : res.comment.intime
+            });
+            $comment_list.append( html );
+            $comment.val('');
+		});
+	});
+
+    $( '.like-btn' ).click(function () {
+		$.get('/dashixiongwx/shop/'+shop_id+'/community/article/'+article_id+'/like', function (res) {
+            if( !res.code ){
+                showLike();
+                likes.push({nick:user.nick});
+                show_likes(likes);
+                var $like_num = $( '.like-num' );
+                var val = $like_num.text();
+                val -= 0;
+                $like_num.text( ++val ); 
+            }
+		});
+    });
+
+</script>
+{{/if}}
+
+
+
+
+

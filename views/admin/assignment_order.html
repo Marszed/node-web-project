@@ -1,0 +1,13 @@
+<div>
+    <form method="post" action="/dashixiongwx/admin/order/doassignment">
+        订单ID <input type="text" id="orderId" name="orderId">
+        选择店面
+        <select name="shopId">
+            <option value="-1" selected="selected">请选择分类</option>
+            {{each(change,i) shop}}
+            <option value="${change.id}">${change.name}</option>
+            {{/each}}
+        </select>
+        <input type="submit" value="订单转店">
+    </form>
+</div>

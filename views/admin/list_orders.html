@@ -1,0 +1,929 @@
+<style>
+	table, td, th{
+		border : 1px solid #CCC;
+	}
+    ul{
+        padding : 0;
+    }
+	h1{
+		padding : 10px;
+		font-size : 20px;
+	}
+	.money {
+		padding : 10px;
+	}
+	.good{
+		font-size : 18px;
+		color : green;
+	}
+	.bad{
+
+		color : red;
+	}
+	.order-create{
+		color : red;
+	}
+	.order-delivering{
+		color : green;
+	}
+	.order-receive{
+		color : #CCC;
+	}
+	.profit, .client-detail{
+		padding : 0 0 0 30px;
+	}
+
+	table{
+		margin : 10px;
+	}
+	.resume td, .resume th{
+		padding : 5px;
+	}
+	.warnning{
+		height : 20px;
+		background : yellow;
+		padding : 5px;
+	}
+	#new_orders{
+		display : block;
+		color : orange;
+		text-align : center;
+	}
+	.requirement{
+		font-size : 12px;
+		color : #FF1493;
+	}
+    .client-name{
+        min-width : 150px;
+        max-width : 200px;
+    }
+    .order-detail{
+        max-width : 300px;
+    }
+
+	/*-------------------------*/
+	.deliver_fatal {/* 超过半小时, 被客户骂惨了! */
+		background : #FF6A6A;
+		color : #FFF;
+	}
+	.deliver_caution{/* 18~30分钟, 晚了 */
+		background : #FFC1C1;
+	}
+	.deliver_warnning{/* 8~18分钟, 应该去送了 */
+		background : #FFF8DC;
+	}
+	.deliver_saved{/* 8分钟以内, 可以等等单子 */
+		background : #E0EEE0;
+	}
+	.deliver_fatal a{
+		color : #FFF;
+	}
+    @media screen and (max-width:500px){
+        ul,li{margin:0px;padding:0px;}
+    }
+
+    /*---------------------------*/
+    .todo{
+        background :  #FFFACD;
+        border : 1px dashed #DDD;
+    }
+    .todo li{
+        list-style-type : disc
+    }
+    .todo h3{
+        padding-left : 10px;
+    }
+    .time-text{
+        font-size : 12px;
+        color : #CCC;
+        padding-left : 2px;
+    }
+    .action-todo-del{
+        font-size : 12px;
+        padding-left : 10px;
+    }
+    .todo-list{
+        padding-left : 40px;
+    }
+
+    /* user comments */
+    .user-comments{
+        color : orange;
+        padding : 0;
+        line-height : 14px;
+    }
+    .comment-time{
+        color : #DDD;
+    }
+    .total-pay{
+        font-size : 30px;
+        color : orange;
+    }
+    .count input{
+        width : 20px;
+    }
+    .action-increase, .action-decrease{
+        padding : 0 5px;
+        font-size : 20px;
+        vertical-align : center;
+        color : #FFF;
+    }
+    .action-increase{
+        background : green;
+    }
+
+    .action-decrease{
+        background : red;
+    }
+    .express-info{
+        color : #458B74;
+    }
+    .order-num{
+        text-align : center;
+        font-size : 30px;
+    }
+    .order-create-num{
+        color : red;
+    }
+    .order-delivering-num{
+        color : green;
+    }
+    .orange{
+        color:orange;
+        text-decoration:none;
+    }
+    .remark-a{
+        text-decoration:none;
+    }
+    .remark-a:hover{
+        text-decoration:underline;
+    }
+    .none{
+        display:none;
+    }
+    .total-pay-td del{
+        display:block;;
+        margin-bottom:5px;
+    }
+    .push-btns{
+        display:inline;
+        margin-left:10px;
+    }
+    .push-btns input{
+        font-size:16px;
+        margin-left:10px;
+    }
+    .android{
+        width: 20px;
+        height: 20px;
+    }
+    .android_span a{
+        line-height:  20px;
+        vertical-align:super;
+    }
+</style>
+
+
+
+{{if todos.length}}
+<div class="todo">
+    <div>
+        <h3>待办事宜</h3>
+    </div>
+    <ul class="todo-list">
+        {{each(todo, i) todos}}
+        <li>
+            <span>${todo.content}</span><span class="time-text">${todo.intime_text}</span><a class="action-todo-del" href="/dashixiongwx/admin/shop/${shop_id}/todo/del/${todo.id}" onclick="return false;">删除</a>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+{{/if}}
+
+
+<h1>
+	<a href="/dashixiongwx/admin/shop/${shop_id}/order/list?type=${type}&y=${pre_date_y}&m=${pre_date_m}&d=${pre_date_d}&p=${query.p}">
+		&lt;&lt;前一天
+	</a>
+	${shop_id}号店${m}月${d}日(${xingqi})业绩
+	<a href="/dashixiongwx/admin/shop/${shop_id}/order/list?type=${type}&y=${next_date_y}&m=${next_date_m}&d=${next_date_d}&p=${query.p}">
+		后一天&gt;&gt;
+	</a>
+    {{if power>=3}}
+	    {{if power>=5 }}
+	<a class="profit" href="/dashixiongwx/admin/shop/${shop_id}/product/sold/${y}/${m}/${d}"> 产品利润排行榜&gt;&gt;</a>
+	    {{/if}}
+	<a class="client-detail" href="/dashixiongwx/admin/shop/${shop_id}/visitor/detail/${y}/${m}/${d}"> 顾客明细&gt;&gt;</a>
+	<a class="client-detail" href="/dashixiongwx/admin/shop/${shop_id}/order/assignment"> 订单转店&gt;&gt;</a>
+	{{/if}}
+
+    {{if power>=6 }}
+    <a class="client-detail" href="/dashixiongwx/admin/shop/${shop_id}/list_user_opration"> 查询管理员的操作&gt;&gt;</a>
+    {{/if}}
+    {{if power>=3 }}
+    <div class="push-btns"></div>
+    {{/if}}
+</h1>
+{{if power==2}}
+<table class="resume">
+	<tr>
+        <th>未确认</th>
+        <th>配送中</th>
+        <th>已收货</th>
+        <th>总收入</th>
+    </tr>
+    <tr>
+        <td rowspan="2" class="order-num"><a href="#" onclick="return false;" class="order-create-num"></a></td>
+        <td rowspan="2" class="order-num order-delivering-num"></td>
+        <td rowspan="2" class="order-num order-receive-num"></td>
+        <td rowspan="2">${total_in && total_in.toFixed(1)} 元</td>
+    </tr>
+</table>
+{{/if}}
+{{if power==5}}
+<table class="resume">
+    <tr>
+        <th>未确认</th>
+        <th>总收入</th>
+    </tr>
+    <tr>
+        <td rowspan="2" class="order-num"><a href="#" onclick="return false;" class="order-create-num"></a></td>
+        <td rowspan="2">${total_in && total_in.toFixed(1)} 元</td>
+    </tr>
+</table>
+{{/if}}
+{{if power>3&&power!=5}}
+<table class="resume">
+	<tr>
+		<th> </th> <th> 到店顾客数 </th> <th> 营业时间到店顾客数 </th> <th> 订单数 </th> <th> app营业时间到店顾客数 </th> <th> app订单数 </th> <th> 成交率 </th> <th> 总收入 </th><th title="实际收入=总收入-限购产品收入">实际收入</th> <th> 客单 </th>
+		{{if power>5 }}
+		<th> 利润 </th> <th> 利润率 </th>
+		{{/if}}
+
+        <th>未确认</th>
+        <th>配送中</th>
+        <th>已收货</th>
+        <th>新用户</th>
+        <th>旧用户</th>
+        <th>回头率</th>
+    </tr>
+
+	<tr>
+		{{if isToday}}
+		<th> 今日 </th>
+		{{else}}
+		<th>${m}月${d}日</th>
+		{{/if}}
+
+		<td> ${visitor_count} </td>
+		<td> ${user_visit_len} </td>
+		<td> ${ordersTwo.length} </td>
+        <td>${appVisitCount}</td>
+        <td>${appOrderNum}</td>
+		<td> ${ ordersTwo.length/user_visit_len*100 &&(ordersTwo.length/user_visit_len*100).toFixed(1)  }% </td>
+		<td>${total_in && total_in.toFixed(1)} 元</td>
+        <td title="实际收入=总收入-限购产品收入">${actual_income && actual_income.toFixed(2)}元</td><!--实际收入-->
+		<td>${ orders.length && (total_in/orders.length).toFixed(1) }元</td><!-- 客单 -->
+
+
+		{{if power>5 }}
+		<td> <!-- 利润 -->
+			{{if (total_in-total_cost)>0 }}
+			<strong class="good">${total_in-total_cost && (total_in-total_cost).toFixed(1)} </strong> 元
+			{{else}}
+			<strong class="bad">${total_in-total_cost && (total_in-total_cost).toFixed(1)} </strong> 元
+			{{/if}}
+		</td>
+		<td> ${profit_rate} </td>
+		{{/if}}
+
+        <td rowspan="2" class="order-num"><a href="#" onclick="return false;" class="order-create-num"></a></td>
+        <td rowspan="2" class="order-num order-delivering-num"></td>
+        <td rowspan="2" class="order-num order-receive-num"></td>
+        <td rowspan="2" class="order-num order-new-num">0</td>
+        <td rowspan="2" class="order-num order-old-num">0</td>
+        <td rowspan="2" class="order-num order-back-rate"><span>0</span>%</td>
+	</tr>
+
+	{{if isToday}}
+	<tr>
+		<th> 昨日此时 </th>
+		<td> ${resume_yestoday.visitor_count} </td>
+		<td> -- </td>
+		<td> ${resume_yestoday.order_num} </td>
+        <td>--</td>
+        <td>--</td>
+		<td> ${ resume_yestoday.visitor_count && (resume_yestoday.order_num/resume_yestoday.visitor_count*100).toFixed(1)  }% </td>
+		<td>${ resume_yestoday.total_in && resume_yestoday.total_in.toFixed(1)} 元</td>
+        <td>...</td><!--实际收入-->
+		<td>${ resume_yestoday.order_num && (resume_yestoday.total_in/resume_yestoday.order_num).toFixed(1) }元</td>
+
+		{{if power>5 }}
+		<td>
+			{{if (total_in-total_cost)>0 }}
+			<strong class="good">${resume_yestoday.total_in-resume_yestoday.total_cost && (resume_yestoday.total_in-resume_yestoday.total_cost).toFixed(1)} </strong> 元
+			{{else}}
+			<strong class="bad">${resume_yestoday.total_in-resume_yestoday.total_cost && (resume_yestoday.total_in-resume_yestoday.total_cost).toFixed(1)} </strong> 元
+			{{/if}}
+		</td>
+		<td> ${resume_yestoday.profit_rate}% </td>
+
+		{{/if}}
+	</tr>
+	{{/if}}
+</table>
+{{else power!=2&&power!=5}}
+<table>
+    <tr>
+        <th>未确认</th>
+    </tr>
+    <tr>
+        <td rowspan="2" class="order-num"><a href="#" onclick="return false;" class="order-create-num"></a></td>
+    </tr>
+</table>
+{{/if}}
+
+<a href="#" class="ask-permission" onclick="return false;">打开桌面通知</a>
+<p class="warnning" style="display:none;"><a id="new_orders" href="/dashixiongwx/admin/shop/${shop_id}/order/list?type=Valid" onclick="return false;">有新订单啦!!!</a></p>
+{{if isToday}}
+<table class="today">
+{{else}}
+<table>
+{{/if}}
+	<tr>
+        <th>
+            序号
+        </th>
+		<th>
+			订单id
+		</th>
+		<th>
+			时间
+		</th>
+		<th>
+			客户姓名
+		</th>
+		<th>
+			联系方式
+		</th>
+		<th>
+			地址
+		</th>
+		<th>
+			总价
+		</th>
+		<th>
+			订单详情
+		</th>
+		<th>
+			操作
+		</th>
+
+	</tr>
+
+{{each(order, i) orders}}
+	{{if order.deta_time <1000*60*8 && order.orderStatus!=2}}
+	<tr id="order${order.id}" class="deliver_saved">
+	{{else order.deta_time < 1000*60*18 && order.orderStatus!=2}}
+	<tr id="order${order.id}" class="deliver_warnning">
+	{{else order.deta_time <= 1000*60*30 && order.orderStatus!=2 }}
+	<tr id="order${order.id}" class="deliver_caution">
+	{{else order.deta_time > 1000*60*30 && order.orderStatus<2 }}
+	<tr id="order${order.id}" class="deliver_fatal">
+	{{else}}
+    <tr id="order${order.id}" class="client-order">
+	{{/if}}
+        <td class="id">
+            ${orders.length - i}
+        </td>
+		<td>
+            <span class="android_span">
+                {{if order.snapshot.isapp}}
+                <img class="android" title="app用户，不许怠慢!" src="http://s.ksmimi.com/dashixiong_static/img/android.png"/>
+                {{/if}}
+                <a href="/dashixiongwx/admin/shop/${shop_id}/order/${order.id}/detail?id=${i+1}" class="order_id"> ${order.id} </a>
+            </span>
+        </td>
+		<td>
+            <p class="bgcolor-thansk-giving-day" bgtmp="${order.intime}">${order.intime}</p>
+            <p>(${order.intime_text})</p>
+		</td>
+		<td>
+            <a class="client-name" target="_blank" href="/dashixiongwx/admin/shop/${shop_id}/user/profile/${order.userId}">
+				${order.name}
+            </a>
+             |
+			<a target="_blank" href="/dashixiongwx/admin/shop/${shop_id}/order/list/${order.userId}/${encodeURIComponent(order.name)}">
+                过往订单&gt;&gt;
+				<img class="none new_customer new_${order.userId}" user_id="${order.userId}" title="${order.name}是一个新客户，不许怠慢!" src="http://s.ksmimi.com/dashixiong_static/img/new.png"/>
+			</a>
+
+            {{if comments_map[ order.userId ]}}
+                <ol class="user-comments">
+                    {{each(comment, i) comments_map[ order.userId ]}}
+                    <li>
+                        <a class="client-name orange" target="_blank" href="/dashixiongwx/admin/shop/${shop_id}/user/profile/${order.userId}">
+                            ${comment.content} <span class="comment-time">${comment.timeTxt}</span>
+                        </a>
+                    </li>
+                    {{/each}}
+                </ol>
+            {{/if}}
+
+		</td>
+		<td>
+            <a target="_blank" href="/dashixiongwx/admin/shop/${shop_id}/msg/${order.userId}/list">
+                <img width="20" src="http://s.ksmimi.com/dashixiong_static/img/wechat.png" alt="wechat" />
+            </a>
+			<a href="tel:${order.mobile}">
+				${order.mobile}
+			</a><br/>
+            {{if order.shortTel !=0}}
+            <a href="tel:${order.shortTel}">
+                ${order.shortTel}
+            </a>
+            {{/if}}
+		</td>
+		<td>
+			${order.address}
+			{{if order.orderStatus == 0}}
+			(<span class="order-create status"><img src="http://s.ksmimi.com/dashixiong_static/img/warning-icon.png"/>未确认</span>)
+			{{else order.orderStatus == 1}}
+			(<span class="order-delivering status">配送中...</span>)
+			{{else order.orderStatus == 2}}
+			(<span class="order-receive status">已经送达</span>)
+			{{else order.orderStatus == 3}}
+			(<span class="order-receive status">订单取消</span>)
+			{{/if}}
+
+		</td>
+		<td class="total-pay-td">
+			{{if order.snapshot}}
+                {{if order.snapshot.discount}}
+                    ${order.snapshot.total_pay && order.snapshot.total_pay.toFixed(1)} 元
+                {{else}}
+				    ${order.snapshot.total_pay && order.snapshot.total_pay.toFixed(1)} 元
+                {{/if}}
+                {{if order.snapshot.tool_ids}}
+                <p>
+                    <a target="_blank" href="/dashixiongwx/admin/shop/${shop_id}/order/${order.id}/tool?ids=${order.snapshot.tool_ids.join()}">
+                    (使用了${order.snapshot.tool_ids.length}个道具)
+                    </a>
+                </p>
+                {{/if}}
+			{{else}}
+				木有快照信息咧?
+			{{/if}}
+		</td>
+		<td class="order-detail">
+            <a href="/dashixiongwx/admin/shop/${shop_id}/order/${order.id}/remark" class="remark-a" title="点击后可为订单添加备注">
+			{{if order.snapshot}}
+				<ul>
+				{{each(product, i) order.snapshot.products_bought}}
+					<li>
+						${product.title} x ${product.count}
+					</li>
+				{{/each}}
+				</ul>
+				{{if order.snapshot.requirements}}
+					<ul class="requirement">
+					{{each(requirement, i) order.snapshot.requirements}}
+						<li>
+							{{html requirement}}
+						</li>
+					{{/each}}
+					</ul>
+				{{/if}}
+                {{if order.snapshot.express_info_fetch}}
+                    <p class="express-info">
+                        ${order.snapshot.express_info_fetch}
+                    </p>
+				{{/if}}
+                {{if order.snapshot.express_info_sent}}
+                    <p class="express-info">
+                        寄件公司: ${order.snapshot.express_info_sent.company}
+                    </p>
+                    <p class="express-info">
+                        收件人: ${order.snapshot.express_info_sent.receiver.replace(/undefined/g,'')}
+                    </p>
+                    <p class="express-info">
+                        寄件人: ${order.snapshot.express_info_sent.sender.replace(/undefined/g,'')}
+                    </p>
+                    <p class="express-info">
+                        重量:${order.snapshot.express_info_sent.weight}
+                    </p>
+
+				{{/if}}
+                {{if order.snapshot.remark}}
+                    <span class="orange">(${order.snapshot.remark})</span>
+                {{/if}}
+                {{if order.snapshot.isapp}}
+                <span class="apporder" style="color: #ff0000">(app订单)</span>
+                {{/if}}
+			{{else}}
+				木有快照信息咧?
+			{{/if}}
+            </a>
+		</td>
+		<td>
+            <a class="action" orderid="${order.id}" type="deliver" class="deliver" href="/dashixiongwx/admin/shop/${shop_id}/order/${order.id}/status/update/1" onclick="return false;">配送</a> |
+            <a class="action" orderid="${order.id}" type="receive" class="receive" href="/dashixiongwx/admin/shop/${shop_id}/order/${order.id}/status/update/2" onclick="return false;">确认收货</a> |
+            <a class="action" orderid="${order.id}" type="cancel" class="cancel" href="/dashixiongwx/admin/shop/${shop_id}/order/${order.id}/status/update/3" onclick="return false;">取消订单</a>
+			{{if order.broken}}
+			| <a title="发现有成本为0的销售记录, 点击重新获取本单所有产品的售价以及成本, 然后更新到订单的快照当中" class="action" type="fixed" href="/dashixiongwx/admin/shop/${shop_id}/order/${order.id}/fix">修复</a>
+			{{/if}}
+            {{if order.payStatus==10 && power>=3}}
+            | <a class="payment action" orderid="${order.id}" type="payment" href="#" onclick="return false;" title="已付款表示:已经在线支付">已付款</a>
+            {{/if}}
+            {{if order.payStatus==1}}
+            <!--| <a class="cancelPay action" orderid="${order.id}" onclick="return false;" title="取消已付款状态" href="">取消已付款</a>-->
+            {{/if}}
+
+
+		</td>
+	</tr>
+{{/each}}
+
+
+</table>
+
+<div id="dialog" style="display:none;">
+     <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><span id="dialog_msg"></span> </p>
+</div>
+
+<div id="sell_in_shop" style="display:none;">
+    <div>
+        <h3>店面销售</h3>
+        <div>
+            <input id="sell_in_shop_input" type="text" name="" id="sell_input" value="" /> 共<span class="total-pay">0</span>元
+        </div>
+        <table >
+            <tr>
+                <th>图片</th>
+                <th>品名</th>
+                <th>code</th>
+                <th>价格(元)</th>
+                <th>数量</th>
+                <th>单位</th>
+                <th>小结(元)</th>
+            </tr>
+            <tbody id="sell_in_shop_container"> </tbody>
+        </table>
+    </div>
+</div>
+
+<iframe id="deliver_iframe" src="" frameborder="0" style="display:none"></iframe>
+
+<!--socket.io -->
+<script src="http://www.ksmimi.com:6889/socket.io/socket.io.js"></script>
+
+<!--感恩节活动-->
+<!--<script type="text/javascript">
+    $(document).ready(function(){
+        $('.bgcolor-thansk-giving-day').each(function(index, domEle){
+            var initTime = $(this).attr('bgtmp');
+
+            var speMinuteArr = initTime.split(':'),
+                speMin = speMinuteArr[1];
+            var dt = new Date(initTime);
+            if( (0 == (speMin-0)) || (59 == (speMin-0)) || (0==dt.getMinutes()) || (59==dt.getMinutes())){
+                $(this).closest('tr').find('a').first().css({'border':'1px solid red','padding':'5px'});
+            }
+        });
+    });
+</script>-->
+
+<script type="text/javascript" >
+    var $doc = $(document);
+    var shop_id = ${shop_id},
+        section_id = ${section_id},
+        power = ${power},
+        y = ${y},
+        m = ${m},
+        d = ${d};
+    var notifications = [];
+    var clearAllNotification = function () {
+        notifications.forEach(function (notification, i) {
+            if(  notification.close ){
+                notification.close();
+                return;
+            }
+			notification.cancel && (notification.cancel());
+        });
+    };
+
+
+	var askPermission = function(){
+		if(!window.webkitNotifications){
+			alert('你不是chrome浏览器没有办法开启桌面提醒-_-%');
+			return;
+		}
+		window.webkitNotifications.requestPermission(function(){
+			if(window.console) console.log(window.webkitNotifications.checkPermission());
+		});
+	};
+
+	var notify = function(notify, noSound){
+		if( window.webkitNotifications && window.webkitNotifications.checkPermission() == 0 ){
+			var icon = 'http://www.dangercove.com/html5-notifications/img/icon.png';
+
+			// Create a new notification
+			var notification = window.webkitNotifications.createNotification(icon, '【'+ notify.shop_id +'号店】'+notify.title, notify.message);
+			notification.show();
+			setTimeout(function(){
+                if(  notification.close ){
+                    notification.close();
+                    return;
+                }
+				notification.cancel && (notification.cancel());
+			}, 8000);
+
+            notifications.push( notification );
+		}
+		if( !noSound ){
+			play_order_come_sound();
+			show_warnning();
+		}
+	}
+	//-------------------- warnning
+	var show_warnning = function(){
+		$('.warnning').show();
+	};
+	var hide_warnning = function(){
+		$('.warnning').hide();
+	};
+
+
+	//-------------------- sound
+	var order_come;
+	var play_order_come_sound = function(){
+		if(!order_come){
+			order_come = new Audio('http://s.ksmimi.com/dashixiong_static/res/order_come.mp3');
+		}
+		order_come.play();
+	};
+
+	//-------------------- 用户动作响应
+	var btn_ask_permission = $('a.ask-permission');
+	btn_ask_permission.click(function(){
+		askPermission();
+	});
+
+	//-------------------- 初始化设置
+	if( !(window.webkitNotifications && window.webkitNotifications.checkPermission()) ){
+		btn_ask_permission.hide();
+	}
+
+    /*//"未确认"的订单，每10秒叫一次
+    var $order_create = $('.order-create');
+    var checkOrders = function(){
+        if( $('.order-create').size() > 0 ){
+            play_order_come_sound();
+            s_time = setTimeout(function(){
+               checkOrders();
+            }, 1000*10);
+        }
+    };
+    checkOrders();*/
+
+</script>
+<script>
+//var socket = io.connect('http://'+ location.host +':6889');
+var socket = io.connect('http://www.ksmimi.com:6889');
+//通过这个请求上报一下自己的店铺id
+socket.emit('report_shop_id', {
+    shop_id : shop_id
+});
+socket.on('order come', function (data) {
+	if(window.console) console.log(data);
+    if( section_id ){ //有section_id说明是在查看某个店家的订单
+        //推送的消息属于本店的订单才推送消息
+        if( section_id == data.section_id ) notify(data);
+    }else{
+        notify(data);
+    }
+});
+</script>
+
+<script type="text/javascript">
+    //对订单的各种操作, 如: 配送中,确认收货,取消订单等
+    var $iframe = $('#deliver_iframe'),
+        s_time = 0;
+
+    //对订单的已支付操作
+    var $paymet = $('.payment');
+    $paymet.click(function(){
+        if(confirm('确认付款吗？')){
+            var $pay = $(this),
+                    orderId = $pay.attr('orderid');
+            var opration = $(this).text();
+            var args = {
+                    orderId : orderId
+            };
+            $.post('/dashixiongwx/admin/cancleOrder',{orderid:orderId,opration:opration},function(data){});
+            $.post('/dashixiongwx/admin/order/payment', {args : args},function(data){
+                if(data == 'success'){
+                    location.reload();
+                }
+            });
+        }
+    });
+
+    //恢复已付款
+    var $cancelPay = $('.cancelPay');
+    $cancelPay.click(function(){
+        if(confirm('确认恢复？')){
+            var $cancel = $(this),
+                    cancelPayId = $cancel.attr('orderid');
+            var opration = $(this).text();
+            $.post('/dashixiongwx/admin/cancleOrder',{orderid:cancelPayId,opration:opration},function(data){});
+            $.post('/dashixiongwx/admin/order/cancelPay',{cancelPayId : cancelPayId},function(data){
+                if(data == 'success') {
+                    location.reload();
+                }
+            });
+        }
+    });
+
+	$('.action').click(function(){
+        var $a = $(this);
+        var $tr = $a.parents('tr');
+
+		var a = this;
+
+		var $sts = $a.parents('tr').find('.status');
+
+        //抓取值@wuyong
+        var orderId = $(this).attr('orderid');
+        var opration = $(this).text();
+
+        //管理员操作记录@wuyong
+//        $.post('/dashixiong/admin/cancleOrder',{orderid:orderId,opration:opration},function(data){});
+
+        if( $a.attr('type')=='cancel' ){
+            $sts.html('<del>订单取消</del>');
+            var name = $a.parents( '.client-order' ).find( '.client-name' ).text();
+            $( '#dialog_msg' ).text( '此订单的货物数量将返回库存, 确定要取消"'+ name +'"的订单?' );
+            $( '#dialog' ).dialog({
+                modal : true,
+                show: {
+                    effect: "fade",
+                    duration: 618
+                  },
+                hide: {
+                    effect: "fade",
+                    duration: 618
+                },
+                buttons: {
+                    '确定' : function() {
+                        $.post('/dashixiongwx/admin/cancleOrder',{orderid:orderId,opration:opration},function(data){});
+                        var This = this;
+                        $.get( '/dashixiongwx/admin/shop/'+ shop_id +'/order/'+ $a.attr('orderid') +'/cancel', function (res) {
+                            $( This ).dialog( "close" );
+                            $tr.remove();
+                            check_num();
+                        });
+                    },
+                    Cancel: function() {
+                        $( this ).dialog( "close" );
+                    }
+                }
+	        });
+            return;
+		}
+		$.get(this.href, function(res){
+			if($a.attr('type')=='deliver'){
+                $.post('/dashixiongwx/admin/cancleOrder',{orderid:orderId,opration:opration},function(data){});
+				$sts.html('配送中...');
+				$sts[0].className = 'order-delivering status';
+                check_num();
+                //点击配送自动打单
+                var href = $tr.find('.order_id').attr('href') + '&auto_print=1';
+                $iframe.attr('src', href);
+                //取消未确认时的声音提示
+                clearTimeout(s_time);
+			}else if($a.attr('type')=='receive'){
+                $.post('/dashixiongwx/admin/cancleOrder',{orderid:orderId,opration:opration},function(data){});
+				$sts.html('已经送达');
+				$sts[0].className = 'order-receive status';
+				$a.parents('tr').removeClass('deliver_fatal');
+				$a.parents('tr').removeClass('deliver_caution');
+				$a.parents('tr').removeClass('deliver_warnning');
+				$a.parents('tr').removeClass('deliver_saved');
+                check_num();
+			}
+
+		});
+	});
+
+    $( '#new_orders' ).click(function () {
+        clearAllNotification();
+        location.href = this.href;
+    });
+
+    //----------------------- todo --------------------------//
+    $( '.action-todo-del' ).click(function () {
+        var a = this;
+        $.get( a.href, function (res) {
+            var li = $( a ).parents( 'li' );
+            li.html( '<del>'+li.html()+'</del>' );
+            $( a ).hide();
+        });
+    });
+
+    //显示各种状态的订单的数目
+    var check_num = function () {
+        $( '.order-create-num' ).text( $( '.order-create' ).size() );
+        $( '.order-delivering-num' ).text( $( '.order-delivering' ).size() );
+        $( '.order-receive-num' ).text( $( '.order-receive' ).size() );
+    };
+
+    //点击跳转到第一个未确认的订单
+    $( '.order-create-num' ).click(function () {
+        var $order_create = $( '.order-create' );
+        if( !$order_create.size() )return;
+        location.href = '#'+$( $order_create[0] ).parents('tr').attr( 'id' );
+    });
+
+    //----------------- init
+    check_num();
+
+    //判断是否新用户
+    var $new_customer = $('img.new_customer'),
+        user_ids = [],
+        back_num = 0,
+        total_num = $new_customer.size(),
+        new_marker = {};
+    //回头率
+    var $order_new = $('.order-new-num'),
+        $order_old = $('.order-old-num'),
+        $back_rate = $('.order-back-rate');
+
+    $new_customer.each(function(){
+        var $new_img = $(this),
+            user_id = $new_img.attr('user_id');
+        if( user_id ){
+            user_ids.push(user_id);
+            if( !new_marker[user_id] ) new_marker[user_id] = [];
+            new_marker[user_id].push( $new_img );
+        }
+    });
+    $.post('/dashixiongwx/admin/shop/'+ shop_id +'/get/order_nums', {user_ids:user_ids, y:y, m:m, d:d},
+            function(res){
+        for(var p in res){
+            if( res[p] == 0 ){ //今日以前的时间里没下过单，说明是新用户，显示新客户的标识图片
+                new_marker[p].length && new_marker[p][new_marker[p].length-1].show();
+            }
+        }
+
+        $new_customer.each(function(){
+            var $img = $(this);
+            if( $img.is(':hidden') ) back_num++;
+        });
+
+        //-------------------- 回头率
+        $order_new.html( total_num - back_num );
+        $order_old.html( back_num );
+        $back_rate.find('span').html( ((back_num/total_num)*100).toFixed(1) );
+    });
+
+    //声音推送
+    if(power && power >=3){
+        var $push_btns = $('.push-btns');
+        $.get('/dashixiongwx/admin/shop/' + shop_id + '/set/voice', {isAjax:1}, function(res){
+            var btns = [];
+            $.each(res, function(i, btn){
+                btns.push('<input type="button" class="voice-btn" voice="'+ btn.voice +'" value="'+ btn.title +'" />')
+            });
+            $push_btns.html( btns.join('') );
+        });
+        $doc.on('click', '.voice-btn', function(){
+            var $btn = $(this),
+                voice = $btn.attr('voice'),
+                type = 'push voice';
+            var p = {voice:voice, type:type, shop_id:shop_id};
+            $.post('/dashixiongwx/admin/shop/' + shop_id + '/push/voice', {p:p}, function(res){});
+        });
+    }
+
+    var players = {};
+    var play_sound = function(data){
+        if( !players[data.voice] ){
+            players[data.voice] = new Audio('http://img.ksmimi.com/uploads/voices/'+ data.voice);
+        }
+        players[data.voice].play();
+    };
+    //客服给店家推送消息
+    socket.on('push voice', function (data) {
+        if(window.console) console.log(data);
+        play_sound(data);
+    });
+
+</script>
+<script type="text/javascript" charset="utf-8" src="http://s.ksmimi.com/dashixiong_static/jspro/sell_in_shop.js"> </script>
+
+
+
+
+
+

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .ops{
+            margin-bottom: 20px;
+        }
+        .new_user{
+            float: left;
+            margin-right: 10px;
+        }
+        .current-date{
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        td{
+            width: 130px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="ops">
+    <a href="?y=${pre_date_y}&m=${pre_date_m}&d=${pre_date_d}">前一天</a>
+    <span class="current-date">当前日期为：${y}年${m}月${d}日</span>
+    <a href="?y=${next_date_y}&m=${next_date_m}&d=${next_date_d}">后一天</a>
+</div>
+
+<div class="contain">
+    <table class="new_user">
+        <tr>
+            <td>新用户到店数</td>
+            <td>新用户下单人数</td>
+            <td>新用户下单率</td>
+        </tr>
+        <tr>
+            <td>${newIds}</td>
+            <td>${newOrdersNum}</td>
+            <td>${newProfix}%</td>
+        </tr>
+    </table>
+
+    <table class="old_user">
+        <tr>
+            <td>老用户到店数</td>
+            <td>老用户下单人数</td>
+            <td>老用户下单率</td>
+        </tr>
+        <tr>
+            <td>${oldIds}</td>
+            <td>${oldOrdersNum}</td>
+            <td>${oldProfix}%</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

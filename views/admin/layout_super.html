@@ -1,0 +1,91 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+	<meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1"/>
+	<title>小卖部管理处 - 大师兄小卖部</title>
+	<link rel="stylesheet" type="text/css" href="http://s.ksmimi.com/csspro/v0.93/base.css" />
+	<!--<link rel="stylesheet" type="text/css" href="http://s.ksmimi.com/dashixiong_static/csspro/shop.css" />-->
+	<script src="http://s.ksmimi.com/jspro/v0.93/jquery.js" type="text/javascript"></script>
+	<style>
+		html{
+			-webkit-text-size-adjust:none;
+		}
+		body{
+			background-image: url(http://s.ksmimi.com/imgpro/grid.png);
+			background-repeat: repeat;
+			background-size: auto;
+			background-color : #CCC;
+			color : #888;
+		}
+
+		.container{
+			width:80%;
+			max-width:500px;
+			background : #FFF;
+			padding : 20px;
+			margin :  10px auto;
+			border-bottom : 1px solid #CCC;
+			border-right : 1px solid #CCC;
+		}
+		.note{
+			color : #CCC;
+		}
+		#nav{
+			padding : 10px;
+		}
+		#nav a{
+			padding : 10px;
+		}
+		li{
+			line-height : 24px;
+		}
+		a{
+			color : #40A0C0;
+		}
+		table, td, th{
+			border : 1px solid #CCC;
+		}
+		td, th{
+			padding : 10px;
+		}
+		tr{
+			line-height : 24px;
+		}
+		h1{
+			padding : 10px;
+			font-size : 20px;
+		}
+		.add-shop{
+			padding : 10px;
+		}
+        .profit{
+            color : green;
+        }
+        .summary{
+            padding : 10px;
+        }
+        .date{
+            font-size : 24px;
+            text-align : center;
+            padding : 10px;
+        }
+        .shop-list{
+            margin-left : 10px;
+        }
+	</style>
+
+</head> 
+<body> 
+	<p class="add-shop">
+		<a href="/dashixiongwx/admin/logout"/>退出</a> | 
+		<a href="/dashixiongwx/admin/shop/list/all"/>分店管理</a> | 
+		<a href="/dashixiongwx/admin/setting/list"/>配置管理</a> | 
+		<a href="/dashixiongwx/admin/shop/add"/>添加分店&gt;&gt;</a>
+	</p>
+
+    {{html body}}
+</body>
+</html>
+
+

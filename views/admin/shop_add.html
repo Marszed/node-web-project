@@ -1,0 +1,31 @@
+<style>
+	h1{
+		font-size : 32px;	
+		padding : 20px;
+	}
+	form p{
+		margin : 20px 10px;	
+	}
+	input {
+		line-height : 28px;	
+		border : 1px solid #CCC;
+	}
+	.submit{
+		padding : 5px;	
+	}
+</style>
+
+
+<h1>添加分店</h1>
+<form action="/dashixiongwx/admin/shop/doadd" method="post">
+	<p><label>店名</label> <input name="shop[name]" type="text" /> *</p>	
+	<p><label>描述</label> <input name="shop[description]" type="text" /> *</p>	
+	<p><label>地址</label> <input name="shop[address]" type="text" /> *</p>	
+	<p><label>类型</label> 
+			<select name="shop[type]" id="type">
+				<option value="direct">直营店</option>
+				<option value="allied">加盟店</option>
+			</select>
+	</p>	
+	<p><input class="submit" type="submit" value="提交" /></p>	
+</form>

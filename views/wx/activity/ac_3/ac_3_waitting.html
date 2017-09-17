@@ -1,0 +1,72 @@
+<script src="http://s.ksmimi.com/dashixiong_static/jspro/jquery-1.10.2.js"></script>
+<script type="text/javascript" charset="utf-8" src="http://s.ksmimi.com/dashixiong_static/jspro/timer_count.js"> </script>
+<style type="text/css" media="all">
+    .title{
+        text-align : center; 
+        padding-bottom : 29px;
+    }
+    .txt{
+        text-align : center; 
+        margin-bottom : 29px;
+    } 
+    .txt a{
+        padding : 10px 50px; 
+        background : #DDD;
+        color : #888;
+    }
+    .time-left{
+        text-align : center; 
+    }
+    .txt .btn{
+        color : #FFF;
+        background : #40A0C0;
+    }
+    #btn{
+        text-decoration : none;
+    }
+    .warning{
+        color : red; 
+    }
+</style>
+<div class="container">
+    <p class="warning">
+        如果提示活动结束, 请“返回”, 然后再回复“抢”, 之后再点进来~~ 
+    </p>
+    <p class="title">
+        大师兄小卖部抢货活动 
+    </p>
+    <p class="txt">
+        <a id="btn" href="#" onclick="return false;">
+            时候未到！
+        </a>
+    </p>
+    <p class="time-left">
+        距离10:30 还有 <span id="hour"></span>小时 <span id="mini"></span>分 <span id="sec"></span>秒
+    </p>
+</div>
+<script type="text/javascript" charset="utf-8">
+    var server_timestamp_now = ${server_timestamp_now};
+    var now = new Date().getTime();
+    var deta = server_timestamp_now - now;//服务器时间差
+    var d = Date.UTC(2014, 2, 13, 22, 20);
+    var isOK = false;
+    var obj = {
+        sec : document.getElementById("sec"),
+        mini : document.getElementById("mini"),
+        hour : document.getElementById("hour")
+    }
+    fnTimeCountDown(d, obj, function () {
+        $( '#btn' ).html( '点击进入! 抢啊！' ).addClass( 'btn' );
+        $( '.time-left' ).hide();
+        isOK = true;
+    });
+    
+    
+    $( '#btn' ).click(function () {
+        if( !isOK )return;
+        location.reload();
+    });
+
+    
+</script>
+

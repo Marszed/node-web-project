@@ -1,0 +1,49 @@
+<style type="text/css" media="all">
+    ul.shop-info{
+        padding-left : 10px; 
+    }
+    .warningTB{
+        margin:0 auto;
+    }
+    @media print{
+		#nav, .print, .shortcut, .nobackup, #top, .warningPd, .warning-menus{
+			display : none;
+		}
+		ul,ol{
+			font-size : 12px;
+			line-height : 12px;
+		}
+	}
+</style>
+
+<h2>进货列表</h2>
+<div class="warning-menus">
+    <a href="#" class="warning-print">打印进货单(共${lists.length}款产品)</a>
+</div>
+<table class="warningTB">
+	<tr>
+		<th> 序号 </th>
+	    <th class="warningPd"> 产品图像 </th>
+        <th> 产品名称 </th>
+        <th> 剩余 </th>
+        <th> 进货库存 </th>
+	</tr>
+{{each(list, i) lists}}
+	<tr>
+        <td> ${i+1}</td>
+	    <td class="warningPd"> <img class="warningPd-img" src="${env.img}/${list.img}" width="50" /> </td>
+        <td> ${list.title} </td>
+        <td> ${list.count} </td>
+        <td> ${list.warningCount} </td>
+	</tr>
+{{/each}}
+
+</table>
+
+<script type="text/javascript" charset="utf-8">
+    var $print = $('.warning-print');
+    $print.click(function () {
+        window.print();
+        return false;
+    });
+</script>

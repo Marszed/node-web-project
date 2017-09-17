@@ -1,0 +1,53 @@
+<style>
+	h1{
+		font-size : 32px;	
+		padding : 20px;
+	}
+	p{
+		margin : 20px 10px;	
+	}
+	input {
+		line-height : 28px;	
+		border : 1px solid #CCC;
+	}
+	#counts{
+		width : 500px;	
+		height : 500px;
+	}
+	.submit{
+		padding : 5px;	
+	}
+</style>
+
+
+<h1>${w_name||query.w_name}进货</h1>
+<form id="inproducts_form" action="/dashixiongwx/admin/shop/${shop_id}/warehouse/${w_id}/doinproducts" method="post">
+	<p><label>产品编号及数量(使用盘点器上传数据)</label> <input type="submit" id="btn_add" value="累加" onclick="return false;"/> <input type="submit" id="btn_cover" value="覆盖" onclick="return false;"/></p>	
+	<p>
+	    <textarea name="counts" id="counts"></textarea>	
+	</p>	
+    <input type="hidden" name="w_name" id="" value="${w_name||query.w_name}" />
+    <input type="hidden" name="inproducts_type" id="inproducts_type" value="" /><!-- 这个参数决定是覆盖还是添加数据库里的数据 -->
+
+</form>
+<script type="text/javascript" charset="utf-8">
+	$(function(){
+		setTimeout(function(){
+			//$('#counts').val('4891338005692,27\n6914068011950,38\n6925303773915,46');
+			$( '#counts' ).focus();
+		},0)
+	});
+
+    //累加
+    $( '#btn_add' ).click(function () {
+        $( '#inproducts_type' ).val( 'Add' );
+        $( '#inproducts_form' ).submit();
+    });
+
+    //覆盖
+    $( '#btn_cover' ).click(function () {
+        $( '#inproducts_type' ).val( 'Cover' );
+        $( '#inproducts_form' ).submit();
+    });
+
+</script>

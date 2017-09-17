@@ -1,0 +1,36 @@
+<style type="text/css" media="all">
+    .red{color:red;}
+    .query-btn{cursor:pointer;}
+    .input-style{width:500px;}
+</style>
+
+<div class="queryBox">
+    <form action="/dashixiongwx/admin/shop/${shop_id}/show/promotionList?isPost=1" method="get">
+        <p>查询字符 : <input type="text" placeholder="如“1”" name="promotion[word]" class="input-word input-style" /></p>
+        <p>开始时间 : <input type="text" placeholder="如“2014-08-09 00:00:00”" name="promotion[start_time]" class="input-style" value="${start_time}" /></p>
+        <p>结束时间 : <input type="text" placeholder="如“2014-08-12 00:00:00”" name="promotion[end_time]" class="input-style" value="${end_time}" /></p>
+        <p>工资系数 : <input type="text" placeholder="如“[{5:1.2}, {10:1.5}, {20:2}]”" name="promotion[rules]" class="input-style" value="${ratioInfo}" /></p>
+        <input type="submit" class="query-btn" value="查询"/>
+    </form>
+</div>
+
+<h2>${shop_id} 号店推广情况：</h2>
+<p>
+    "<span class="red">${word}</span>"所标识的用户拉了 <span class="red">${follow.length}</span> 个用户，
+    其中有 <span class="red">${orders .length}</span> 个下了单，
+    下单率为：<span class="red">${Math.round((orders.length/follow.length)*100)}%</span>，
+    他赚了：( ${follow.length} - ${orders.length} ) * ${base} + ${orders.length} * ${ratio} =
+    <span class="red">${((follow.length-orders.length)*base + orders.length*ratio).toFixed(2)}</span>
+</p>
+<p>关注用户的ID分别为：${follow.join(',')}</p>
+<p>下单用户的ID分别为：</p>
+{{each(order, i) orders}}
+    ${order.userId} - ${order.nick}<br />
+{{/each}}
+
+<script type="text/javascript">
+    $(function(){
+        var $word = $('input.input-word');
+        $word.focus();
+    });
+</script>

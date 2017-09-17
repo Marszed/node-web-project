@@ -1,0 +1,43 @@
+<style type="text/css" media="all">
+    .menu{
+        margin : 10px;
+    } 
+    .tc{text-align:center;}
+</style>
+
+
+<div class="menu">
+    <a href="/dashixiongwx/admin/shop/${shop_id}/user/sort/update">更新数据</a>
+</div>
+
+
+<table border="0">
+    <tr>
+        <td colspan="7" class="tc">共有客户${user_profits.length}人 </td>
+    </tr>
+    <tr>
+        <th>排名</th>
+        <th>用户Id</th>
+        <th>用户名</th>
+        <th>电话</th>
+        <th>地址</th>
+        <th>收入(元)</th>
+        <th>毛利(元)</th>
+    </tr>
+     
+    {{each(user_profit, i) user_profits}}
+        <tr>
+            <td>${i+1}</td>      
+            <td>${user_profit.userId}</td>
+            <td>
+                <a target="_blank" href="/dashixiongwx/admin/shop/${shop_id}/user/profile/${user_profit.userId}">${users_addr_map[ user_profit.userId ].name}</a>
+                 | 
+                 <a target="_blank" href="/dashixiongwx/admin/shop/${shop_id}/order/list/${user_profit.userId}/${users_addr_map[ user_profit.userId ].name}">过往订单&gt;&gt;</a>
+            </td>      
+            <td>${users_addr_map[ user_profit.userId ].mobile}</td>      
+            <td>${users_addr_map[ user_profit.userId ].address}</td>      
+            <td>${user_profit.totalPay}</td>      
+            <td>${(user_profit.totalPay - user_profit.totalCost).toFixed(1)}</td>      
+        </tr>
+    {{/each}}
+</table>

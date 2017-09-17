@@ -1,0 +1,126 @@
+<style>
+    table, td, th{
+        border : 1px solid #CCC;
+    }
+    ul{
+        padding : 0;
+    }
+    h1{
+        padding : 10px;
+        font-size : 20px;
+    }
+
+
+    table{
+        margin : 10px;
+        width: 70%;
+    }
+    .resume td, .resume th{
+        padding : 5px;
+    }
+
+    .deliver_fatal a{
+        color : #FFF;
+    }
+    @media screen and (max-width:500px){
+        ul,li{margin:0px;padding:0px;}
+    }
+
+    /*---------------------------*/
+
+    .todo li{
+        list-style-type : disc
+    }
+    .todo h3{
+        padding-left : 10px;
+    }
+
+    .count input{
+        width : 20px;
+    }
+
+    .total-pay-td del{
+        display:block;;
+        margin-bottom:5px;
+    }
+    .push-btns input{
+        font-size:16px;
+        margin-left:10px;
+    }
+</style>
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="shopid" placeholder="请输入用户ID"/>
+<input type="button" id="btn_shopid" value="查询"/>
+<span class="tip1" style="color: red;display: none;">亲,只能输入数字!</span>
+<div class="tab2">
+    <table>
+        <tr>
+            <th>用户ID</th>
+            <th>用户名</th>
+            <th>道具</th>
+            <th>总财富值</th>
+        </tr>
+        <tbody class="content"> </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var toolsval = {{html JSON.stringify(toolsval)}};
+
+        $('#btn_shopid').click(function(){
+            var $value = $('#shopid').val()-0;
+            if($value) {
+                $('.tip1').hide();
+                $.get('/dashixiongwx/admin/shop/${shop_id}/selectUserTools',{userId:$value, isAjax:1},function(res){
+                    res = JSON.parse(res);
+                    $('.content').html( make_items(res) );
+                });
+            } else{
+                $('.tip1').show();
+            }
+        });
+        var make_items = function (ms) {
+            var html = ['此人暂无任何道具和财富!'];
+            ms.forEach(function (msg, i) {
+                html.push( make_item( msg ) );
+            });
+            return html.join('');
+        };
+        var make_item = function (msg) {
+            if(msg.nick == null) {
+                msg.nick = '--';
+            }
+            var html = [
+                '<tr>',
+                '<td>',
+                msg.id,
+                '</td>',
+                '<td>',
+                msg.nick,
+                '</td>',
+                '<td>',
+                msg.title,
+                '</td>',
+                '<td>',
+                msg.val,
+                '</td>',
+                '</tr>'
+            ];
+            return html.join('');
+        };
+        $('.content').html( make_items(toolsval) );
+    });
+
+</script>
+
+<script type="text/javascript">
+    document.onkeydown = function(e) {
+        var theEvent = window.event || e;
+        var code = theEvent.keyCode || theEvent.which;
+        if( code == 13 ) {
+            $('#btn_shopid').click();
+        }
+    }
+</script>
+
+

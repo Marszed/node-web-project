@@ -1,0 +1,141 @@
+<style type="text/css" media="all">
+    ul.shop-info{
+        padding-left : 10px; 
+    }
+    .subMenus-p{
+        display:inline-block;
+        margin-right:10px;
+    }
+    .subMenus-a{
+        margin-right:10px;
+        text-decoration:none;
+    }
+    .subMenus-a:hover{
+        text-decoration:underline;
+        padding-bottom:2px;
+    }
+    .setting-table{
+        width: 90%;
+    }
+    .setting-table input{
+        width: 90%;
+    }
+</style>
+
+
+<h2>店铺信息</h2>
+<ul class="shop-info">
+    {{if power >= 6}}<li>本店关注总数: ${users_num}</li>{{/if}}
+    <li>今日本店关注数: ${users_num_today}</li>
+    <li>今日外卖单查看数: ${num_takeway}</li>
+</ul>
+
+<h2>功能</h2>
+<div class="subMenus">
+    <p class="subMenus-p"> <a class="subMenus-a" href="/dashixiongwx/admin/shop/${shop_id}/tool/grant">发放道具</a> /</p>
+    <p class="subMenus-p"> <a class="subMenus-a" href="/dashixiongwx/admin/shop/${shop_id}/todo/add">添加待办事宜</a> /</p>
+    <p class="subMenus-p"> <a class="subMenus-a" href="/dashixiongwx/admin/shop/${shop_id}/takeaway/list">外卖单管理</a> /</p>
+    <p class="subMenus-p"> <a class="subMenus-a" href="/dashixiongwx/admin/activity/shop/${shop_id}/order/list">活动订单 (非销售订单)</a> /</p>
+    <p class="subMenus-p"> <a class="subMenus-a" href="/dashixiongwx/admin/shop/${shop_id}/user/distribution">客户地址分布</a> /</p>
+    <p class="subMenus-p"> <a class="subMenus-a" href="/dashixiongwx/admin/shop/${shop_id}/show/warningList">整理本店进货单 </a> /</p>
+    <p class="subMenus-p"> <a class="subMenus-a" href="/dashixiongwx/admin/shop/${shop_id}/show/promotionList">兼职推广概况 </a> /</p>
+    <p class="subMenus-p"> <a class="subMenus-a" href="/dashixiongwx/admin/shop/${shop_id}/show/shopRelation">店铺关联</a>
+        /</p>
+    <p class="subMenus-p"> <a class="subMenus-a"  href="/dashixiongwx/admin/shop/${shop_id}/show/possibleReach">"预计送达"管
+        理</a>
+    </p>
+</div>
+
+<h2>拷贝货架信息</h2>
+<table>
+	<tr>
+		<th>
+			拷贝哪个店的货架（填shopId）
+		</th>
+        <th>是否删除原有货架(1 删除， 0 不删除。选填)</th>
+        <th>操作</th>
+	</tr>
+	<tr>
+		<td>
+            <input class="from_shop_id" type="text" name="" value="" />
+		</td>
+        <td><input class="need_to_del" type="text"/></td>
+        <td><a class="copy-section" href="#" onclick="return false;">开始拷贝</a></td>
+	</tr>
+</table>
+
+<h2>店铺设置</h2>
+<table class="setting-table">
+	<tr>
+		<th>
+			序号
+		</th>
+		<th>
+			设置key
+		</th>
+		<th>
+			设置value
+		</th>
+	</tr>	
+
+{{each(setting, i) sets}}
+	<tr>
+        <td>
+			${i}
+		</td>
+		<td>
+			${setting.settingKey}	
+		</td>
+		<td>
+            <input type="text/submit/hidden/button/image" name="" id="" value="${setting.settingValue}" />
+            <a skey="${setting.settingKey}" class="apply-changes" href="#" onclick="return false;">提交更改</a>
+		</td>
+	</tr>
+{{/each}}
+
+</table>
+
+<script type="text/javascript" charset="utf-8">
+    var shop_id = ${shop_id};
+    $( '.apply-changes' ).click(function () {
+            $.post( '/dashixiongwx/admin/shop/${shop_id}/setting/doedit', {
+                shop_id : shop_id, 
+                setting_key : $( this ).attr( 'skey' ),
+                setting_value : $( this ).siblings( 'input' ).val()
+            }, function (res) {
+                alert('更新成功!');
+            });
+    });
+
+    $( '.copy-section' ).click(function () {
+        var from_shop_id = $('.from_shop_id').val().trim();
+        var need_to_del = $('.need_to_del').val().trim();
+        if( !from_shop_id ){
+            alert('请输入shopId');
+            return;
+        }
+        if(need_to_del == 1) {
+            if( confirm('确定要拷贝' + from_shop_id + '号店的货架信息吗？'+ shop_id + '号店的货架信息将被删除哦！') ){
+                $.post( '/dashixiongwx/admin/shop/${shop_id}/copy/sections', {
+                    from_shop_id : from_shop_id,
+                    need_to_del : need_to_del
+                }, function (res) {
+                    alert('拷贝成功!');
+                    location.reload();
+                });
+            }
+        }else if(need_to_del == 0){
+            if( confirm('确定要拷贝' + from_shop_id + '号店的货架信息吗？') ){
+                $.post( '/dashixiongwx/admin/shop/${shop_id}/copy/sections', {
+                    from_shop_id : from_shop_id,
+                    need_to_del : need_to_del
+                }, function (res) {
+                    alert('拷贝成功!');
+                    location.reload();
+                });
+            }
+        }else{
+            alert('操作有误，再来一次!');
+        }
+    });
+</script>

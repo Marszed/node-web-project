@@ -1,0 +1,27 @@
+<style>
+	h1{
+		font-size : 32px;	
+		padding : 20px;
+	}
+	p{
+		margin : 20px 10px;	
+	}
+	input {
+		line-height : 28px;	
+		border : 1px solid #CCC;
+	}
+	.submit{
+		padding : 5px;	
+	}
+</style>
+
+
+<h1>在${y}年${m}月${d}日添加财务记录</h1>
+<form action="/dashixiongwx/admin/finance/doadd/${y}/${m}/${d}" method="post">
+	<p><label>摘要</label> <input name="record[digest]" type="text" /> </p>	
+	<p><label>借方</label> <input name="record[inCount]" type="text" /> 元</p>	
+	<p><label>贷方</label> <input name="record[outCount]" type="text" /> 元</p>	
+	<p><label>结余</label> <input name="record[remain]" type="text" /> 元</p>	
+	<p><label>注解</label> <input name="unit" type="text" /> </p>	
+	<p><input class="submit" type="submit" value="提交" /></p>	
+</form>

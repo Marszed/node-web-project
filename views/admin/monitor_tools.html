@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .ops{
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ops">
+        <a href="?y=${pre_date_y}&m=${pre_date_m}&d=${pre_date_d}">前一天</a>
+        <span class="current-date">当前日期为：${y}年${m}月${d}日</span>
+        <a href="?y=${next_date_y}&m=${next_date_m}&d=${next_date_d}">后一天</a>
+    </div>
+    <table>
+        <tr>
+            <td>序号</td>
+            <td>发放道具者</td>
+            <td>接收道具者</td>
+            <td>道具名称</td>
+            <td>时间</td>
+        </tr>
+        {{each(data, i) datas}}
+        <tr>
+            <td>${i+1}</td>
+            <td>${data.logUser}</td>
+            <td>${data.commonUser}</td>
+            <td>${data.title}</td>
+            <td>${data.timeStamp}</td>
+        </tr>
+        {{/each}}
+    </table>
+</body>
+</html>

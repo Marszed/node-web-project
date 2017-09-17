@@ -1,0 +1,145 @@
+<style type="text/css">
+	h1{
+		font-size : 18px;	
+		line-height : 24px;
+		margin-bottom : 5px;
+		text-align : center;
+	}
+	h3{
+		line-height : 18px;
+		border-bottom : 1px solid #000;		
+		padding : 8px 8px 8px 0;
+		margin-bottom : 10px;
+		color : #888;
+
+	}
+	ul{
+		margin-bottom : 25px;	
+		list-style : disc inside;
+	}
+	li{
+		color : #333;	
+		line-height : 24px;
+	}
+	.num{
+		color : #CCC;
+	}
+	.total-pay, .total-num{
+		color : orange;	
+		font-size : 18px;
+	}
+	.back-to-store{
+		margin-bottom : 15px;	
+	}
+	.qr{
+		text-align : center;	
+	}
+	.qr img {
+		width : 90%;	
+	}
+
+	.say{
+		color : #000;
+		text-align : left;			
+		font-weight : 900;
+		font-size : 18px;
+		padding : 10px 0;
+	}
+	.qr-head{
+		margin-top : 10px;	
+	}
+	.qr-head, .qr-foot{
+		text-align : center;	
+		font-size : 14px;
+	}
+	.shop-name{
+		color : #000;	
+		font-weight : 700;
+	}
+	.info-backup{
+		margin : 90px 0;	
+		text-align : center;
+		border-top: solid 1px #888;
+	}
+	.info-backup h4{
+		margin : 0 0 20px 0;	
+	}
+	.info-block{
+		margin-top : 20px;	
+	}
+	.print{
+		text-align : center;	
+	}
+	.print a{
+		padding : 10px;	
+		display : block;
+	}
+	.print a:hover{
+		background : #40A0C0;	
+		color : #FFF;
+	}
+	.shop-group{
+		border : 1px solid #000;	
+		font-size : 18px;	
+		line-height : 24px;
+		margin-bottom : 5px;
+		text-align : center;
+	}
+	.intime{
+		font-size : 10px;		
+	}
+	.oldman{
+		text-align : right;	
+	}
+	.weibo{
+		text-align : center;	
+	}
+	@media print{
+		#nav,.print,.shortcut,.nobackup{
+			display : none;	
+		}	
+		ul,ol{
+			font-size : 12px;	
+			line-height : 12px;
+		}
+		
+
+	}
+	
+</style>
+
+<div class="print">
+	<a onclick="window.print();return false;" href="#">打印送货单</a>
+</div>
+{{if !luck}}
+${user_name} 没中奖！
+{{else}}
+
+<p class="say">
+	${user_name}，圣诞快乐哈~ 期末考试干巴爹！
+</p>
+
+	<h3>你的礼物如下:</h3>
+	<ol>
+		{{each(v, i) ls}}
+		<li>${v}</li>
+		{{/each}}
+	</ol>
+	<h3>联系信息:</h3>
+	<ul>
+		<li>${mobile}</li>
+		<li>${address}</li>
+	</ul>
+<p class="oldman">
+—— 圣诞老人
+</p>
+<p class="qr-head">微信扫扫, 送货上门</p>
+<div class="qr">
+	<img src="http://s.ksmimi.com/dashixiong_static/img/qr.jpg"	/>
+</div>
+<p class="qr-foot">货到付款, 方便快捷</p>
+<p class="weibo">
+	来跟我们吹吹水吧: 新浪微博【 @大师兄小卖部】
+</p>
+
+{{/if}}

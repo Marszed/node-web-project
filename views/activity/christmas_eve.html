@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <title>圣诞活动</title>
+<style type="text/css">
+    body{
+        margin: 0;
+        font-size: 18px;
+    }
+    .container{
+        background: url("http://${staticHost}/dsx/img/christmas_eve_border.png") repeat-y left -18px;
+    }
+    .second-container{
+        margin-left: 12px;
+        padding-right: 12px;
+        background: url("http://${staticHost}/dsx/img/christmas_eve_border.png") #fff repeat-y right top;
+    }
+    .to-info{
+        margin-left: 6%;
+    }
+    input{
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 1px solid gainsboro;
+        line-height: 20px;
+        font-size: 16px;
+    }
+    .gray-font{
+        color: gray;
+    }
+    .color-red{
+        color: #cb3637;
+    }
+    .free-img{
+        margin-top: 10px;
+        vertical-align: middle;
+        text-align: center;
+        width: 90%;
+    }
+    .img-or-img{
+        padding: 0 20px 0 20px;
+        position: relative;
+        bottom: 25px;
+    }
+    img{
+        width: 70px;
+    }
+    .message-info{
+        margin-left: 5%;
+    }
+    #say-to-content{
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 1px solid gainsboro;
+        width: 90%;
+    }
+    .gift-choice{
+        margin-left: 5%;
+    }
+    textarea{
+        font-size: 16px;
+
+    }
+    .align-right{
+        text-align: right;
+        padding-right: 13px;
+    }
+    .footer-btn{
+        background-color: #cb3637;
+        border: 1px solid;
+        border-radius: 10px;
+        color: white;
+        text-align: center;
+        height: 40px;
+        width: 90%;
+        /*position: fixed;*/
+        margin: 0 auto;
+        bottom: 1px;
+    }
+    .alredy-submit,.sumbit-btn-success{
+        position: relative;
+        top: 25%;
+        font-size: 20px;
+    }
+    .sumbit-btn{
+        position: relative;
+        top: 5%;
+        height: 40px;
+        line-height: 40px;
+        font-size: 20px;
+    }
+    .alredy-submit{
+        position: relative;
+        top: 25%;
+        font-size: 20px;
+    }
+</style>
+<script type="text/javascript" src="http://s.ksmimi.com/dsx/jspro/jquery-2.1.1.min.js"></script>
+<script type="text/javascript">
+    var gifts = {{html gifts}},
+            shop_id = "${shopId}",
+            user_id = "${userId}",
+            wx_id = "${wx_id}";
+
+    var $doc = $(document);
+    $doc.ready(function(){
+
+        var img_apple_src_show = 'http://${staticHost}/dsx/img/christmas_eve_apple_show.png',
+                img_apple_src_hide = 'http://${staticHost}/dsx/img/christmas_eve_apple_hide.png',
+                img_tt_src_show = 'http://${staticHost}/dsx/img/christmas_eve_tt_show.png',
+                img_tt_src_hide = 'http://${staticHost}/dsx/img/christmas_eve_tt_hide.png';
+
+        if(gifts.length){
+            var type_value = JSON.parse(gifts[0].type_value);
+            $('input[name="toUserName"]').val(type_value.toUserName);
+            $('input[name="toUserAddr"]').val(type_value.toUserAddr);
+            $('textarea').val(type_value.message_info);
+            $('input[type="hidden"]').val(type_value.gift_type);
+            $('input[name="fromUserName"]').val(type_value.fromUserName);
+            $('input[name="fromUserAddr"]').val(type_value.fromUserAddr);
+            $('input[name="fromUserTel"]').val(type_value.fromUserTel);
+            if(type_value.gift_type=='apple'){
+                $('#apple-hide').attr('src', img_apple_src_show);
+            }else{
+                $('#tt-hide').attr('src', img_tt_src_show);
+            }
+        }
+
+
+        $('.gift').each(function(i,domEle){
+            $(this).click(function(){
+                if($(this).attr('apple')){
+                    $('#tt-hide').attr('src', img_tt_src_hide);
+                    $('#apple-hide').attr('src', img_apple_src_show);
+                    $('input[type="hidden"]').val('apple');
+                    return;
+                }
+                if($(this).attr('tt')){
+                    $('#apple-hide').attr('src',img_apple_src_hide);
+                    $('#tt-hide').attr('src', img_tt_src_show);
+                    $('input[type="hidden"]').val('tt');
+                    return;
+                }
+
+            });
+        });
+
+        $('.sumbit-btn').click(function(){
+            var flag = true;
+            var obj = {
+                shopId : shop_id,
+                userId : user_id
+            };
+            $.post('/dashixiongwx/activity/christmas/repeat/submit',{obj:obj},function(data){
+                if(data == 'true'){
+                    var toUserName = $('input[name="toUserName"]').val(),
+                            toUserAddr = $('input[name="toUserAddr"]').val(),
+                            message_info = $('textarea').val(),
+                            gift_type = $('input[type="hidden"]').val(),
+                            fromUserName = $('input[name="fromUserName"]').val(),
+                            fromUserAddr = $('input[name="fromUserAddr"]').val(),
+                            fromUserTel = $('input[name="fromUserTel"]').val();
+                    if(toUserName && toUserAddr && message_info && gift_type && fromUserTel){
+                        var obj = {
+                            toUserName : toUserName,
+                            toUserAddr : toUserAddr,
+                            message_info : message_info,
+                            gift_type : gift_type,
+                            fromUserName : fromUserName,
+                            fromUserAddr : fromUserName,
+                            fromUserTel : fromUserTel,
+                            shopId : shop_id,
+                            userId : user_id
+                        };
+                        $.post('/dashixiongwx/activity/christmas/submit', {objs : obj}, function(data){
+                            if(data=='success'){
+                                $('.sumbit-btn').css({"display":"none"});
+                                $('.sumbit-btn-success').css({"display":"block"});
+                                setTimeout(function(){
+                                    window.location.href = 'http://www.ksmimi.com/dashixiongwx/shop/'+shop_id+'?wx_id='+wx_id;
+                                },2000);
+
+                            }
+                        });
+                    }else{
+                        alert("* 项为必填项");
+                    }
+                }else{
+                   flag = false;
+                }
+            });
+            if(flag=='false'){
+                alert('您已提交过！');
+            }
+            return flag;
+
+        });
+
+
+    });
+</script>
+</head>
+<body>
+    <div class="container">
+        <div class="second-container">
+            <div style="background-color: #fff;padding-bottom: 25px;">
+                <div class="to-info">
+                    <br/>
+                    <span class="color-red">*&nbsp;</span> <span class="gray-font">T&nbsp;&nbsp;O:&nbsp;</span><input name="toUserName" class="input-address" type="text" placeholder="请填写对方的姓名"><br /><br />
+                    <span class="color-red">*&nbsp;</span> <span class="gray-font">地址:&nbsp;</span><input name="toUserAddr" class="input-address" type="text" placeholder="对方地址，限本校"><br /><br />
+                    <span class="color-red">*&nbsp;</span> <span class="gray-font">我想对Ta说:</span><br />
+                </div>
+
+                <div class="message-info">
+                    <textarea id="say-to-content" rows="1"></textarea>
+                </div>
+
+                <div class="gift-choice" style="margin-top: 15px;">
+                    <span class="color-red">*&nbsp;点击选择送Ta一份礼物（free）</span><br />
+                    <div class="free-img">
+                        <img apple="apple" id="apple-hide" class="gift" src="http://${staticHost}/dsx/img/christmas_eve_apple_hide.png">
+                        &nbsp;&nbsp;<span class="gray-font img-or-img">or</span>&nbsp;&nbsp;
+                        <img tt="tt" id="tt-hide" class="gift" src="http://${staticHost}/dsx/img/christmas_eve_tt_hide.png">
+                        <input name="hidden" type="hidden" value="">
+                    </div>
+                    <br/>
+                </div>
+
+                <div class="align-right">
+                    <span class="gray-font">&nbsp;&nbsp;&nbsp;from:</span>&nbsp;<input name="fromUserName" type="text" placeholder="请填写自己的名字"><br /><br />
+                    <span class="gray-font">&nbsp;&nbsp;&nbsp;地址:</span>&nbsp;<input name="fromUserAddr" type="text" placeholder="请填写自己的地址"><br/><br />
+                    <span class="color-red">*&nbsp;</span><span class="gray-font">电话:</span></span>&nbsp;<input name="fromUserTel" type="text" placeholder="请填写自己的电话"><br/><br />
+                </div>
+
+                <div class="color-red footer-btn">
+                    {{if gifts_str.length == 0}}
+                        <span class="sumbit-btn" style="display: block;">提交</span>
+                        <span style="display: none;font-size: 16px;" class="sumbit-btn-success"  >提交成功。正在进入小卖部...</span>
+                    {{else}}
+                    <a style="text-decoration: none; color: white;" href="http://www.ksmimi.com/dashixiongwx/shop/${shop_id}?wx_id=${wx_id}"><span  class="alredy-submit " style="font-size: 16px;">您已参与过。点击进入小卖部</span></a>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

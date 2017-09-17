@@ -1,0 +1,29 @@
+<div id="layout">
+    <div id="content">
+        <div class="category">
+            <a href="/dashixiongwx/rp/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}">人品</a>
+            <a href="/dashixiongwx/myWealth/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}" class="cur">我的财富</a>
+            <a href="/dashixiongwx/listWealth/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}">福布斯财富榜</a>
+        </div>
+        <div class="categort-content">
+            <p class="description" ><strong >${user.nick }</strong> {{if ret.tools.length ==0}}目前还没有道具{{else}}拥有以下道具。{{/if}}</p>
+            <ul class="ul-list props-list">
+                {{each(tool, i) ret.tools}}
+                <li>
+                    <div class="list-item">
+                        <div class="p"><img class="p-pic" src="${tool.img}" style="width:80px;height:80px;" alt="${tool.alt}"></div>
+                        <div class="des">
+                            <p class="d-tit"> <strong class="tool-tit">${tool.title}</strong><strong class="num"> ${tool.num}</strong></p>
+                            <p class="d-main">${tool.description}</p>
+                            <p class="d-main">价值: <em>${tool.cValue}</em>人品/个</p>
+                        </div>
+                    </div>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+    <!-- 不能删 -->
+    <div id="layout-footer"></div>
+</div>
+<div id="footer"><a href="/dashixiongwx/shop/1/article/440">如何攒人品</a></div>

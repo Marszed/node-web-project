@@ -1,0 +1,213 @@
+
+    <p class="date">
+        <a href="/dashixiongwx/admin/shop/list/all?y=${pre_date_y}&m=${pre_date_m}&d=${pre_date_d}">&lt;&lt;前一天</a> 
+        ${the_date_y}年${the_date_m}月${the_date_d}日公司总业绩
+        <a href="/dashixiongwx/admin/shop/list/all?y=${next_date_y}&m=${next_date_m}&d=${next_date_d}">后一天&gt;&gt;</a> 
+    </p>
+
+    <p class="summary">
+        今日总到店数为${all.visitor_count}人，订单总数为${all.order_num}，总收入为${all.total_in}元，毛利为<span class="profit">${all.profit}</span>元&nbsp;&nbsp;<input type="button" value="显示全部店铺" class="show_all_shop"/>
+    </p>
+
+	<table class="shop-list">
+		<tr>
+			<th>
+				id
+			</th>
+			<th>
+				名称
+			</th>
+            <th>
+                到店数 
+            </th>
+            <th>
+                订单数
+            </th>
+            <th>
+                客单
+            </th>
+            <th>
+                总收入 
+            </th>
+            <th>
+                毛利
+            </th>
+            <th>
+                毛利率
+            </th>
+            <th>
+                拓展情况
+            </th>
+			<th>
+				类型
+			</th>
+			<th>
+				操作
+			</th>
+		</tr>	
+
+	{{each(shop ,i) shops}}
+        {{if shop.expandtype == '在营业中'}}
+		<tr>
+			<td>
+				${shop.id}
+			</td>
+			<td>
+				<a href="/dashixiongwx/admin/shop/${shop.id}">${shop.name}</a>
+			</td>
+            <td>
+                ${shop.resume.visitor_count} 
+            </td>
+            <td>
+                ${shop.resume.order_num}
+            </td>
+            <td>
+                ${shop.resume.visitor_count?(shop.resume.total_in/shop.resume.order_num).toFixed(1):0} 元
+            </td>
+            <td>
+                ${shop.resume.total_in} 元
+            </td>
+            <td>
+                <span class="profit">
+                    ${(shop.resume.total_in*shop.resume.profit_rate/100).toFixed(1)} 元
+                </span>
+            </td>
+            <td>
+                ${shop.resume.profit_rate} %
+            </td>
+            <td>
+                {{if shop.expandtype == '在营业中'}}
+                在营业中
+                {{else}}
+                {{if shop.expandtype == '正在拓展'}}
+                正在拓展
+                {{else}}
+                 计划拓展
+                {{/if}}
+                {{/if}}
+            </td>
+			<td>
+				{{if shop.type == 'direct'}}
+				直营店
+				{{else}}
+				加盟店
+				{{/if}}
+			</td>
+			<td>
+				<!--
+				&nbsp;<a class="action" type="del" href="/dashixiongwx/admin/shop/${shop_id}/del">删除</a>
+				-->
+				&nbsp;<a class="action" type="del" href="/dashixiongwx/admin/shop/${shop.id}/edit">编辑</a> | 
+				&nbsp;<a class="action" type="qr" target="_blank" href="/dashixiongwx/admin/shop/${shop.id}/qr">二维码</a>
+			</td>
+		</tr>
+        {{/if}}
+	{{/each}}
+
+	</table>
+    <table class="shop-list-all" style="display: none">
+        <tr>
+            <th>
+                id
+            </th>
+            <th>
+                名称
+            </th>
+            <th>
+                到店数
+            </th>
+            <th>
+                订单数
+            </th>
+            <th>
+                客单
+            </th>
+            <th>
+                总收入
+            </th>
+            <th>
+                毛利
+            </th>
+            <th>
+                毛利率
+            </th>
+            <th>
+                拓展情况
+            </th>
+            <th>
+                类型
+            </th>
+            <th>
+                操作
+            </th>
+        </tr>
+
+        {{each(shop ,i) shops}}
+        <tr>
+            <td>
+                ${shop.id}
+            </td>
+            <td>
+                <a href="/dashixiongwx/admin/shop/${shop.id}">${shop.name}</a>
+            </td>
+            <td>
+                ${shop.resume.visitor_count}
+            </td>
+            <td>
+                ${shop.resume.order_num}
+            </td>
+            <td>
+                ${shop.resume.visitor_count?(shop.resume.total_in/shop.resume.order_num).toFixed(1):0} 元
+            </td>
+            <td>
+                ${shop.resume.total_in} 元
+            </td>
+            <td>
+                <span class="profit">
+                    ${(shop.resume.total_in*shop.resume.profit_rate/100).toFixed(1)} 元
+                </span>
+            </td>
+            <td>
+                ${shop.resume.profit_rate} %
+            </td>
+            <td>
+                {{if shop.expandtype == '在营业中'}}
+                在营业中
+                {{else}}
+                {{if shop.expandtype == '正在拓展'}}
+                正在拓展
+                {{else}}
+                计划拓展
+                {{/if}}
+                {{/if}}
+            </td>
+            <td>
+                {{if shop.type == 'direct'}}
+                直营店
+                {{else}}
+                加盟店
+                {{/if}}
+            </td>
+            <td>
+                <!--
+                &nbsp;<a class="action" type="del" href="/dashixiongwx/admin/shop/${shop_id}/del">删除</a>
+                -->
+                &nbsp;<a class="action" type="del" href="/dashixiongwx/admin/shop/${shop.id}/edit">编辑</a> |
+                &nbsp;<a class="action" type="qr" target="_blank" href="/dashixiongwx/admin/shop/${shop.id}/qr">二维码</a>
+            </td>
+        </tr>
+        {{/each}}
+
+    </table>
+    <script type="application/javascript">
+        var shop_list = $(".shop-list"),
+            shop_list_all = $(".shop-list-all"),
+            showall = $(".show_all_shop");
+        showall.click(function(){
+            shop_list.hide();
+            shop_list_all.show('fast');
+        });
+    </script>
+
+
+

@@ -1,0 +1,36 @@
+<table>
+	<tr>
+		<th>
+			产品id
+		</th>
+		<th>
+			条码
+		</th>
+		
+		<th>
+			产品名称
+		</th>
+		<th>
+			
+		</th>
+	</tr>	
+
+{{each(product, i) products}}
+	<tr>
+		<td id="${product.id}">
+			${product.id}
+		</td>
+		<td>
+			${product.code}
+		</td>
+		<td>
+			<a href="/dashixiongwx/admin/shop/${shop_id}/product/${product.id}/trend/30?title=${product.title}">${product.title}</a>
+		</td>
+		
+		<td>
+			${product.cost} 元
+		</td>
+	</tr>
+{{/each}}
+
+</table>

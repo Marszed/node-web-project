@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+	<meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1"/>
+	<title>${shop_id}号店管理处 - 呼叫大师兄</title>
+    <link rel="stylesheet" href="http://s.ksmimi.com/dashixiong_static/csspro/hot_sneaks/jquery-ui-1.10.4.custom.min.css">
+    <!--<script src="http://s.ksmimi.com/dashixiong_static/jspro/jquery-1.10.2.js"></script>-->
+    <link rel="shortcut icon" type="image/x-icon" href="http://s.ksmimi.com/dashixiong_static/img/favicon.ico" />
+    <link rel="bookmark" type="image/x-icon"  href="http://s.ksmimi.com/dashixiong_static/img/favicon.ico" />
+    <script type="text/javascript" src="http://s.ksmimi.com/dsx/jspro/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="http://s.ksmimi.com/dsx/jspro/json2.min.js"></script>
+    <script src="http://s.ksmimi.com/dashixiong_static/jspro/jquery-ui-1.10.4.custom.min.js"></script>
+    <link rel="stylesheet" href="http://s.ksmimi.com/dashixiong_static/csspro/table.css">
+    <script type="text/javascript" charset="utf-8">
+        var DSX = {};
+        DSX.env = {
+            static : 's.ksmimi.com',
+            img : 'img.ksmimi.com'
+        };
+        DSX.shop = {
+            id : ${shop_id}
+        };
+    </script>
+	<style>
+		html{
+			-webkit-text-size-adjust:none;
+		}
+		body{
+			background-image: url(http://s.ksmimi.com/imgpro/grid.png);
+			background-repeat: repeat;
+			background-size: auto;
+			background-color : #CCC;
+			color : #888;
+		}
+        table{
+	        border-spacing: 0
+        }
+
+		li{
+			line-height : 24px;
+            list-style : none;
+		}
+		a{
+			color : #40A0C0;
+		}
+
+        #top{position:fixed;right:10px; bottom:10px; display:inline-block;width:48px;height:48px; background:#ccc;line-height:48px; text-align:center;}
+	</style>
+    <style type="text/css">
+        #nav{
+            padding: 10px;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 999;
+        }
+        #nav a{
+            text-decoration: none;
+        }
+        #sub_menu{
+            display: none;
+            position: absolute;
+            background: white;
+            border-top: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+        }
+        #sub_menu div{
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        #sub_menu div:hover{
+            background: #ccc;
+        }
+        .navig {
+            float: left;
+            margin-right: 40px;
+            margin-bottom:10px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function(){
+            $('#menutop>.navig:has(div)').hover(
+            function(){
+                $(this).find('div').show();
+            },function(){
+                $(this).find('div').hide();
+            });
+        });
+    </script>
+</head> 
+<body>
+    <div id="nav">
+        <div id="menutop">
+            {{if power >= 1}}
+                {{if power != 2}}
+            <div class="navig"><a href="/dashixiongwx/shop/${shop_id}/rd/index?wx_id=${open.openId}" target="_blank">小卖部首页(${shop_id})</a></div>
+                {{/if}}
+                {{if power != 2 && power != 4 && power != 6}}
+            <div class="navig"><a href="/dashixiongwx/admin/shop/${shop_id}/expressinfofetch/list#mp.weixin.qq.com">快递</a>
+                <div id="sub_menu">
+                    <!-- 初级兼职, 送货, 取件 -->
+                    <div><a href="/dashixiongwx/admin/shop/${shop_id}/expressinfofetch/list#mp.weixin.qq.com">快递取件</a></div>
+                </div>
+            </div>
+                {{/if}}
+                {{if power>=2}}
+            <div class="navig"><a href="/dashixiongwx/admin/shop/${shop_id}/order/list?type=Valid" style="color:orange">订单管
+                理</a>
+                <div id="sub_menu">
+                    <!-- 高级兼职, 打单, 客服 -->
+                    {{if power >= 2}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/order/list?type=Valid">业绩查询</a></div>{{/if}}
+                    {{if power>=4 && power!=6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/unconfirmorder/list">未确认订单</a></div>{{/if}}
+                    {{if power>=2 && power!=6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/canceledorder/list">已取消订单</a></div>{{/if}}
+                </div>
+            </div>
+            <div class="navig">{{if power>=2 && power!=4}}<a href="/dashixiongwx/admin/shop/${shop_id}/section/list" style="color:orange">仓库管
+                理</a>{{/if}}
+                <div id="sub_menu">
+                    {{if power>=2 && power!=4}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/section/list">货架管理</a></div>{{/if}}
+                    {{if power>=6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/section/strategy">货架策略</a></div>{{/if}}
+                    {{if power>=3 && power!=4}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/warehouse/list">仓库管理</a></div>{{/if}}
+                </div>
+            </div>
+            {{if power==3 || power==5 || power==6 || power==10}}<div class="navig"><a href="/dashixiongwx/admin/shop/${shop_id}/notice/list">公告管理</a></div>{{/if}}
+            {{if power >= 3}}<div class="navig"><a href="/dashixiongwx/admin/shop/${shop_id}/article/list">社区管理</a></div>{{/if}}
+            <div class="navig">{{if power >= 3}}<a href="/dashixiongwx/admin/shop/${shop_id}/msg/list">消息管理</a>{{/if}}
+                <div id="sub_menu">
+                    {{if power >= 3}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/msg/list">消息管理</a></div>{{/if}}
+                    {{if power==4 || power==6 || power==10}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/msg/listall">所有消息管理</a></div>{{/if}}
+                    {{if power == 4 || power==10}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/set/voice">声音推送</a></div>{{/if}}
+                </div>
+            </div>
+            <div class="navig">{{if power >= 3}}<a href="/dashixiongwx/admin/shop/${shop_id}/setting/list" style="color:orange">店铺管理</a>{{/if}}
+                <div id="sub_menu">
+                    {{if power >= 3}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/setting/list">本店管理</a></div>{{/if}}
+                    {{if power >= 3}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/defectiveGoodsRegistration" target="_blank">坏货管理</a></div>{{/if}}
+                    {{if power >= 5}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/show/shopRelation">店铺关联</a></div>{{/if}}
+                    {{if power==4 || power==6 || power==10}}<div><a href="/dashixiongwx/admin/shop/list/all">分店管理</a></div>{{/if}}
+                    {{if power != 4}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/motto/list/all">小票箴言</a></div>{{/if}}
+                    {{if power==4 || power==10}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/leavestatus">离开状态</a></div>{{/if}}
+                    {{if power >= 6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/add/product/comment">菜品评论</a></div>{{/if}}
+                    {{if power==3 || power==5 || power==6 || power==10}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/manage/draw">签到奖品管理</a></div>{{/if}}
+                    {{if power >= 6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/school">Select Shop</a></div>{{/if}}
+                </div>
+            </div>
+            <div class="navig">{{if power >= 3}}<a href="/dashixiongwx/admin/shop/${shop_id}/employee/list">用户管理</a>{{/if}}
+                <div id="sub_menu">
+                    {{if power >= 3}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/employee/list">员工管理</a></div>{{/if}}
+                    {{if power == 10}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/members">权限管理</a></div>{{/if}}
+                    {{if power == 4 || power==6 || power==10}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/user/list/all">用户管理</a></div>{{/if}}
+                    {{if power >= 6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/selectUserTools">查询用户财富及道具</a></div>{{/if}}
+                </div>
+            </div>
+            <div class="navig">{{if power==3 || power==5 || power==10 || power==4}}<a href="/dashixiongwx/admin/shop/${shop_id}/${user.power}/finance/statements">财务管理</a>{{/if}}
+                <div id="sub_menu">
+                    {{if power==3 || power==5 || power==10 || power==4}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/${user.power}/finance/statements">财务报表</a></div>{{/if}}
+                    {{if power==3 || power==5 || power==10 || power==4}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/finance">财务管理</a></div>{{/if}}
+                    {{if power==4}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/get/finance/messages">短信管理</a></div>{{/if}}
+                </div>
+            </div>
+            <div class="navig">{{if power >= 3}}<a href="/dashixiongwx/admin/shop/${shop_id}/show/promotionList">活动管理</a>{{/if}}
+                <div id="sub_menu">
+                    {{if power >= 3}}<div><a href="/dashixiongwx/admin/activity/shop/${shop_id}/order/list">活动订单 (非销售订单)</a></div>{{/if}}
+                    {{if power >= 3}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/show/promotionList">兼职推广概况</a></div>{{/if}}
+                    {{if power >= 6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/christmas">圣诞表白派送</a></div>{{/if}}
+                    {{if power >= 6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/dynamic/style">节日换皮肤</a></div>{{/if}}
+                    {{if power >= 6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/active/channel">渠道信息</a></div>{{/if}}
+                </div>
+            </div>
+            <div class="navig">{{if power >= 5 || power==4}}<a href="/dashixiongwx/admin/shop/${shop_id}/user/distribution">数据分析</a>{{/if}}
+                <div id="sub_menu">
+                    {{if power >= 5}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/user/distribution">客户地址分布</a></div>{{/if}}
+                    {{if power >= 6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/dateresume">运营统计</a></div>{{/if}}
+                    {{if power >= 6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/analysis">用户行为分析</a></div>{{/if}}
+                    {{if power >= 6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/userOrderRate">新老用户下单率</a></div>{{/if}}
+                    {{if power >= 6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/userVersionRate">用户版本使用率</a></div>{{/if}}
+                    {{if power >= 6 || power==4}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/customer/evaluation">客户评价</a></div>{{/if}}
+                    {{if power >= 6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/analysis/new/users">新用户分析</a></div>{{/if}}
+                    {{if power >= 6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/analysis/new/users/dataresume" target="_blank">新用户运营统计</a></div>{{/if}}
+                </div>
+            </div>
+            <div class="navig">{{if power >= 6}}<a href="/dashixiongwx/admin/shop/${shop_id}/tool/grant/monitor">开发专用</a>{{/if}}
+                <div id="sub_menu">
+                    {{if power == 10}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/tool/grant/monitor">发放道具统计</a></div>{{/if}}
+                    {{if power == 10}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/product/compatible/status/statistics">产品兼容统计</a></div>{{/if}}
+                    {{if power == 10}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/sectionop/select">上架/下架/库存统计</a></div>{{/if}}
+                    {{if power >= 6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/signdraw/select">道具人品来源统计</a></div>{{/if}}
+                    {{if power >= 6}}<div><a href="/dashixiongwx/admin/shop/${shop_id}/visit/store/select">用户访问首页时间统计</a></div>{{/if}}
+                </div>
+            </div>
+                {{/if}}
+            <div class="navig">
+                {{if power >= 4}}<a href="/dashixiongwx/admin/shop/${shop_id}/plans" target="_blank" style="color:orange;">工作计划</a>{{/if}}
+            </div>
+            <div class="navig"><a href="/dashixiongwx/admin/logout">退出</a></div>
+            {{/if}}
+        </div>
+    </div>
+
+    {{html body}}
+    <a href="#" id="top">TOP</a>
+</body> 
+</html> 

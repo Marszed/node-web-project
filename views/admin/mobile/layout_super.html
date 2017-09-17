@@ -1,0 +1,56 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	<title>小卖部管理处 - 大师兄小卖部</title>
+    <script type="text/javascript" src="http://s.ksmimi.com/dsx/jspro/json2.min.js"></script>
+    <style type="text/css">
+        body{background:#fff;margin: 0;padding: 0;color:#4f6b72; font-family:"微软雅黑","Microsoft YaHei", sans-serif;max-width:640px;margin:0 auto;}
+        table{border-collapse:collapse;border-spacing:0;}
+        .box{width:100%;margin:0 auto; border:0;}
+        ul,li{list-style:none;display: block;margin:0;padding:0;border:0; outline:0;font-size:100%; vertical-align:baseline; background:transparent;}
+        a{text-decoration:none; color:#40A0C0;}
+        table{margin:5px 2% 15px 2%;width:96%;}
+        th, td{padding:10px;}
+        th{text-align:left;}
+        tfoot td{text-align:left;}
+        th span{font-weight:normal;}
+        .direct{white-space:nowrap;}
+        #head{position:fixed;width:100%;left:0;top:0;z-index:100;background:#f1f1f1;}
+        #logo{height:40px;width:40px;float: left;}
+        #nav{float:right;display:-webkit-box;
+        background: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0,0,0,0)),color-stop(50%,rgba(0,0,0,0.3)), to(rgba(0,0,0,0)));
+        -webkit-background-size: 1px 100%;
+        background-size: 1px 100%;
+        background-position: left center;
+        background-repeat: no-repeat;
+        }
+        .navItem{height:40px;margin:0px;text-align: center; -webkit-box-flex:1;padding:0 5px;
+        background: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0,0,0,0)),color-stop(50%,rgba(0,0,0,0.3)), to(rgba(0,0,0,0)));
+        -webkit-background-size: 1px 100%;
+        background-size: 1px 100%;
+        background-position: right center;
+        background-repeat: no-repeat;
+        }
+        .navItem:last-child{background:none;}
+        .navItem>a{ display:inline-block; height: 100%;line-height:40px}
+    </style>
+
+</head> 
+<body> 
+    <div id="head">
+        <div id="logo"><img src="http://s.ksmimi.com/dashixiong_static/img/logo.png" alt="" /></div>
+        <ul id="nav">
+            <li id="navItem1" class="navItem"><a href="/dashixiongwx/admin/shop/add"/>添加分店</a></li>
+            <li id="navItem2" class="navItem"><a href="/dashixiongwx/admin/shop/list/all"/> 分店管理</a></li>
+            <li id="navItem3" class="navItem"><a href="/dashixiongwx/admin/setting/list"/>配置管理</a></li>
+            <li id="navItem4" class="navItem"><a href="/dashixiongwx/admin/logout"/>退出</a></li>
+        </ul>
+    </div>
+    <div style="height:40px"></div>
+	{{html body}}	
+</body> 
+</html>
+
+

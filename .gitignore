@@ -1,0 +1,11 @@
+/node_modules
+dsx_*
+nohup.out
+pid
+.DS_Store
+.idea
+*.rdb
+*.log
+*.out
+*.swp
+promotion.log

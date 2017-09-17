@@ -1,0 +1,74 @@
+<style type="text/css" media="all">
+    .note{ color : red; } 
+</style>
+<h1>修改员工信息</h1>
+<p class="note">以下信息全部为必填项</p>
+<form action="/dashixiongwx/admin/shop/${shop_id}/employee/${employee.id}/doedit" method="post" accept-charset="utf-8">
+    <h2>基本信息</h2>
+    <input type="hidden" name="employee[id]" id="" value="${employee.id}" />
+    <p>
+        姓名 
+        <input type="text" name="employee[name]" value="${employee.name}" />
+    </p>
+    <p>
+        身份证号
+        <input type="text" name="employee[idCardNum]" value="${employee.idCardNum}" />
+    </p>
+    <p>
+        员工类型
+        <select name="employee[type]">
+            <option value="fulltime" {{if employee.type=='fulltime'}}selected="true"{{/if}}>全职</option>
+            <option value="parttime" {{if employee.type=='parttime'}}selected="true"{{/if}}>兼职</option>
+            <option value="leave" {{if employee.type==''}}selected="true"{{/if}}>离职</option>
+        </select>
+    </p>
+    <p>
+        用户id
+        <input type="text" name="employee[userId]" value="${employee.userId}" />
+    </p>
+    <p>
+        所在分店id
+        <input type="text" name="employee[shopId]" value="${employee.shopId}" />
+    </p>
+    <p>
+        级别
+        <input type="text" name="employee[level]" value="${employee.level}" />
+    </p>
+
+    <h2>银行信息</h2>
+    <p>
+        工资卡号
+        <input type="text" name="employee[bankCardNum]" value="${employee.bankCardNum}"/>
+    </p>
+    <p>
+        发卡银行
+        <select name="employee[bankName]">
+            <option value="农商银行" {{if employee.bankName=='农商银行'}}selected="true"{{/if}}>农商银行</option>
+            <option value="工行" {{if employee.bankName=='工行'}}selected="true"{{/if}}>工行</option>
+            <option value="建行" {{if employee.bankName=='建行'}}selected="true"{{/if}}>建行</option>
+            <option value="农行" {{if employee.bankName=='农行'}}selected="true"{{/if}}>农行</option>
+            <option value="中行" {{if employee.bankName=='中行'}}selected="true"{{/if}}>中行</option>
+            <option value="招行" {{if employee.bankName=='招行'}}selected="true"{{/if}}>招行</option>
+        </select>
+    </p>
+
+    <h2>联系信息</h2>
+    <p>
+        手机
+        <input type="text" name="employee[mobile]" value="${employee.mobile}"/>
+    </p>
+    <p>
+        QQ
+        <input type="text" name="employee[qq]" value="${employee.qq}"/>
+    </p>
+    <p>
+        微信号
+        <input type="text" name="employee[wxNick]" value="${employee.wxNick}"/>
+    </p>
+
+
+    <p>
+         <input type="submit" name="" value="提交" />
+    </p>
+
+</form>

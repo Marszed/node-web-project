@@ -1,0 +1,210 @@
+<style>
+	table, td, th{
+		border : 1px solid #CCC;	
+	}
+	td,th{
+		padding : 5px;
+	}
+	h1{
+		padding : 10px;
+		font-size : 20px;	
+	}
+	
+	table{
+		margin : 10px;	
+		width : 95%;
+	}
+	.drain{
+		background : red;	
+	}
+	.dangous{
+		background : orange;
+	}
+	.fine{
+		background : green;
+	}
+	.client-status{
+		text-align : center;	
+		color : #888;
+	}
+	.client-status span{
+	}
+	.filter{
+		margin : 10px;	
+	}
+	.filter a{
+		padding : 5px;	
+	}
+    .menu{
+        padding : 10px; 
+    }
+
+</style>
+<div class="menu">
+    <a class="user-active" href="#" onclick="return false;">用户活跃度</a> | 
+    <a class="user-profit" href="/dashixiongwx/admin/shop/${shop_id}/user/sort">用户排行榜</a>  |
+    <a class="user-profit" href="/dashixiongwx/admin/shop/${shop_id}/user/assignment">用户转店</a>  
+</div>
+
+<div id="canvasDiv" style="display:none;"></div>
+
+<p class="filter">
+	<a class="fine" href="#" onclick="return false">活跃用户</a> | <a class="dangous" href="#" onclick="return false">危险用户</a> | <a class="drain" href="#" onclick="return false">流失用户</a>
+</p>
+
+<table>
+	<tr>
+		<th>
+			客户id
+		</th>
+		<th>
+			客户状态
+		</th>
+		<th>
+			客户姓名
+		</th>
+		<th>
+			联系方式
+		</th>
+		<th>
+			地址
+		</th>
+		<th>
+			最后一单id
+		</th>
+        <th>
+            操作 
+        </th>
+		
+	</tr>
+
+
+{{each(order, i) last_orders}}
+
+	{{if address_map[order.userId] }}
+	<tr>
+		<td>${order.userId}</td>
+		<td class="client-status">
+			{{if order.user_active_status == 0}}
+			<span class="fine">活跃</span>
+			{{else order.user_active_status == 1}}
+			<span class="dangous">危险</span>
+			{{else order.user_active_status == 2}}
+			<span class="drain">流失</span>
+			{{/if}}
+		</td>
+		<td>
+            <!--
+			<a href="/dashixiongwx/admin/order/list/${order.userId}/${ address_map[order.userId][0].name}">
+            -->
+            <a target="_blank" href="/dashixiongwx/admin/shop/${shop_id}/user/profile/${order.userId}">
+				${ address_map[order.userId][0].name }
+			</a>
+		</td>
+		<td>
+			${ address_map[order.userId][0].mobile}
+		</td>
+		<td>
+			${ address_map[order.userId][0].address}
+		</td>
+		<td>
+			${order.maxId} ${intime} ${time_text}
+		</td>
+        <td>
+            <a target="_blank" href="/dashixiongwx/admin/shop/${shop_id}/msg/${order.userId}/list">历史消息</a> | 
+            <a target="_blank" href="/dashixiongwx/admin/shop/${shop_id}/order/list/${order.userId}/${ encodeURIComponent(address_map[order.userId][0].name)}">
+				过往订单&gt;&gt;
+			</a>
+        </td>
+		
+	</tr>
+	{{/if}}
+
+{{/each}}
+</table>
+<script type="text/javascript" charset="utf-8" src="http://${env.staticRoot}/dashixiong_static/jspro/ichart.1.2.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+	var last_orders = {{html JSON.stringify(last_orders)}};
+	var map = {};	
+	var data = [];
+	last_orders.forEach(function( order, i ){
+		if( !map[ order.user_active_status ] ){
+			map[ order.user_active_status ] = [];
+		}
+		map[ order.user_active_status ].push( order );
+	});
+
+    if( !map[0] ){
+        map[0] = [];
+    }
+    if( !map[1] ){
+        map[1] = [];
+    }
+    if( !map[2] ){
+        map[2] = [];
+    }
+	
+	data.push({
+		name : '活跃(20天内有下单)'+map[0].length+'人',
+		value : (map[0].length/last_orders.length).toFixed(4) * 100,
+		color :'#9ACD32' 
+	});
+	data.push({
+		name : '危险(20天没下单)'+map[1].length+'人',
+		value : (map[1].length/last_orders.length).toFixed(4) * 100,
+		color :'#FFFACD' 
+	});
+	data.push({
+		name : '流失(一个月没下单)'+map[2].length+'人',
+		value : (map[2].length/last_orders.length).toFixed(4) * 100,
+		color :'#9d4a4a' 
+	});
+
+	//画图啦
+    	
+	new iChart.Pie2D({
+		render : 'canvasDiv',
+		data: data,
+		title : '大师兄客户活跃度分析',
+		legend : {
+			enable : true
+		},
+		showpercent:true,
+		decimalsnum:2,
+		width : 1200,
+		height : 400,
+		radius:140
+	}).draw();
+
+	//filters	
+	$( '.filter a.fine' ).click(function(){
+		$( 'span.fine' ).parents( 'tr' ).show();
+		$( 'span.dangous' ).parents( 'tr' ).hide();
+		$( 'span.drain' ).parents( 'tr' ).hide();
+	});
+	$( '.filter a.dangous' ).click(function(){
+		$( 'span.fine' ).parents( 'tr' ).hide();
+		$( 'span.dangous' ).parents( 'tr' ).show();
+		$( 'span.drain' ).parents( 'tr' ).hide();
+	});
+	$( '.filter a.drain' ).click(function(){
+		$( 'span.fine' ).parents( 'tr' ).hide();
+		$( 'span.dangous' ).parents( 'tr' ).hide();
+		$( 'span.drain' ).parents( 'tr' ).show();
+	});
+
+    //-----------
+    
+    $( '.user-active' ).click(function () {
+        $( '#canvasDiv' ).toggle();
+    });
+
+
+
+
+
+
+
+
+</script>
+

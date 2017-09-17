@@ -1,0 +1,55 @@
+<style type="text/css" media="all">
+    .shop_setting{
+        width:500px;
+        padding:3px 6px;
+    } 
+    th{
+        text-align:center;
+    }
+</style>
+
+<h2>店铺关联信息</h2>
+<table>
+	<tr>
+		<th>
+			店铺关联信息
+		</th>
+        <th>
+            店铺类型
+        </th>
+        <th>
+            操作
+        </th>
+	</tr>
+	<tr>
+		<td>
+            <input class="shop_setting" type="text" name="" value="${shop.relation}" placeholder="请输入关联店铺的shopId" />
+		</td>
+        <td>
+            <select name="shop_type" class="shop_type">
+                <option value="">请选择</option>
+                <option value="store" ${shop.shopType == 'store' ? 'selected="true"' : ''}>小卖部</option>
+                <option value="restaurant" ${shop.shopType == 'restaurant' ? 'selected="true"' : ''}>餐厅</option>
+            </select>
+        </td>
+        <td>
+            <a class="setting_btn" href="#" onclick="return false;">提交配置</a>
+        </td>
+	</tr>
+</table>
+
+</table>
+
+<script type="text/javascript" charset="utf-8">
+    var shop_id = ${shop_id};
+    $( '.setting_btn' ).click(function () {
+        $.post( '/dashixiongwx/admin/shop/'+ shop_id +'/update/shopRelation', {
+            shop_type : $('.shop_type').val(),
+            setting_value : $('.shop_setting').val().replace(/，/g, ',')
+        }, function (res) {
+            var msg = 'success';
+            if( !res.status ) msg = 'faild';
+            alert(msg);
+        });
+    });
+</script>

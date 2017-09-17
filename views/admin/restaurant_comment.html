@@ -1,0 +1,87 @@
+<style type="text/css">
+table{
+    width: 70%;
+}
+th{
+    text-align: center;
+    font-size: 15px;
+}
+.product-comment{
+    cursor: pointer;
+}
+img{
+    width: 30px;
+    height: 20px;
+}
+.tr-product-comment{
+    display: none;
+    line-height: 10px;
+    padding: 0;
+}
+/*input{
+    display: block;
+}*/
+.hide-userOrderId{
+    display: none;
+}
+</style>
+<h1>添加餐厅菜品评论</h1>
+<table style="text-align: center;">
+    <tr>
+        <th>序号</th>
+        <th>美图</th>
+        <th>名称</th>
+        <th>操作</th>
+    </tr>
+    {{each(product,i) products}}
+    <tr>
+        <td>${i+1}</td>
+        <td><img src="http://img.ksmimi.com/uploads/products/${product.img}"></td>
+        <td>${product.title}</td>
+        <td><span class="product-comment">评论</span></td>
+        <input type="hidden" value="${product.id}">
+    </tr>
+    <tr class="tr-product-comment" other="${product.id}">
+        <td>用户Id:<input name="userId" type="number" placeholder="用户Id"></td>
+        <td>评论内容:<input name="content" maxlength="8" type="text" placeholder="不超过8个字"></td>
+        <td></td>
+        <td><input class="submit-comment" type="submit" value="提交"><input class="cancel-comment" type="submit" value="取消"></td>
+    </tr>
+    {{/each}}
+</table>
+<table >
+
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var productId;
+        $('.product-comment').on('click',function(){
+           productId = $(this).closest('tr').find('input').val();
+            $(this).closest('tr').siblings('tr[other='+productId+']').show('fast');
+        });
+        $('.cancel-comment').on('click',function(){
+            $(this).closest('tr').hide('fast');
+        });
+        $('.submit-comment').on('click',function(){
+            //获取要提交保存到数据库的值
+            var userId = $(this).closest('tr').find('input[name=userId]').val();
+                commentValue = $(this).closest('tr').find('input[name=content]').val();
+//                userOrderId = $(this).closest('tr').find('input[name=userOrderId]').val();
+                userOrderId = 0;
+            if(userId && commentValue){
+                $.post('/dashixiongwx/product/comment/submit',{userOrderId:userOrderId,userId:userId,productId:productId,content:commentValue},function(data){
+                    if(data=="评论成功"){
+                        alert("评论成功");
+                        $('.submit-comment').closest('tr').hide('normal');
+                        $('.submit-btn').unbind('click');
+                    }
+                });
+            }else{
+                alert("请填写相应内容");
+                return false;
+            }
+
+        });
+    });
+</script>

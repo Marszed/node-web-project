@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .print_btn{
+            margin-bottom: 10px;
+        }
+        @media print{
+            #nav,.print,.shortcut,.nobackup, #top, .print_btn{
+                display : none;
+            }
+            ul,ol{
+                font-size : 12px;
+                line-height : 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+<input class="print_btn" type="button" value="点击打印"/>
+<table>
+    <tr style="display: none;">
+        <td>产品名称</td>
+        <td>产品编码</td>
+        <td>产品条形码</td>
+    </tr>
+    {{each(arr,i) arr}}
+    <div style="margin-bottom: 10px;">${arr.title}</div>
+    <tr>
+        <td style="display: none;">${arr.title}</td>
+        <td style="display: none;" class="proCode" proCode="${arr.code}">${arr.code}</td>
+        <td>
+            <img class="code" src=""/>
+        </td>
+    </tr>
+    {{/each}}
+</table>
+</body>
+<script type="text/javascript">
+    $(function(){
+        var $code = $('.proCode').attr('proCode');
+        var url = 'http://apps.99wed.com/baiduapp/barcode/barcode.php?codebar=BCGean13&text='+ $code +'&resolution=2&thickness=30';
+        $('.code').attr('src',  url);
+    });
+</script>
+<script type="text/javascript">
+    $('.print_btn').click(function(){
+        window.print();
+    });
+</script>
+</html>

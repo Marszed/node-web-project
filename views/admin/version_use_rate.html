@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>版本使用率</title>
+    <style type="text/css">
+        .ops{
+            margin-bottom: 20px;
+        }
+        .new_user{
+            float: left;
+            margin-right: 10px;
+        }
+        .current-date{
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        td{
+            width: 130px;
+        }
+    </style>
+</head>
+<body>
+<div class="contain">
+    <table class="new_user">
+        <tr>
+            <td>简洁版使用人数</td>
+            <td>简洁版使用率</td>
+        </tr>
+        <tr>
+            <td>${simpleNums}</td>
+            <td>${simpleRate}%</td>
+        </tr>
+    </table>
+
+    <table class="old_user">
+        <tr>
+            <td>快捷版使用人数</td>
+            <td>快捷版使用率</td>
+        </tr>
+        <tr>
+            <td>${quickNums}</td>
+            <td>${quickRate}%</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

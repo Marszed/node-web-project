@@ -1,0 +1,21 @@
+<style type="text/css" media="all">
+    .tool-img{
+        border : 1px solid #CCC; 
+    }
+    .tool-title{
+        font-size : 18px; 
+        color : #333;
+    } 
+</style>
+
+<p>
+    订单${order_id}所使用的道具如下:
+</p>
+<ul>
+{{each(tool, i) tools}}
+<li>
+    <img class="tool-img" width="50" src="${tool.img}" alt="${tool.title}" />
+    <span class="tool-title">${tool.title}</span> ${tool.description}
+</li>
+{{/each}}
+</ul>

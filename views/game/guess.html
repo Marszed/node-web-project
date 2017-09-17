@@ -1,0 +1,314 @@
+<style type="text/css">
+    .guessBox{
+        width:304px;
+        min-height:424px;
+        margin:0 auto;
+    }
+    .guessBox-body{
+        width:304px;
+        height:314px;
+        position:relative;
+        color:#ffedde;
+        background:url("http://${staticHost}/dsx/img/guess_box.png") no-repeat top center;
+    }
+    .guessBox-cover, .guessBox-cover-open{
+        text-align:center;
+    }
+    .guessNotice{
+        min-height:30px;
+        margin-bottom:50px;
+    }
+    .guessInput, .guessTip, .guessChance, .guessRule, .guessBox-btns{
+        position:absolute;
+    }
+    .guessChance{
+        font-size:12px;
+        top:54px;
+        left:24px;
+    }
+    .guessTip{
+        font-size:16px;
+        left:126px;
+        top:17px;
+    }
+    .guessRule{
+        width:66px;
+        right:8px;
+        top:83px;
+        font-size:14px;
+        line-height:18px;
+    }
+    .ruleTitle{
+        font-size:16px;
+        margin-bottom:10px;
+    }
+    .guessInput{
+        height:32px;
+        width:90px;
+        text-align:center;
+        font-size:22px;
+        line-height:32px;
+        position:absolute;
+        z-index:10;
+        top:13px;
+        left:24px;
+        background-color:#fff;
+        color:#f8b551;
+        border-radius:5px;
+    }
+    .guessBox-li{
+        float:left;
+        background:#fff;
+        opacity:0;
+        width:62px;
+        height:55px;
+    }
+    .guessBox-btns{
+        width:190px;
+        top:71px;
+        left:27px;
+    }
+    .guessTip-text{
+        line-height:20px;
+    }
+    .guessBox-cover-open{
+        position:relative;
+        top:2px;
+    }
+    .guessBox-result{
+        position:absolute;
+        bottom:0;
+        color:#e4b48c;
+        background-color:#fff;
+        border:1px solid #ccc;
+        border-bottom:none;
+        width:190px;
+        height:90px;
+        left:55px;
+        padding-top:15px;
+    }
+    .guessBox-rp{
+        color:#eb6100;
+        font-family:arial;
+        font-size:20px;
+    }
+    .guessBox-rp label{
+        font-size:50px;
+    }
+    a.guess-a{
+        color:#fff000;
+    }
+    .my-rp{
+        text-align:center;
+        font-size:18px;
+        margin-top:20px;
+    }
+    /*-- 11-11 --*/
+    .guessBox-11{
+        display:none;
+        background-color:#fff;
+        text-align:left;
+    }
+    .double-11 .guessBox-11{
+        width:190px;
+        display:block;
+        position:absolute;
+        left:55px;
+        bottom:0;
+    }
+    .double-11 .guessBox-result{
+        display:none;
+    }
+    .girl-11-p{
+        position: absolute;
+        right: 0;
+        top: 8px;
+        line-height: 26px;
+        width: 70px;
+    }
+</style>
+
+<div class="guessNotice"></div>
+
+<div class="guessBox">
+    <div class="guessBox-cover">
+        <img src="http://${staticHost}/dsx/img/cover.png" />
+    </div>
+    <div class="guessBox-cover-open none">
+        <img src="http://${staticHost}/dsx/img/cover_open.png" />
+        <div class="guessBox-11">
+            <img class="girl-11" src="http://img.ksmimi.com/uploads/articles/f0d1dcb667e88a019dd378e23c8b31d7.png" alt=""/>
+            <p class="girl-11-p">恭喜你获得<label style="color:orange">女朋友</label>道具一枚～</p>
+        </div>
+        <div class="guessBox-result">
+            <p class="guessBox-rp"><label class="rp-label">0</label>人品</p>
+            <p class="guessBox-result-text">恭喜你获得<label class="rp-label">0</label>个人品</p>
+        </div>
+    </div>
+    <div class="guessBox-body">
+        <ul class="guessBox-btns clf">
+            <li class="guessBox-li" num="1"></li>
+            <li class="guessBox-li" num="2"></li>
+            <li class="guessBox-li" num="3"></li>
+            <li class="guessBox-li" num="4"></li>
+            <li class="guessBox-li" num="5"></li>
+            <li class="guessBox-li" num="6"></li>
+            <li class="guessBox-li" num="7"></li>
+            <li class="guessBox-li" num="8"></li>
+            <li class="guessBox-li" num="9"></li>
+            <li class="guessBox-li" type="del"></li>
+            <li class="guessBox-li" num="0"></li>
+            <li class="guessBox-li" type="ok"></li>
+        </ul>
+        <div class="guessInput">15</div>
+        <div class="guessChance">你还剩下<label class="guessChance-num">6</label>次机会</div>
+        <div class="guessTip">提示：<label class="guessTip-text">请输入一个1～100之间的正整数。</label></div>
+        <div class="guessRule">
+            <p class="ruleTitle">游戏规则</p>
+            密码箱会在1～100之间随机产生一个整数，在6次之内猜中就能成功开启密码箱
+        </div>
+    </div>
+    <div class="my-rp"><a href="/dashixiongwx/rp/${wx_id}">我的人品和道具</a></div>
+    <p style="margin-top:10px;margin-bottom:10px;text-align:center;"><a href="http://www.ksmimi.com/dashixiongwx/shop/1/article/401"
+            >如何使用道具</a></p>
+</div>
+
+<script type="text/javascript">
+    var wx_id = "${wx_id}";
+
+    (function(win, doc, $){
+        var $doc = $(doc),
+            $guessInput = $('div.guessInput');
+            num = 0;
+
+        var addNum = function(num){
+            var val = $guessInput.text();
+            if( !val || val == '0' ){
+                val = num;
+            }else{
+                val += num;
+            }
+            $guessInput.html(val);
+        };
+        var delNum = function(){
+            var val = $guessInput.text(),
+                num = val.slice(0, val.length-1);
+            $guessInput.html( num ? num : 0 );
+        };
+
+        //code for game
+        var $inputNubmer = $('div.guessInput');//输入数字文本框
+        $inputNubmer.html(0);
+        var $chance = $('div.guessChance'),
+            $guessTip_text = $('label.guessTip-text'),
+            $chanceNum = $chance.find('label'),
+            $cover = $('div.guessBox-cover'),
+            $cover_open = $('div.guessBox-cover-open'),
+            $rp_label = $('label.rp-label'),
+            $guessBox = $('.guessBox');
+
+        var nums=0;			//获取用户猜的数字
+        var rangeMax=100;	//最大数字范围边界
+        var rangeMin=1;		//最小数字范围边界
+
+        var count_chance = 6;//设置一共可以猜的次数
+
+        function showResult(data){
+            //有女朋友这个道具了，那就继续发人品
+            if( data.hasGirlfriend ){
+                $guessTip_text.html('恭喜你猜对了，您太聪明了!<a href="/dashixiongwx/game/again" class="guess-a">再来一次</a>');
+                $cover.hide();
+                $rp_label.html(data.rp);
+                $cover_open.fadeIn();
+                $chanceNum.html(0);
+            }else{
+                //没有女朋友这个道具，送他一个女朋友道具
+                $cover_open.addClass('double-11').show();
+                $guessTip_text.html('女盆友，屌丝最爱，可抵2元。<a href="/dashixiongwx/game/again" class="guess-a">再来一次</a>');
+                $cover.hide();
+            }
+            //标记一下
+            $guessBox.attr('finish', '1');
+        }
+        function ok(data){
+            nums = $inputNubmer.text().trim()-0;
+            $.post('/dashixiongwx/game/check/guess/result', {guessNum:nums, init:data && data.init ? data.init : false}, function(res){
+                //显示一下还有多少次机会
+                $chanceNum.html( res.status ? (count_chance-res.requestTimes) : 0);
+                //如果已经中奖，直接提示他就行了
+                if( res.result ){
+                    if( $guessBox.attr('finish') ){
+                        alert('不用猜了，你已经中奖了！');
+                        return;
+                    }
+                    showResult(res);
+                    return;
+                }
+                //判断一下是否有资格猜
+                if( !res.canHeGuess ){
+                    if( res.rp ){
+                        alert('很遗憾，答案是'+ res.num +'，机会已经用完，欢迎明天再来');
+                    }else{
+                        alert('机会已经用完，欢迎明天再来');
+                    }
+                    $guessTip_text.html('话说，你人品高的话，可以 <a href="/dashixiongwx/game/again" class="guess-a">再来一次</a>！');
+                    return;
+                }
+                if( res.requestTimes == 0 ) return; //等于0代表是初始化，啥也不用干
+                //有资格猜
+                if(res.requestTimes <= count_chance){
+                    if( !res.isBigger ){	//数字有些小了
+                        rangeMin = nums;
+                        $guessTip_text.html('太小了，在['+rangeMin+'-'+rangeMax+']之间!');
+                        $inputNubmer.html(0);
+                    }else{					//数字大了
+                        rangeMax = nums;
+                        $guessTip_text.html('数字太大了，在['+rangeMin+'-'+rangeMax+']之间！');
+                        $inputNubmer.html(0);
+                    }
+                }
+            });
+        }
+
+        ok({init:true});
+        //alert("加油!游戏即将开始。。。");
+
+        $(function(){
+            $doc
+                .on('touchstart', '.guessBox-li', function(){
+                    var $li = $(this),
+                        num = $li.attr('num'),
+                        type = $li.attr('type');
+                    //点击的是ok或del按钮
+                    if( type ){
+                        switch(type){
+                            case 'ok':
+                                ok();
+                                break;
+                            case 'del':
+                                delNum();
+                                break;
+                        }
+                        return;
+                    }
+                    //点击的是数字按键
+                    addNum(num);
+                })
+                .on('click', '.guess-a', function(){
+                    if( confirm('时光倒流需要消耗10个人品，确定要执行吗？') ){
+                        $.get('/dashixiongwx/game/again', function(res){
+                            res = JSON.parse(res);
+                            if( res.canHePlay ){
+                                location.href = '/dashixiongwx/game/guess';
+                                return;
+                            }
+                            //不能再玩了
+                            alert('抱歉，你的人品不够^_^');
+                        });
+                    }
+                    return false;
+                });
+        });
+
+    })(window, document, jQuery);
+</script>

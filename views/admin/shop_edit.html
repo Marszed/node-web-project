@@ -1,0 +1,47 @@
+<style>
+	h1{
+		font-size : 32px;	
+		padding : 20px;
+	}
+	p{
+		margin : 20px 10px;	
+	}
+	input {
+		line-height : 28px;	
+		border : 1px solid #CCC;
+	}
+	.submit{
+		padding : 5px;	
+	}
+	.long-input{
+		width : 300px;	
+	}
+</style>
+
+<form action="/dashixiongwx/admin/shop/${shop.id}/doedit" method="post">
+	<input type="hidden" name="shop[id]" type="text" value="${shop.id}" />
+	<p><label>店名</label> <input name="shop[name]" type="text" value="${shop.name}" /> *</p>	
+	<p><label>描述</label> <input class="long-input" name="shop[description]" type="text" value="${shop.description}" /> *</p>	
+	<p><label>地址</label> <input class="long-input" name="shop[address]" type="text" value="${shop.address}" /> *</p>	
+	<p><label>类型</label> 
+			<select id="shop_type" name="shop[type]" id="type">
+				<option value="direct">直营店</option>
+				<option value="allied">加盟店</option>
+			</select>
+	</p>
+    <p><label>拓展情况</label>
+        <select id="shop_expand" name="shop[expandtype]" id="expand">
+            <option value="在营业中">在营业中</option>
+            <option value="正在拓展">正在拓展</option>
+            <option value="计划拓展">计划拓展</option>
+        </select>
+    </p>
+	<p><input class="submit" type="submit" value="提交" /></p>	
+</form>
+<script type="text/javascript" charset="utf-8">
+	var shop_type ='${shop.type}';
+    var shop_expand = '${shop.expandtype}';
+	$("#shop_type option[value='"+ shop_type +"']").attr("selected", true);
+    $("#shop_expand option[value='"+ shop_expand +"']").attr("selected", true);
+
+</script>

@@ -1,0 +1,47 @@
+<style type="text/css" media="all">
+    #nav{
+        display : none; 
+    } 
+</style>
+
+<p>
+    <a href="/dashixiongwx/admin/setting/add">添加配置项</a>
+</p>
+
+<table>
+	<tr>
+		<th>
+			序号
+		</th>
+		<th>
+			设置key
+		</th>
+        <th>
+			操作
+		</th>
+	</tr>	
+
+{{each(setting, i) sets}}
+	<tr>
+        <td>
+			${i}
+		</td>
+		<td>
+			${setting.settingKey}	
+		</td>
+        <td>
+            <a href="/dashixiongwx/admin/setting/del/${setting.settingKey}" onclick="ondel(this);return false;">删除</a>
+		</td>
+	</tr>
+{{/each}}
+
+</table>
+
+<script type="text/javascript" charset="utf-8">
+    var ondel =  function (ele) {
+        var yes = confirm( '确定要删除么?' );
+        if( yes ){
+            location.href = ele.href; 
+        }
+    };
+</script>

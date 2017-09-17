@@ -1,0 +1,127 @@
+<style>
+    .update:hover, .delete:hover{
+        cursor: pointer;
+    }
+    .input-text{
+        width:300px;
+    }
+    .draw-info{
+        width:144px;
+    }
+</style>
+<h1>签到奖品管理</h1>
+
+<form method="post" action="/dashixiongwx/admin/shop/${shop_id}/draw/add">
+    <table id="sign-table">
+        <thead></thead>
+        <tr style="text-align: center;">
+            <th>名称</th>
+            <th>类型</th>
+            <th>店号</th>
+            <th>库存</th>
+            <th>Val</th>
+        </tr>
+        <tr>
+            <td><input type="text" class="input-text" placeholder="奖品名称，最好带单位，如1人品，可乐1瓶，半山豪宅1栋" name="name"></td>
+            <td>
+                <select name="kind">
+                    <option value="0">道具</option>
+                    <option value="1">人品</option>
+                    <option value="2">实物</option>
+                </select>
+            </td>
+            <td><input type="text" name="shopId" readonly="true" value="${shop_id}"></td>
+            <td><input type="number" placeholder="库存数量" name="count"></td>
+            <td><input type="number" placeholder="人品值/道具id" name="val"></td>
+        </tr>
+        <tr style="text-align: center;">
+            <td colspan="5"><input id="submitClick" type="submit" value="新增"></td>
+        </tr>
+    </table>
+</form>
+<br />
+
+<table>
+    <tr>
+        <th>序号</th>
+        <th>名称</th>
+        <th>类型</th>
+        <th>店号</th>
+        <th>库存</th>
+        <th>VAL</th>
+        <th>操作</th>
+    </tr>
+    <!--循环出数据的所有抽奖记录-->
+    <!--有则列出-->
+    {{if sing_draw.length>0}}
+        {{each(draw,i) sing_draw}}
+        <tr id="${draw.id}">
+            <td>${i+1}</td>
+            <td class="draw-info" column="title">${draw.title}</td>
+            <td class="draw-info" column="type">
+                <select name="kind">
+                    <option value="0" {{if draw.type == 0}}selected{{/if}}>道具</option>
+                    <option value="1" {{if draw.type == 1}}selected{{/if}}>人品</option>
+                    <option value="2" {{if draw.type == 2}}selected{{/if}}>实物</option>
+                </select>
+            </td>
+            <td class="draw-info" column="shopId">${draw.shopId}</td>
+            <td class="draw-info" column="count">${draw.count}</td>
+            <td class="draw-info" column="val">${draw.val}</td>
+            <td><span class="update">编辑</span>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<span class="delete">删除</span></td>
+        {{/each}}
+     <!--无则显示  暂无记录-->
+    {{else}}
+    <tr>
+        <td colspan="7" style="color: red; text-align: center;font-size: 15px;">暂无记录！</td>
+    </tr>
+    {{/if}}
+</table>
+<script type="text/javascript">
+    var $doc = $(document);
+
+    $doc
+        //编辑抽奖奖品
+        .on('click', '.update', function(){
+            var $update = $(this),
+                $parent = $update.closest('tr'),
+                data = {};
+            //有文本框，说明是处于编辑状态，准备提交数据
+            if( $parent.find('input').size() > 3 ){
+                 $parent.find('.draw-info').each(function(){
+                     var $info = $(this),
+                         text = $info.text(),
+                         val = $info.find('input').val();
+                     if( $info.attr('column') == 'type' ) val = $info.find('select').val();
+                     data[ $info.attr('column') ] = val;
+                     if( $info.attr('column') != 'type' ) $info.html(val);
+                });
+                data.id = $parent.attr('id');
+                console.log(data);
+                $.post('/dashixiongwx/admin/shop/1/update/draw', {data:data}, function(res){
+                    if( !res.status ) alert('更新失败！');
+                });
+                $update.text('编辑');
+                return;
+            }
+            //想修改数据，在可编辑的地方添加一个输入框
+            $parent.find('.draw-info').each(function(){
+                var $info = $(this),
+                    text = $info.text();
+                if( $info.attr('column') != 'type' ) $info.html('<input type="text" value="'+ $info.text() +'" />');
+                $update.text('更新');
+            });
+        })
+
+        //删除抽奖奖品
+        .on('click', '.delete', function(){
+            var $delete = $(this),
+                $parent = $delete.closest('tr'),
+                trId = $parent.attr('id');
+                $.post('/dashixiongwx/admin/shop/1/delete/draw',{trId:trId},function(res){
+                    if(res=='success'){
+                        window.location.reload();
+                    }
+                });
+        });
+</script>

@@ -1,0 +1,101 @@
+<style>
+    table{
+        text-align:center;
+        width: 700px;
+    }
+    th{
+        text-align: center;
+        font-size: 15px;
+        border: 1px solid #ffffff;
+    }
+    form input{
+        cursor: pointer;
+        border: 0px;
+        background-color: #64aef7;
+        color: #ffffff;
+    }
+    #submit{
+        cursor: pointer;
+    }
+    span{
+        color: red;
+    }
+</style>
+
+<h1>上传和下载财务报表</h1>
+
+    <form method="post" action="/dashixiongwx/admin/shop/${shop_id}/${user.power}/upload/finance/statement" enctype="multipart/form-data">
+        <!--顶部 上传财务报表-->
+            <table id="uploadTable">
+                <thead></thead>
+                <tr>
+                    <td>请选择文件</td>
+                    <td><input id="fileValue" name="finance" type="file" title="请选择文件" value=""></td>
+                    <td><input id="submitClick" type="submit" value="上传"></td>
+                </tr>
+            </table>
+        <!--<hr>-->
+        <!--底部 财务报表历史记录-->
+
+    </form>
+    <br>
+ <!--循环出财务记录-->
+  <table id="recordsTable">
+      <tr>
+          <th>序号</th>
+          <th>时间</th>
+          <th>文件</th>
+          <th>操作</th>
+      </tr>
+      <!--Finance 可能为空数组-->
+      {{if Finance.length > 0}}
+        {{each(finance,i) Finance}}
+            <tr>
+                <td>
+                    <!--${finance.id}-->
+                    ${i+1}
+                </td>
+                <td>
+                    ${finance.timeStamp}
+                </td>
+                <td>
+                    ${finance.name}
+                </td>
+                <td><a href="http://img.ksmimi.com/uploads/finances/${finance.name}">下载</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a class="delete" href="/dashixiongwx/admin/shop/${shop_id}/${finance.id}/${user.power}/finance/statements/delete">删除</a></td>
+            </tr>
+         {{/each}}
+      {{else}}
+          <tr>
+              <td colspan="4" style="color: red; text-align: center;font-size: 15px;">暂无记录！</td>
+          </tr>
+      {{/if}}
+  </table>
+<script>
+    $(document).ready(function(){
+
+
+        $('#submitClick').click(function(){
+            //获取当前用户的权限、店铺ID
+            var userPower = ${user.power};
+            var shopID = ${shop_id};
+            if(userPower < 3){  //权限低于power=3，不能上传
+                 alert("low power!");
+                return false;
+            }
+            var fileValue = $('#fileValue').val();
+            if(fileValue.length==0){
+               alert("请先选择文件！");
+               return false;
+            }
+        });
+
+        $('.delete').click(function(){
+            if(confirm("你要删除吗？")){
+                return true;
+            }else{
+                return false;
+            }
+        });
+
+    });
+</script>

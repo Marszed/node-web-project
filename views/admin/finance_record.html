@@ -1,0 +1,140 @@
+<style>
+	table, td, th{
+		border : 1px solid #CCC;	
+		padding : 5px;
+		margin : 10px;
+	}
+	table{
+		width : 80%;	
+	}
+	h1{
+		padding : 10px;
+		font-size : 20px;	
+	}
+	.money, .add {
+		padding : 10px;	
+	}
+	.good{
+		font-size : 18px;
+		color : green;	
+	}
+	.bad{
+
+		color : red;
+	}
+	.order-create{
+		color : red;	
+	}
+	.order-delivering{
+		color : green;	
+	}
+	.order-receive{
+		color : #CCC;	
+	}
+	.add-record-table{
+		margin-bottom : 30px;	
+	}
+</style>
+
+
+
+<h1>
+	<a href="/dashixiongwx/admin/shop/${shop_id}/finance/${pre_date_y}/${pre_date_m}/${pre_date_d}">
+		&lt;&lt;前一天 
+	</a>
+		${m}月${d}日财务日志账
+		<a href="/dashixiongwx/admin/shop/${shop_id}/finance/${next_date_y}/${next_date_m}/${next_date_d}">
+		后一天&gt;&gt;
+	</a>
+</h1>
+<!--
+<p class="add">
+	<a href="/dashixiongwx/admin/shop/${shop_id}/finance/add/${y}/${m}/${d}">添加记录</a>	
+</p>
+-->
+<h1></h1>
+<form action="/dashixiongwx/admin/shop/${shop_id}/finance/doadd/${y}/${m}/${d}" method="post">
+	<table class="add-record-table">
+		<tr><th colspan="6">添加财务记录</th></tr>
+		<tr><th>摘要</th><th>借方</th><th>贷方</th><th>结余</th><th>备注</th><th></th></tr>
+		<tr>
+			<td><input name="record[digest]" type="text" /></td>
+			<td><input name="record[inCount]" type="text" /></td>
+			<td><input name="record[outCount]" type="text" /></td>
+			<td><input name="record[remain]" type="text" /></td>
+			<td><input name="record[comment]" type="text" /></td>
+			<td><input class="submit" type="submit" value="添加" /></td>
+		</tr>
+	</table>
+</form>
+<table>
+	<tr>
+		<th>
+			序号	
+		</th>
+		<th>
+			摘要
+		</th>
+		<th>
+			借方(元)
+		</th>
+		<th>
+			贷方(元)
+		</th>
+		<th>
+			结余(元)
+		</th>
+		<th>
+			备注
+		</th>
+		<th>
+			操作
+		</th>
+	</tr>	
+
+{{each(record, i) records}}
+	<tr>
+		<td>
+			${i+1}
+		</td>
+		<td>
+			${record.digest}
+		</td>
+		<td>
+			{{if record.inCount}}
+				${record.inCount}
+			{{/if}}
+		</td>
+		<td>
+			{{if record.outCount}}
+				${record.outCount}
+			{{/if}}
+		</td>
+		<td>
+			{{if record.remain}}
+				${record.remain}
+			{{/if}}
+		</td>
+		<td>
+			${record.comment}
+		</td>
+		<td>
+			<a class="action-del" href="/dashixiongwx/admin/shop/${shop_id}/finance/del/${record.id}">删除</a> | 
+			<a href="/dashixiongwx/admin/shop/${shop_id}/finance/edit/${y}/${m}/${d}/${record.id}">编辑</a>
+		</td>
+	</tr>
+{{/each}}
+
+</table>
+
+<script type="text/javascript" charset="utf-8">
+	$(function(){
+		$('a.action-del').click(function(e){
+			var yes = confirm('真的要删除? 财务数据很重要的哦');
+			if(yes){
+				location.href = this.href;	
+			}
+			return false;
+		});
+	});
+</script>

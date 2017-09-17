@@ -1,0 +1,142 @@
+<style type="text/css" media="all">
+    a.add{
+        margin : 10px; 
+    }
+</style>
+<p class="add">
+    <a href="/dashixiongwx/admin/shop/${shop_id}/employee/add">添加员工&gt;&gt;</a>
+    &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="selectByShopId" size="12" placeholder="请输入店铺ID"/>
+    <input type="button" id="btnSelect" value="查询"/>
+    <span id="tip" style="color: red;display: none;">亲,只能输入数字!</span>
+</p>
+
+<table class="tab1">
+	<tr>
+		<th>
+			员工号
+		</th>
+		<th>
+	        姓名	    
+		</th>
+        <th>
+            userId
+        </th>
+		<th>
+			身份证号
+		</th>
+        <th>
+			所在分店ID
+		</th>
+		<th>
+			员工类型
+		</th>
+        <th>
+			业务级别
+		</th>
+        <th>
+			银行
+		</th>
+        <th>
+			工资卡号
+		</th>
+        <th>
+			手机
+		</th>
+        <th>
+			QQ
+		</th>
+        <th>
+			微信号
+		</th>
+        <th>
+			操作
+		</th>
+	</tr>	
+
+{{each(employee, i) employees}}
+	<tr>
+
+		<td>
+			${employee.id}
+		</td>
+		<td>
+			<a href="/dashixiongwx/admin/shop/${shop_id}/${employee.idCardNum}/barcode" target="_blank" title="查看用户">${employee.name}</a>
+		</td>
+        <td>
+            ${employee.userId}
+        </td>
+		<td>
+			${employee.idCardNum}
+		</td>
+        <td class="shopid" shopIdVal="${employee.shopId}">
+			${employee.shopId}
+		</td>
+        <td>
+            {{if employee.type == 'fulltime'}}
+            全职
+            {{/if}}
+            {{if employee.type == 'parttime'}}
+            兼职
+            {{/if}}
+            {{if employee.type == ''}}
+            离职
+            {{/if}}
+		</td>
+        <td>
+			${employee.level}
+		</td>
+        <td>
+			${employee.bankName}
+		</td>
+        <td>
+			${employee.bankCardNum}
+		</td>
+        <td>
+			${employee.mobile}
+		</td>
+        <td>
+			${employee.qq}
+		</td>
+        <td>
+			${employee.wxNick}
+		</td>
+		<td>
+			&nbsp;<a class="action" type="edit" href="/dashixiongwx/admin/shop/${shop_id}/employee/${employee.id}/edit">编辑</a>
+		</td>
+	</tr>
+{{/each}}
+
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#btnSelect').click(function(){
+            var $val = $('#selectByShopId').val()-0;
+            if($val){
+                $('#tip').hide();
+                $('.shopid').each(function(i,domEle){
+                    if($val != $(this).attr('shopIdVal')) {
+                        $(this).parent('tr').hide();
+                    }
+                    if($val == $(this).attr('shopIdVal')) {
+                        $(this).parent('tr').show();
+                    }
+                 });
+            } else if($val == ''){
+                location.reload();
+            } else{
+                $('#tip').show();
+            }
+
+        });
+    });
+</script>
+<script type="text/javascript">
+    document.onkeydown = function (e) {
+        var theEvent = window.event || e;
+        var code = theEvent.keyCode || theEvent.which;
+        if (code == 13) {
+            $("#btnSelect").click();
+        }
+    }
+</script>

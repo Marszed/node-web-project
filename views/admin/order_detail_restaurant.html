@@ -1,0 +1,343 @@
+<style>
+    body{
+        color:#000;
+    }
+	ul,li,p{margin:0;padding:0;}
+	h1{
+		font-size : 18px;	
+		line-height : 24px;
+		margin-bottom : 5px;
+		text-align : center;
+	}
+	h2{
+		line-height : 18px;
+		font-size:16px;
+		border-bottom : 1px dashed #888;		
+		padding : 0px 8px 6px 0;
+		margin-bottom : 10px;
+		color : #000;
+
+	}
+	ul{
+		margin-bottom : 20px;
+		list-style : none;
+	}
+	li{
+		color : #000;
+		line-height:1.2;
+		list-style:disc;
+	}
+	.num{
+		color : #000;
+	}
+    .bold{font-weight:bold;}
+    .fs14{
+        font-size:14px;
+    }
+	.bigNum{
+		color : #000;
+        font-size:24px;
+        font-weight:bold;
+	}
+	.total-pay, .total-num{
+		color : orange;	
+		font-size : 18px;
+	}
+	.back-to-store{
+		margin-bottom : 15px;	
+	}
+	.qr{
+		text-align : center;	
+	}
+	.qr img,code {
+		width : 90%;	
+	}
+
+	.say{
+		color : #000;
+		text-align : left;			
+		font-weight : 900;
+		font-size : 18px;
+		padding : 10px 0;
+	}
+	.qr-head{
+		margin-top : 10px;	
+	}
+	.qr-head, .qr-foot{
+		text-align : center;	
+		font-size : 16px;
+	}
+	.shop-name{
+		color : #000;	
+		font-weight : 700;
+	}
+	.info-backup{
+		margin : 35px 0;
+		text-align : center;
+		border-top: solid 1px #888;
+	}
+	.info-backup h4{
+		margin : 10px 0 10px 0;
+	}
+	.info-block{
+		margin-top : 20px;	
+	}
+	.print{
+		text-align : center;	
+	}
+	.print a{
+		padding : 10px;	
+		display : block;
+	}
+	.print a:hover{
+		background : #40A0C0;	
+		color : #FFF;
+	}
+	.shop-group{
+		border : 1px solid #000;	
+		font-size : 18px;	
+		line-height : 24px;
+		margin-bottom : 5px;
+		text-align : center;
+	}
+	.intime{
+		font-size : 10px;		
+	}
+    .info-address{
+        border : 1px solid #000;
+        font-weight:bold;
+        font-size:24px;
+    }
+    .express-info label{
+        text-decoration : underline; 
+    }
+    .margin_b_10{
+        margin-bottom : 10px; 
+    }
+	@media print{
+		#nav,.print,.shortcut,.nobackup, #top{
+			display : none;	
+		}	
+		ul,ol{
+			font-size : 12px;	
+			line-height : 12px;
+		}
+	}
+    .bag{
+        font-size:20px;
+    }
+
+</style>
+<div class="print">
+	<a id="print" onclick="return false;" href="#">打印送货单</a>
+</div>
+
+<p class="shortcut">
+【按P键即可打印】
+</p>
+<div class="nobackup">
+    <!--
+    {{if !query.nobackup}}
+    {{else}}
+    {{/if}} 
+    <a id="remove_backup" href="/dashixiongwx/admin/shop/${shop_id}/order/${order.id}/detail?nobackup=1">去掉财务联和送货联</a>
+    -->
+    <a id="remove_backup" style="position:fixed;" >去掉财务联和送货联</a>
+    <br>
+    <a id="remove_finance" style="position:fixed;">去掉财务联</a>
+</div>
+
+<div class="container">
+	<p class="say">
+		{{if motto}}
+			${motto.content}
+		{{else}}
+			外卖半个钟，呼叫大师兄！
+		{{/if}}
+	</p>
+
+	<h2>收货信息（ID:${order.id},序号:${id}）</h2>
+	<ul class="info">
+		<li>${order.intime}</li>
+		<li>
+            ${order.name}，<span class="bold fs14">${order.mobile}</span>
+            <span class="bold fs14">
+                {{if order.shortTel}}
+                 短号:${order.shortTel}
+                {{/if}}
+            </span>
+        </li>
+		<li><span class="info-address">${order.address}</span></li>
+	</ul>
+
+	{{if order_snapshot.requirements}}
+	<h2>其他吩咐</h2>
+		<ul class="info">
+			{{each(requirement, i) order_snapshot.requirements}}
+			<li>
+				<p>{{html requirement}}</p>
+			</li>
+			{{/each}}
+		</ul>
+	{{/if}}
+
+	<h2>
+		购物袋信息(<strong class="total-num">${order_snapshot.total_num}</strong>件东西，共
+        {{if shop_id == 7 && order_snapshot.discount}}
+        <strong class="total-pay">${order_snapshot.total_pay.toFixed(1)}</strong> 元。
+        {{else}}
+            <strong class="total-pay">${order_snapshot.total_pay.toFixed(1)}</strong> 元。
+        {{/if}}
+		{{if deliver_info}}
+		，含${deliver_info.price}元跑腿费
+		{{/if}}	
+		)
+	</h2>
+	<ul class="bag">
+		{{each(product, i) order_snapshot.products_bought}}
+		<li>
+        <p><span class="title">${product.title}</span> <strong class="price">${product.price_deal}元</strong>/<span class="unit">${product.unit}</span> <span class="num {{if product&&product.count-0>1}}bigNum{{/if}}">x${product.count}</span></p>
+		</li>
+		{{/each}}
+	</ul>
+    {{if order_snapshot.tool_ids}}
+    <h2>道具信息</h2>
+    <p>
+        使用了${order_snapshot.tool_ids.length} 个道具
+    </p>
+    {{/if}}
+    
+    {{if order_snapshot.express_info_fetch}}
+    <h2>取件信息</h2>
+    <p>
+        ${order_snapshot.express_info_fetch} 
+    </p>
+    {{/if}}
+
+    {{if order_snapshot.express_info_sent}}
+    <h2>寄件信息</h2>
+	<div class="express-info">
+        <p class="margin_b_10 margin_b_10">
+            <label for="">寄件公司 </label>: ${order_snapshot.express_info_sent.company}
+        </p>
+        <p class="margin_b_10 margin_b_10">
+            <label for="">收件人 </label>: ${order_snapshot.express_info_sent.receiver.replace(/undefined/g,'')}
+        </p>
+        <p class="margin_b_10">
+            <label for="">寄件人 </label>: ${order_snapshot.express_info_sent.sender.replace(/undefined/g,'')}
+        </p>
+	</div>
+    {{/if}}
+
+
+	<p class="qr-head">微信扫扫, 微信下单</p>
+	<div class="qr">
+		<img src="http://img.ksmimi.com/uploads/articles/d0ee2890b56ffb2801d12df5faaedb12.jpeg"	/>
+	</div>
+	<p class="qr-foot">闪电送货，货到付款</p>
+
+	{{if !query.nobackup}}
+	<div class="info-backup none">
+		<h4>送货联</h4>	
+		<p>时间: ${order.intime}</p>
+		<div>
+			订单号${order.id}: ${order_snapshot.total_pay.toFixed(1)}元
+		</div>
+		<!--
+		<img class="code" src="http://apps.99wed.com/baiduapp/barcode/barcode.php?codebar=BCGcode39&text=s1-1234&resolution=2&thickness=30"/>
+		-->
+	</div>
+	<div class="info-backup info-finance">
+		<h4>财务联</h4>	
+		<p>时间: ${order.intime}</p>
+		<div>
+			订单号${order.id}: ${order_snapshot.total_pay.toFixed(1)}元
+		</div>
+	</div>
+	{{/if}}
+
+</div>
+
+
+<script src="http://s.ksmimi.com/dsx/jspro/jquery.cookie.js"></script>
+<script>
+    $(function(){
+
+        var finance = $.cookie('finance');
+        if( finance == 'show' ){
+            $('.info-backup').hide();
+            $('#remove_backup').text('添加财务联和送货联');
+        }else{
+            $('.info-backup').show();
+            $('#remove_backup').text('去掉财务联和送货联');
+        }
+
+        $('#remove_backup').click(function(){
+            var f = $.cookie('finance');
+            if( f == 'show' ){
+                $(this).text('去掉财务联和送货联');
+                $.cookie('finance', 'hide', {expires:30, path:'/'});
+                $.cookie('finance2', 'hide', {expires:30, path:'/'});
+            }else{
+                $(this).text('添加财务联和送货联');
+                $.cookie('finance', 'show', {expires:30, path:'/'});
+                $.cookie('finance2', 'show', {expires:30, path:'/'});
+            }
+            $('.info-backup').toggle();
+            return;
+        });
+
+
+        //---lufeng------start----
+        var finance2 = $.cookie('finance2');
+        if( finance2 == 'show' ){
+            $('.info-finance').hide();
+            $('#remove_finance').text('添加财务联');
+        }else{
+            $('.info-finance').show();
+            $('#remove_finance').text('去掉财务联');
+        }
+
+        $('#remove_finance').click(function(){
+
+            var f2 = $.cookie('finance2');
+            if( f2 == 'show' ){
+                $(this).text('去掉财务联');
+                $.cookie('finance2', 'hide', {expires:30, path:'/'});
+            }else{
+                $(this).text('添加财务联');
+                $.cookie('finance2', 'show', {expires:30, path:'/'});
+            }
+            $('.info-finance').toggle();
+            return;
+        });
+        //---lufeng------end----
+    });
+    var shop_id = ${shop_id};
+    var order_id = ${order.id};
+    var print_docket =  function () {
+        //更改订单状态
+        $.get( '/dashixiongwx/admin/shop/'+ shop_id +'/order/'+ order_id +'/status/update/1' );
+        window.print();
+    };
+
+	$(document).keyup(function(e){
+		if(e.keyCode == 80){
+            print_docket();
+		}else if(e.keyCode == 68){
+            var href = $('#remove_backup').attr('href');
+			location.href = href;
+		}
+	}); $( '#print' ).click(function () {
+        print_docket();
+    });
+
+    $(function(){
+        //自动点击打印
+        var search = location.search;
+        if( search.indexOf('auto_print=1') != -1 ){
+            window.print();
+        }
+    });
+
+</script>

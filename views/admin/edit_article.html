@@ -1,0 +1,35 @@
+<style>
+	p{
+		margin : 0 0 30px 0;	
+	}
+	.editor{
+		width : 800px;	
+		height : 500px;
+	}
+</style>
+
+<h1> 修改文章 </h1>
+<form action="/dashixiongwx/admin/shop/${shop_id}/article/doedit/${article.id}" method="POST">
+	<input name="article[id]" type="hidden" value="${article.id}" />
+	<p>
+		标题 <input name="article[title]" type="text" value="${article.title}" />
+		时间戳 <input name="article[timeStamp]" type="text" value="${article.timeStamp}" />
+	</p>
+    <p>
+		作者 <input name="article[author]" type="text" value="${article.author}" />
+	</p>
+    <p>
+		作者id <input name="article[userId]" type="text" value="${article.userId}" />
+	</p>
+
+    <p>
+		showOrder <input name="article[showOrder]" type="text" value="${article.showOrder}" />
+	</p>
+	<p>
+		<textarea class="editor" name="article[content]" >${article.content}</textarea>
+	</p>
+
+	<p>
+		<input type="submit" value="提交" />
+	</p>
+</form>

@@ -1,0 +1,58 @@
+<style>
+	h1{
+		font-size : 32px;	
+		padding : 20px;
+	}
+	p{
+		margin : 20px 10px;	
+	}
+	input,textarea {
+        padding : 5px;
+		border : 1px solid #CCC;
+        width : 300px;
+        font-size : 14px;
+	}
+    textarea{
+        height : 100px; 
+    }
+    label{
+        width : 100px; 
+    }
+	.submit{
+		padding : 5px;	
+	}
+</style>
+
+
+<h1>修改外卖单</h1>
+<form action="/dashixiongwx/admin/shop/${shop_id}/takeaway/doedit" method="post">
+    <input type="hidden" name="takeaway[id]" id="" value="${takeaway.id}" />
+    <table border="0">
+        <tr>
+            <td><label>店铺名称</label></td>
+            <td><input name="takeaway[name]" type="text" value="${takeaway.name}" /> *</td>
+        </tr>
+        <tr>
+            <td><label>地址</label></td>
+            <td><input name="takeaway[address]" type="text" value="${takeaway.address}" /> *</td>
+        </tr>
+        <tr>
+            <td><label>简介</label></td>
+            <td><input name="takeaway[description]" type="text" value="${takeaway.description}" /> *</td>
+        </tr>
+        <tr>
+            <td><label>显示顺序</label></td>
+            <td><input name="takeaway[showOrder]" type="text" value="${takeaway.showOrder}" /> *</td>
+        </tr>
+        <tr>
+            <td><label>电话(每行一个)</label></td>
+            {{if takeaway.tels}}
+            <td><textarea name="takeaway[tels]"/>${takeaway.tels}</textarea></td>
+            {{else}}
+            <td><textarea name="takeaway[tels]" value="" /></textarea></td>
+            {{/if}}
+        </tr>
+
+    </table>
+    <p><input class="submit" type="submit" value="提交" /></p>	
+</form>

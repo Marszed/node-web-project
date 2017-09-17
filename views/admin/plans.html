@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<link href='http://a.ksmimi.com/global/csspro/calendar/fullcalendar.css' rel='stylesheet' />
+<link href='http://a.ksmimi.com/global/csspro/calendar/fullcalendar.print.css' rel='stylesheet' media='print' />
+<script src='http://a.ksmimi.com/global/jspro/jquery/jquery-1.11.2.min.js'></script>
+<script src='http://a.ksmimi.com/global/jspro/jquery-plugin/jquery-ui.custom.min.js'></script>
+<script src='http://a.ksmimi.com/global/jspro/jquery-plugin/jquery.cookie.js'></script>
+<script src='http://a.ksmimi.com/global/jspro/jquery-plugin/moment.min.js'></script>
+<script src='http://a.ksmimi.com/global/jspro/jquery-plugin/fullcalendar.min.js'></script>
+
+<style>
+
+	body {
+		margin: 40px 10px;
+		padding: 0;
+		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+		font-size: 14px;
+	}
+
+	#calendar {
+		max-width: 900px;
+		margin: 0 auto;
+        position:relative;
+	}
+
+    .event_input{
+        width:100%;
+        border:none;
+        background:#fff;
+        box-sizing:content-box;
+        padding:0 3px;
+        color:#333;
+    }
+    .fc-title{
+        padding:0 2px;
+    }
+    .cal_close{
+        width: 18px;
+        height: 18px;
+        position: absolute;
+        z-index: 100;
+        left : -3px;
+        top: -7px;
+        background-color: #fff;
+        color: #333;
+        text-align: center;
+        line-height: 18px;
+        font-family: Arial;
+        border-radius: 11px;
+        border:1px solid red;
+    }
+    .fc .color-li{
+        list-style: none;
+        height: 26px;
+        width: 30px;
+        margin-left: 0px;
+        cursor:pointer;
+        border:2px solid #fff;
+    }
+    .fc .color-li-border{
+        border:2px solid red;
+    }
+
+</style>
+</head>
+<body>
+
+	<div id='calendar'></div>
+
+    <script>
+        (function(win, doc, $){
+            var $calendar = $('#calendar'),
+                $doc = $(doc);
+            //根据时间戳获取日期
+            var getDateByTimestamp = function( timeStamp, getTime ){
+                var dt = typeof timeStamp == 'object' ? timeStamp : new Date(timeStamp),
+                    m = dt.getMonth()+ 1,
+                    d = dt.getDate(),
+                    h = dt.getHours(),
+                    minus = dt.getMinutes(),
+                    s = dt.getSeconds();
+                    if( m < 10 ) m = '0' + m;
+                    if( d < 10 ) d = '0' + d;
+                    if( h < 10 ) h = '0' + h;
+                    if( minus < 10 ) minus = '0' + minus;
+                    if( s < 10 ) s = '0' + s;
+                var date = dt.getFullYear() +'-'+ m +'-'+ d + (getTime ? (' '+ h +':'+ minus +':'+ s) : '');
+                return date;
+            };
+            var log = function( msg ){
+                if( win.console ) console.log(msg);
+            };
+            var warning = function(msg){
+                alert('保存失败，请不要关闭当前窗口');
+            };
+            var getTimeAreaByDate = function(){
+                var dt = new Date(),
+                    y = dt.getFullYear(),
+                    m = dt.getMonth()+1;
+                var start = y + '-' + (m-1) + '-' + '15 00:00:00',
+                    end = y + '-' + (+m+1) + '-' + '15 00:00:00';
+                console.log('start', start);
+                console.log('end', end);
+                return {
+                    start : new Date(start).getTime(),
+                    end : new Date(end).getTime()
+                };
+            };
+
+            //用以设置光标位置
+            $.fn.setCursorPosition = function(position){
+                if(this.lengh == 0) return this;
+                return $(this).setSelection(position, position);
+            };
+            $.fn.setSelection = function(selectionStart, selectionEnd) {
+                if(this.lengh == 0) return this;
+                input = this[0];
+                if (input.createTextRange) {
+                    var range = input.createTextRange();
+                    range.collapse(true);
+                    range.moveEnd('character', selectionEnd);
+                    range.moveStart('character', selectionStart);
+                    range.select();
+                } else if (input.setSelectionRange) {
+                    input.focus();
+                    input.setSelectionRange(selectionStart, selectionEnd);
+                }
+                return this;
+            };
+            $.fn.focusEnd = function(){
+                this.setCursorPosition(this.val().length);
+            };
+
+            function dayClickHandler(date, jsEvent, view) {
+                var start = end = date.format();
+                var title = prompt('计划概要：'),
+                    cookie_color = $.cookie('color');
+                var eventData;
+                if (title) {
+                    eventData = {
+                        title: title,
+                        start: start,
+                        end: end,
+                        color : cookie_color ? cookie_color : ''
+                    };
+                    $calendar.fullCalendar('renderEvent', eventData, true);
+                    //保存计划
+                    eventData.start = new Date(start+' 00:00:00').getTime();
+                    eventData.end = new Date(end+' 00:00:00').getTime();
+                    //将数据记录到数据库
+                    $.post('/dashixiongwx/api/savePlan', {data:eventData}, function(res){
+                         if( !res.status && res.msg ) log(res.msg);
+                    });
+                }
+                $calendar.fullCalendar('unselect');
+            }
+            function eventResizeHandler( event, delta, revertFunc, jsEvent, ui, view ){
+                try{
+                    var start = new Date(event.start.format()+' 00:00:00').getTime();
+                        eventData = {
+                            id : event.id,
+                            startTime : start,
+                            endTime : event.end ? new Date(event.end.format()+' 00:00:00').getTime() : start
+                        };
+                    //console.log('start', getDateByTimestamp(eventData.startTime));
+                    //console.log('end', getDateByTimestamp(eventData.endTime));
+                    $.post('/dashixiongwx/api/updatePlan', {data:eventData}, function(res){
+                         if( !res.status && res.msg ) log(res.msg);
+                    });
+                }catch(e){
+                    console.log(e);
+                    alert('保存失败，可以尝试刷新后再操作');
+                }
+            }
+            function eventDropHandler(event, delta, revertFunc, jsEvent, ui, view){
+                eventResizeHandler.apply(this, arguments);
+            }
+            function eventClickHandler(event, jsEvent, view){
+                var $event = $(this),
+                    $target = $(jsEvent.target);
+                    event_text = $event.find('span').text();
+                if( $event.find('input').size() || $target.hasClass('cal_close') ) return;
+                $event
+                    .append('<input type="text" class="event_input" id="'+ event.id +'" value="'+event_text+'" />')
+                    .find('span').hide().end()
+                    .find('input').focusEnd();
+            }
+            function eventMouseoverHandler(event, jsEvent, view){
+                var $event = $(this),
+                    $close = $event.find('.cal_close');
+                if( !$close.size() ){
+                    $event.append('<div class="cal_close" cal_id="'+event.id+'">X</div>')
+                }else{
+                    $close.show();
+                }
+            }
+            function eventMouseoutHandler(event, jsEvent, view){
+                var $event = $(this),
+                    $close = $event.find('.cal_close');
+                $close.hide();
+            }
+            function viewRenderHandler(){
+                //给页面追加一个换颜色的功能
+                var $fc_left = $('.fc-left'),
+                    colors = ['#4c87ab', '#9a4a2f', '#f09472', '#eeca6d', '#a2812e', '#819626', '#805eb1', '#d1e968', '#e97577'];
+                var color_box = [
+                    '<div class="color-box">',
+                        '<ul class="color-ul">',
+                            (function(){
+                                var lis = [];
+                                colors.forEach(function(color, i){
+                                    lis.push('<li class="color-li" color="'+color+'" style="background-color:'+color+'"></li>');
+                                });
+                                return lis.join('');
+                            })(),
+                        '</ul>',
+                    '</div>'
+                ];
+                $fc_left.append( color_box );
+                //初始化颜色，标明之前选的是哪个颜色
+                var cookie_color = $.cookie('color');
+                if( cookie_color ) $('.color-li[color='+ cookie_color +']').addClass('color-li-border');
+            }
+            function eventRenderHandler(event, element){
+                $(element).attr('title', event.title);
+            }
+
+            $doc.ready(function(){
+                var dateObj = getTimeAreaByDate();
+                $.get('/dashixiongwx/api/getPlans', {data:dateObj}, function(res){
+                    $calendar.fullCalendar({
+                        buttonText: {
+                            today: '今天',
+                            month: '月',
+                            week: '周',
+                            day: '日'
+                        },
+                        allDayText: "全天",
+                        monthNames: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+                        monthNamesShort: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+                        dayNames: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+                        dayNamesShort: ["日", "一", "二", "三", "四", "五", "六"],
+                        header: {
+                            left: 'today', //还可以加上: prev,next
+                            center: 'title',
+                            right: 'month' //还可以加上“agendaWeek”
+                        },
+                        defaultDate: getDateByTimestamp( new Date() ),
+                        selectable: true,
+                        //selectHelper: true,
+                        dayClick: dayClickHandler, //添加事件
+                        eventResize : eventResizeHandler, //修改时间后更新信息
+                        eventDrop : eventDropHandler,
+                        eventClick : eventClickHandler,
+                        eventMouseover : eventMouseoverHandler,
+                        eventMouseout : eventMouseoutHandler,
+                        viewRender : viewRenderHandler,
+                        eventRender : eventRenderHandler,
+                        editable: true,
+                        //eventLimit: true, // allow "more" link when too many events
+                        events : res
+                    });
+                });
+
+                //input失去焦点后还原日历样式
+                $doc
+                    .on('blur', '.event_input', function(e){
+                        var $input = $(this),
+                            $event = $input.parent(),
+                            $content = $event.find('span'),
+                            id = $input.attr('id'),
+                            text = $input.val();
+                        $content.text(text).show();
+                        $input.remove();
+                        if( text == this.defaultValue ) return;
+                        //更新日历信息
+                        var eventData = {
+                            id : id,
+                            title : text
+                        };
+                        $.post('/dashixiongwx/api/updatePlan', {data:eventData}, function(res){
+                             if( !res.status && res.msg ) log(res.msg);
+                        });
+                    })
+                    .on('keyup', '.event_input', function(e){
+                        if( e.keyCode == 13 || e.keyCode == 27 ) $(this).trigger('blur');
+                    })
+                    .on('click', '.cal_close', function(e){
+                        var $close = $(this),
+                            cal_id = $(this).attr('cal_id'),
+                            eventData = { id : cal_id };
+                        if( win.confirm('真的要删除吗？') ){
+                            //删除计划
+                            $calendar.fullCalendar( 'removeEvents', cal_id);
+                            $.post('/dashixiongwx/api/delPlan', {data:eventData}, function(res){
+                                if( res.status ) $close.parent().remove();
+                            });
+                            return false;
+                        }
+                    })
+                    .on('click', '.color-li', function(){
+                        var $li = $(this),
+                            color = $li.attr('color'),
+                            eventData = {color:color};
+                        $li
+                            .toggleClass('color-li-border')
+                            .siblings().removeClass('color-li-border');
+                            $.cookie('color', color, {expires:180});
+                        //发请求更新当前用户的计划颜色
+                        $.post('/dashixiongwx/api/updatePlanColor', {data:eventData}, function(res){
+                            if( res.status ) location.reload();
+                        });
+                    });
+
+
+            });
+
+        })(window, document, jQuery);
+    </script>
+
+</body>
+</html>

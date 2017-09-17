@@ -1,0 +1,99 @@
+<style>
+	body{
+		background : none;
+	}
+	h2{
+		margin-top : 20px;
+		text-align : center;	
+	}
+	strong{
+		font-size : 24px;
+	}
+</style>
+<script type="text/javascript" charset="utf-8" src="http://${env.staticRoot}/dashixiong_static/jspro/ichart.1.2.min.js"></script>
+<!--
+<canvas id="myChart" width="1000" height="600"></canvas>
+-->
+<div id="myChart"></div>
+<script type="text/javascript" charset="utf-8">
+	var labels = {{html JSON.stringify(labels)}};
+	var nums = {{html JSON.stringify(nums)}};
+</script>
+
+<script type="text/javascript" charset="utf-8">
+$(function(){
+	var data = [
+        	{
+				name : '${query.title}销量',
+        		value:nums,
+        		color:'#1f7e92',
+        		line_width:2
+        	}
+       ];
+	var total_sold = 0;
+	var every_day_sold = 0;
+	for(var i=0; i<nums.length; i++){
+	  	total_sold += nums[i];
+	}
+	every_day_sold = total_sold/nums.length	
+       
+	var chart = new iChart.Area2D({
+			render : 'myChart',
+			data: data,
+			title : '${query.title}最近${day_num}天销售趋势(日销量:'+ every_day_sold.toFixed(1) +')',
+			width : 1280,
+			height : 500,
+			tip:{
+				enable:true,
+				shadow:true,
+				listeners:{
+					//tip:提示框对象、name:数据名称、value:数据值、text:当前文本、i:数据点的索引
+					parseText:function( tip, name, value, text, i ){
+						return name+labels[i]+":<br/> "+value;
+					}
+				}
+				
+			},
+			coordinate:{height:'90%',background_color:'#edf8fa'},
+			sub_option:{
+				hollow_inside:false,//设置一个点的亮色在外环的效果
+				point_size:10
+			},
+			labels:labels 
+		});
+	
+	chart.draw();
+});
+	
+
+
+</script>
+<!--
+<script type="text/javascript" charset="utf-8">
+	var ctx = document.getElementById("myChart").getContext("2d");
+	new Chart(ctx).Line({
+		labels : labels,
+		datasets : [
+			{
+				fillColor : "rgba(151,187,205,0.5)",
+				strokeColor : "rgba(151,187,205,1)",
+				pointColor : "rgba(151,187,205,1)",
+				pointStrokeColor : "#fff",
+				data : nums
+			}
+		]
+		}, {
+			scaleOverlay : true,
+			scaleOverride : false ,
+			scaleSteps : 5,
+			scaleStepWidth : 30,
+			////Boolean - Whether to show labels on the scale	
+			scaleShowLabels : true,
+
+			scaleLabel : "<%= (value-0).toFixed(0) %>",
+			bezierCurve : true,
+			pointDot : true,
+			animationSteps : 20,
+		});
+</script>
+-->

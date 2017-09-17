@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <title>大师兄服务评价</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+
+        }
+        #content{
+            max-width: 640px;
+            margin: 0 auto;
+            background-color: #fdfdfd;
+            padding-bottom: 80px;
+        }
+        .title{
+            margin: 0px 0px 10px 0px;
+            font-size: 18px;
+        }
+        .font-color-red{
+            color: #c83a39;
+        }
+        .evalutation{
+            margin-left: 30px;
+        }
+        .evalutation label{
+            display: inline-block;
+            margin: 3px 0px;
+            color: #757575;
+            margin-left: 10px;
+        }
+        input[type='text']{
+            border-left: 0;
+            border-right: 0;
+            border-top: 0;
+            border-bottom: 2px solid #E9E8F3;
+            width: 90%;
+            height: 40px;
+            font-size: 20px;
+        }
+        h1{
+            text-align: center;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        .submit{
+            position: fixed;
+            text-align: center;
+            background-color: #c83a39;
+            width: 100%;
+            bottom: 0px;
+            height: 50px;
+            line-height: 50px;
+            max-width: 640px;
+        }
+        .submit-span{
+            color: white;
+            font-size: 20px;
+        }
+        img{
+            width: 100%;
+            max-width: 640px;
+        }
+        .product-div{
+            color: #c5c5c5;
+        }
+        .product-li{
+            list-style: none;
+            color: #c5c5c5;
+            margin: 5px 2px 5px 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div id="content">
+    <h1 class="font-color-red">客户评价</h1>
+    {{if products.length}}
+    <div class=" title evalutation product-div">
+        <img src="http://s.ksmimi.com/dsx/img/evaluation.png" alt=""/>
+        订单详情(${date}):
+        <ul class="product-ul">
+            {{each(product, i) products}}
+            <li class="product-li">${product.title}&nbsp;&nbsp;${product.unit}x${product.count}</li>
+            {{/each}}
+        </ul>
+    </div>
+    {{/if}}
+    <div class="evalutation speed">
+        <img src="http://s.ksmimi.com/dsx/img/evaluation.png" alt=""/>
+        <div class="title font-color-red">我们的配送速度如何？</div>
+        <label><input type="radio" name="speed" checked value="快如闪电(20分钟之内)"/>&nbsp;&nbsp;快如闪电(20分钟之内)</label><br/>
+        <label><input type="radio" name="speed" value="发挥正常(30分钟以内)"/>&nbsp;&nbsp;发挥正常(30分钟以内)</label><br/>
+        <label><input type="radio" name="speed" value="有点慢哦(45分钟之内)"/>&nbsp;&nbsp;有点慢哦(45分钟之内)</label><br/>
+        <label><input type="radio" name="speed" value="惨绝人寰,慢到没朋友(1小时以上)"/>&nbsp;&nbsp;惨绝人寰,慢到没朋友(1小时以上)</label>
+    </div>
+    <div class="evalutation  performance">
+        <img src="http://s.ksmimi.com/dsx/img/evaluation.png" alt=""/>
+        <div class="title font-color-red">配货员表现如何？</div>
+        <label><input type="radio" name="performance" checked value="笑容可掬,态度很好"/>&nbsp;&nbsp;笑容可掬,态度很好</label><br/>
+        <label><input type="radio" name="performance" value="没什么表情,好像欠他钱"/>&nbsp;&nbsp;没什么表情,好像欠他钱</label><br/>
+        <label><input type="radio" name="performance" value="态度恶劣,想灭了他"/>&nbsp;&nbsp;态度恶劣,想灭了他</label>
+    </div>
+    <div class="evalutation  performance2">
+        <img src="http://s.ksmimi.com/dsx/img/evaluation.png" alt=""/>
+        <div class="title font-color-red">是否有出现漏配、错配现象？</div>
+        <label><input type="radio" name="performance2" checked value="没有,继续保持"/>&nbsp;&nbsp;没有,继续保持</label><br/>
+        <label><input type="radio" name="performance2" value="有,下次改进"/>&nbsp;&nbsp;有,下次改进</label><br/>
+        <label><input type="radio" name="performance2" value="有,累觉不爱"/>&nbsp;&nbsp;有,累觉不爱</label><br/>
+    </div>
+    <div class="evalutation  extra">
+        <img src="http://s.ksmimi.com/dsx/img/evaluation.png" alt=""/>
+        <div class="title font-color-red">唠叨两句:</div>
+        <input type="text" name="extra" class="extra-input" value=""/>
+    </div>
+    <div class="submit">
+        <span class="submit-span">提交评价</span>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="http://s.ksmimi.com/dsx/jspro/jquery-2.1.1.min.js"></script>
+<script type="text/javascript">
+    var $doc = $(document);
+    var openId = '${openId}',
+            userId = '${userId}',
+            shopId = '${shopId}',
+            orderId = '${orderId}';
+    $doc.ready(function(){
+        var $submit = $('.submit');
+        $submit.click(function(e){
+            var speed = $('input[name="speed"]:checked').val(),
+                    performance = $('input[name="performance"]:checked').val(),
+                    performance2 = $('input[name="performance2"]:checked').val(),
+                    extra = $('.extra-input').val();
+            var args = {
+                    openId: openId,
+                    userId: userId,
+                    shopId: shopId,
+                    content:{
+                        orderId: orderId,
+                        speed: speed,
+                        performance: performance,
+                        performance2: performance2,
+                        extra: extra
+                    }
+            };
+            var postReq = function(){
+                $.post('/dashixiongwx/api/sava/evalutaion/msg?isAjax=1',{argInfo: args},function(data){
+                    if(data=='sus'){
+                        window.location.href='http://www.ksmimi.com/dashixiongwx/api/sava/evalutaion/msg?wx_id='+openId+'&shopId='+shopId;
+                    }
+                });
+            }
+            postReq();
+        });
+    });
+</script>
+</html>

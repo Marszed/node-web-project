@@ -1,0 +1,438 @@
+<!doctype html>
+<html>
+<head>
+	<title>${shop_id}号店管理处 - 大师兄微信小卖部</title> 
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<!--demo展示所用css，不用关心 begin-->
+<link rel="stylesheet" type="text/css" href="css/reset.css" />
+<!--demo展示所用css end-->
+<!--组件依赖css begin-->
+<link rel="stylesheet" type="text/css" href="css/widget/navigator/navigator.default.css" /><!--皮肤文件，若不使用该皮肤，可以不加载-->
+<!--组件依赖css end-->
+
+<!--组件依赖js begin-->
+<script type="text/javascript" src="js/zepto.js"></script>
+<script type="text/javascript" src="js/extend/touch.js"></script>
+<script type="text/javascript" src="js/extend/iscroll.js"></script>
+<script type="text/javascript" src="js/extend/highlight.js"></script>
+<script type="text/javascript" src="js/extend/parseTpl.js"></script>
+<script type="text/javascript" src="js/gmu.max.js"></script>
+<script type="text/javascript" src="js/navigator.max.js"></script>
+<!--组件依赖js end-->
+
+<style type="text/css">
+
+body{background:#fff;margin: 0;padding: 0;color:#4f6b72; font-family:"微软雅黑","Microsoft YaHei", sans-serif;}
+a{text-decoration:none; color:#40A0C0;}
+.left-fixed {
+    background:#f1f1f1;
+    display: -webkit-box;
+}
+.left-fixed>div {
+    display: -webkit-box;
+    -webkit-box-flex: 1;
+}
+#logo{
+    width:40px;
+    height:40px;
+    -webkit-box-flex: 0;
+}
+.ui-scroller {
+    float: left;
+}
+li{margin-bottom:6px;}
+a{text-decoration:none; color:#40A0C0;}
+table{margin:5px 2% 15px 2%;width:96%;}
+th, td{padding:10px;}
+th{text-align:left;}
+th span{font-weight:normal;}
+.client-name{line-height:1.5em; padding:10px 5px;}
+.requirement{color:#FF1493;}
+.tab-menu{border-bottom-width:0;margin:5px 0 15px;width:100%;border-radius:5px; border-top-width:3px; border-top-color:green;}
+.tab-menu td{border-bottom-width:1px;}
+.tab-menu td.active{border-bottom-width:0;}
+.none{display: none;}
+.time-text{font-size:12px;color:#999;padding-left: 2px;}
+.action-todo-del{font-size: 12px;white-space:nowrap;}
+.nowrap{white-space:nowrap;}
+.a-td a{ display: inline-block; width:50%; text-align: center;float: left;}
+</style>
+</head>
+<body>
+
+<div class="box">
+    <div class="left-fixed">
+        <div id="logo"><img src="img/logo.png" alt="" /></div>
+        <div id="nav">
+            <ul>
+                <li class="ui-state-active"><a href="#">小卖部首页(2)</a></li>
+                <li><a href="#">消息管理</a></li>
+                <li><a href="#">业绩查询</a></li>
+                <li><a href="#">仓库管理</a></li>
+                <li><a href="#">公告管理</a></li>
+                <li><a href="#">货架管理</a></li>
+                <li><a href="#">社区管理</a></li>
+                <li><a href="#">小票箴言</a></li>
+                <li><a href="#">离开状态</a></li>
+                <li><a href="#">用户管理</a></li>
+                <li><a href="#">财务管理</a></li>
+                <li><a href="#">运营统计</a></li>
+                <li><a href="#">本店管理</a></li>
+                <li><a href="#">分店管理</a></li>
+                <li><a href="#">退出</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="todo">
+        <table border="1" bordercolor="#ccc" cellpadding="1" cellspacing="1" >
+            <tr>
+                <th colspan="2">
+                    待办事宜
+                </th>
+            </tr>
+            <tr>
+                <td>
+                        <span>粉丝至少要500。</span><span class="time-text">2小时前</span>
+                </td>
+                <td>
+                    <a class="action-todo-del" href="/dashixiongwx/admin/shop/2/todo/del/11" onclick="return false;">删除</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                        <span>冰箱插上去，卖冷饮才行啊</span><span class="time-text">2小时前</span>
+                </td>
+                <td>
+                    <a class="action-todo-del" href="/dashixiongwx/admin/shop/2/todo/del/10" onclick="return false;">删除</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                        <span>周末前进5包洽洽瓜子。——华哥示</span><span class="time-text">6小时前</span>
+                </td>
+                <td>
+                    <a class="action-todo-del" href="/dashixiongwx/admin/shop/2/todo/del/5" onclick="return false;">删除</a>
+                </td>
+            </tr>
+        </table>
+    </div> 
+    <div>
+        <table border="1" bordercolor="#ccc" cellpadding="1" cellspacing="1" >
+            <tr>
+                <td><a href="" class="nowrap">前一天</a></td>
+                <th> 2号店2月26日(星期三)业绩</th>
+                <td><a href="" class="nowrap">后一天</a></td>
+            </tr>
+            <tr>
+                <td colspan="3" class="a-td">
+                    <a class="profit" href="/dashixiongwx/admin/shop/2/product/sold/2014/2/26">产品利润排行榜</a>
+                    <a class="client-detail" href="/dashixiongwx/admin/shop/2/visitor/detail/2014/2/26">顾客明细</a>
+                </td>
+            </tr>
+        </table>
+    
+    </div>
+    <div id="tab">
+        <table  class="tab-menu" border="1" bordercolor="#ccc" cellpadding="1" cellspacing="1" >
+            <tr>
+                <td align="center" class="active">订单列表</td>
+                <td align="center">综合情况</td>
+            </tr>
+        </table>
+        <div class="content">
+            <table border="1" bordercolor="#ccc" cellpadding="1" cellspacing="1">
+                <thead>
+                    <tr class="client-order">
+                        <th colspan="2">
+                            东区宿舍4310</br>
+                            <span>
+                                2014-02-26 13:30:19(3小时前)
+                            </span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr class="client-order">
+                    <td>
+                        <ul>
+                            <li>
+                            【加多宝】 310ml x 1
+                            </li>
+                        </ul>
+                    </td>
+                    <td class="client-name">
+                        Name:
+                        <a href="/dashixiongwx/admin/shop/2/order/list/1007/梁">
+                            梁
+                        </a>
+                        <br />
+                        Tel:
+                        <a href="tel:15622147998">
+                            15622147998
+                        </a>
+                        <br />
+                        Price:
+                        10.3 元
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <ul class="requirement">
+                            <li>
+                            我是土豪, 我用百元大钞记得带零钱
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2">
+                            <a class="action" orderid="9358" type="deliver" href="/dashixiongwx/admin/shop/2/order/9358/status/update/1" onclick="return false;">配送</a> | 
+                            <a class="action" orderid="9358" type="receive" href="/dashixiongwx/admin/shop/2/order/9358/status/update/2" onclick="return false;">确认收货</a> | 
+                            <a class="action" orderid="9358" type="cancel" href="/dashixiongwx/admin/shop/2/order/9358/status/update/3" onclick="return false;">取消订单</a>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <table border="1" bordercolor="#ccc" cellpadding="1" cellspacing="1">
+                <thead>
+                    <tr class="client-order">
+                        <th colspan="2">
+                            东区宿舍4310</br>
+                            <span>
+                                2014-02-26 13:30:19(3小时前)
+                            </span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr class="client-order">
+                    <td>
+                        <ul>
+                            <li>
+                            【康师傅】红烧牛肉面 x 5
+                            </li>
+                            <li>
+                            【康师傅】鲜虾鱼板面 x 2
+                            </li>
+                            <li>
+                            【统一】老坛酸菜牛肉面 x 2
+                            </li>
+                            <li>
+                            【雀巢】脆脆鲨 巧克力味 x 1
+                            </li>
+                            <li>
+                            【无穷】爱辣鸡米 x 1
+                            </li>
+                            <li>
+                            【乡吧佬】五香茶蛋 x 3
+                            </li>
+                            <li>
+                            【加多宝】 310ml x 1
+                            </li>
+                            <li>
+                            【无穷】爱辣小翅 大师兄说好吃 x 1
+                            </li>
+                        </ul>
+                    </td>
+                    <td class="client-name">
+                        Name:
+                        <a href="/dashixiongwx/admin/shop/2/order/list/1007/梁">
+                            梁
+                        </a>
+                        <br />
+                        Tel:
+                        <a href="tel:15622147998">
+                            15622147998
+                        </a>
+                        <br />
+                        Price:
+                        10.3 元
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <ul class="requirement">
+                            <li>
+                            我是土豪, 我用百元大钞记得带零钱
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                </tbody>
+                <tfoot>
+
+                    <tr>
+                        <td colspan="2">
+                            <a class="action" orderid="9358" type="deliver" href="/dashixiongwx/admin/shop/2/order/9358/status/update/1" onclick="return false;">配送</a> | 
+                            <a class="action" orderid="9358" type="receive" href="/dashixiongwx/admin/shop/2/order/9358/status/update/2" onclick="return false;">确认收货</a> | 
+                            <a class="action" orderid="9358" type="cancel" href="/dashixiongwx/admin/shop/2/order/9358/status/update/3" onclick="return false;">取消订单</a>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <table border="1" bordercolor="#ccc" cellpadding="1" cellspacing="1">
+                <thead>
+                    <tr class="client-order">
+                        <th colspan="2">
+                            东区宿舍4310</br>
+                            <span>
+                                2014-02-26 13:30:19(3小时前)
+                            </span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr class="client-order">
+                    <td>
+                        <ul>
+
+                            <li>
+                            【统一】老坛酸菜牛肉面 x 2
+                            </li>
+                            <li>
+                            【乡吧佬】五香茶蛋 x 1
+                            </li>
+                            <li>
+                            【加多宝】 310ml x 1
+                            </li>
+                            <li>
+                            【统一】老坛酸菜牛肉面 x 2
+                            </li>
+                            <li>
+                            【乡吧佬】五香茶蛋 x 1
+                            </li>
+                            <li>
+                            【加多宝】 310ml x 1
+                            </li>
+                            <li>
+                            【统一】老坛酸菜牛肉面 x 2
+                            </li>
+                            <li>
+                            【乡吧佬】五香茶蛋 x 1
+                            </li>
+                            <li>
+                            【加多宝】 310ml x 1
+                            </li>
+                        </ul>
+                    </td>
+                    <td class="client-name">
+                        Name:
+                        <a href="/dashixiongwx/admin/shop/2/order/list/1007/梁">
+                            梁
+                        </a>
+                        <br />
+                        Tel:
+                        <a href="tel:15622147998">
+                            15622147998
+                        </a>
+                        <br />
+                        Price:
+                        10.3 元
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <ul class="requirement">
+                            <li>
+                            我是土豪, 我用百元大钞记得带零钱
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                </tbody>
+                <tfoot>
+
+                    <tr>
+                        <td colspan="2">
+                            <a class="action" orderid="9358" type="deliver" href="/dashixiongwx/admin/shop/2/order/9358/status/update/1" onclick="return false;">配送</a> | 
+                            <a class="action" orderid="9358" type="receive" href="/dashixiongwx/admin/shop/2/order/9358/status/update/2" onclick="return false;">确认收货</a> | 
+                            <a class="action" orderid="9358" type="cancel" href="/dashixiongwx/admin/shop/2/order/9358/status/update/3" onclick="return false;">取消订单</a>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="resume none">
+            <table border="1" bordercolor="#ccc" cellpadding="1" cellspacing="1">
+                <tbody>
+                <tr>
+                    <th></th>
+                    <th>昨天</th>
+                    <th>今天</th>
+                </tr>	
+                <tr>
+                    <td> 到店顾客数 </td> 
+                    <td> 15 </td>
+                    <td> 1 </td>
+                </tr>
+                <tr>
+                    <td> 订单数 </td> 
+                    <td> 15 </td>
+                    <td> 1 </td>
+                </tr>
+                <tr>
+                    <td> 成交率 </td> 
+                    <td> 15% </td>
+                    <td> 1% </td>
+                </tr>
+                <tr>
+                    <td> 客单 </td>
+                    <td>14.8 元</td>
+                    <td>14.8元</td><!-- 客单 -->
+                </tr>
+                <tr>
+                    <td> 总收入 </td> 
+                    <td>94.4 元</td>
+                    <td>11.8元</td>
+                </tr>
+                <tr>
+                    <td> 利润 </td> 
+                    <td> 37 </td>
+                    <td> 8 </td>
+                </tr>
+                <tr>
+                    <td> 利润率 </td> 
+                    <td> 21.6% </td>
+                    <td> 13.1% </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    (function(){
+         var $leftBtn = $('.left-fixed .left a'),
+             $nav = $('#nav');
+
+         $nav.navigator().on('select', function(){
+             $leftBtn.removeClass('ui-state-active');
+         });
+
+         $leftBtn.click(function(){
+             $nav.navigator('unselect');
+             $(this).addClass('ui-state-active');
+         });
+
+
+         var $tabMenu = $('.tab-menu td');
+         $tabMenu.click(function(){
+             var index = $(this).index();
+             $('#tab>div').eq(index).show().siblings('div').hide();
+             $(this).addClass('active').siblings().removeClass('active');
+         });
+     })();
+</script>
+</body>
+</html>

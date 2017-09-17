@@ -1,0 +1,384 @@
+<style>
+    table, td, th{
+        border : 1px solid #CCC;
+    }
+    ul{
+        padding : 0;
+    }
+    h1{
+        padding : 10px;
+        font-size : 20px;
+    }
+
+
+    table{
+        margin : 10px;
+        width: 70%;
+    }
+    .resume td, .resume th{
+        padding : 5px;
+    }
+
+    .deliver_fatal a{
+        color : #FFF;
+    }
+    @media screen and (max-width:500px){
+        ul,li{margin:0px;padding:0px;}
+    }
+
+    /*---------------------------*/
+
+    .todo li{
+        list-style-type : disc
+    }
+    .todo h3{
+        padding-left : 10px;
+    }
+
+    .count input{
+        width : 20px;
+    }
+
+    .total-pay-td del{
+        display:block;;
+        margin-bottom:5px;
+    }
+    .push-btns input{
+        font-size:16px;
+        margin-left:10px;
+    }
+</style>
+<div class="tab2">
+    <table>
+        <tr>
+            <th>用户ID</th>
+            <th>用户名</th>
+            <th>时间</th>
+        </tr>
+        {{each(res, i) ret}}
+        <tr>
+            <td>${res.user_id}</td>
+            <td>${res.nick}</td>
+            <td>${res.timeStamp}</td>
+        </tr>
+        {{/each}}
+    </table>
+</div>
+
+
+<!--socket.io -->
+<script src="http://www.ksmimi.com:6889/socket.io/socket.io.js"></script>
+
+<!--感恩节活动-->
+<!--<script type="text/javascript">
+    $(document).ready(function(){
+        $('.bgcolor-thansk-giving-day').each(function(index, domEle){
+            var initTime = $(this).attr('bgtmp');
+
+            var speMinuteArr = initTime.split(':'),
+                speMin = speMinuteArr[1];
+            var dt = new Date(initTime);
+            if( (0 == (speMin-0)) || (59 == (speMin-0)) || (0==dt.getMinutes()) || (59==dt.getMinutes())){
+                $(this).closest('tr').find('a').first().css({'border':'1px solid red','padding':'5px'});
+            }
+        });
+    });
+</script>-->
+
+<script type="text/javascript" >
+    var $doc = $(document);
+    var shop_id = ${shop_id},
+            section_id = ${section_id},
+            power = ${power},
+            y = ${y},
+            m = ${m},
+            d = ${d};
+    var notifications = [];
+    var clearAllNotification = function () {
+        notifications.forEach(function (notification, i) {
+            if(  notification.close ){
+                notification.close();
+                return;
+            }
+            notification.cancel && (notification.cancel());
+        });
+    };
+
+
+    var askPermission = function(){
+        if(!window.webkitNotifications){
+            alert('你不是chrome浏览器没有办法开启桌面提醒-_-%');
+            return;
+        }
+        window.webkitNotifications.requestPermission(function(){
+            if(window.console) console.log(window.webkitNotifications.checkPermission());
+        });
+    };
+
+    var notify = function(notify, noSound){
+        if( window.webkitNotifications && window.webkitNotifications.checkPermission() == 0 ){
+            var icon = 'http://www.dangercove.com/html5-notifications/img/icon.png';
+
+            // Create a new notification
+            var notification = window.webkitNotifications.createNotification(icon, '【'+ notify.shop_id +'号店】'+notify.title, notify.message);
+            notification.show();
+            setTimeout(function(){
+                if(  notification.close ){
+                    notification.close();
+                    return;
+                }
+                notification.cancel && (notification.cancel());
+            }, 8000);
+
+            notifications.push( notification );
+        }
+        if( !noSound ){
+            play_order_come_sound();
+            show_warnning();
+        }
+    }
+    //-------------------- warnning
+    var show_warnning = function(){
+        $('.warnning').show();
+    };
+    var hide_warnning = function(){
+        $('.warnning').hide();
+    };
+
+
+    //-------------------- sound
+    var order_come;
+    var play_order_come_sound = function(){
+        if(!order_come){
+            order_come = new Audio('http://s.ksmimi.com/dashixiong_static/res/order_come.mp3');
+        }
+        order_come.play();
+    };
+
+    //-------------------- 用户动作响应
+    var btn_ask_permission = $('a.ask-permission');
+    btn_ask_permission.click(function(){
+        askPermission();
+    });
+
+    //-------------------- 初始化设置
+    if( !(window.webkitNotifications && window.webkitNotifications.checkPermission()) ){
+        btn_ask_permission.hide();
+    }
+
+    /*//"未确认"的订单，每10秒叫一次
+     var $order_create = $('.order-create');
+     var checkOrders = function(){
+     if( $('.order-create').size() > 0 ){
+     play_order_come_sound();
+     s_time = setTimeout(function(){
+     checkOrders();
+     }, 1000*10);
+     }
+     };
+     checkOrders();*/
+
+</script>
+<script>
+    var socket = io.connect('http://'+ location.host +':6889');
+    //通过这个请求上报一下自己的店铺id
+    socket.emit('report_shop_id', {
+        shop_id : shop_id
+    });
+    socket.on('order come', function (data) {
+        if(window.console) console.log(data);
+        if( section_id ){ //有section_id说明是在查看某个店家的订单
+            //推送的消息属于本店的订单才推送消息
+            if( section_id == data.section_id ) notify(data);
+        }else{
+            notify(data);
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    //对订单的各种操作, 如: 配送中,确认收货,取消订单等
+    var $iframe = $('#deliver_iframe'),
+            s_time = 0;
+    $('.action').click(function(){
+        var $a = $(this);
+        var $tr = $a.parents('tr');
+
+        var a = this;
+
+        var $sts = $a.parents('tr').find('.status');
+
+        //抓取值@wuyong
+        var orderId = $(this).attr('orderid');
+        var opration = $(this).text();
+
+        //管理员操作记录@wuyong
+        $.post('/dashixiong/admin/cancleOrder',{orderid:orderId,opration:opration},function(data){});
+
+        if( $a.attr('type')=='cancel' ){
+            $sts.html('<del>订单取消</del>');
+            var name = $a.parents( '.client-order' ).find( '.client-name' ).text();
+            $( '#dialog_msg' ).text( '此订单的货物数量将返回库存, 确定要取消"'+ name +'"的订单?' );
+            $( '#dialog' ).dialog({
+                modal : true,
+                show: {
+                    effect: "fade",
+                    duration: 618
+                },
+                hide: {
+                    effect: "fade",
+                    duration: 618
+                },
+                buttons: {
+                    '确定' : function() {
+                        var This = this;
+                        $.get( '/dashixiongwx/admin/shop/'+ shop_id +'/order/'+ $a.attr('orderid') +'/cancel', function (res) {
+                            $( This ).dialog( "close" );
+                            $tr.remove();
+                            check_num();
+                        });
+                    },
+                    Cancel: function() {
+                        $( this ).dialog( "close" );
+                    }
+                }
+            });
+            return;
+        }
+        $.get(this.href, function(res){
+            if($a.attr('type')=='deliver'){
+                $sts.html('配送中...');
+                $sts[0].className = 'order-delivering status';
+                check_num();
+                //点击配送自动打单
+                var href = $tr.find('.order_id').attr('href') + '&auto_print=1';
+                $iframe.attr('src', href);
+                //取消未确认时的声音提示
+                clearTimeout(s_time);
+            }else if($a.attr('type')=='receive'){
+                $sts.html('已经送达');
+                $sts[0].className = 'order-receive status';
+                $a.parents('tr').removeClass('deliver_fatal');
+                $a.parents('tr').removeClass('deliver_caution');
+                $a.parents('tr').removeClass('deliver_warnning');
+                $a.parents('tr').removeClass('deliver_saved');
+                check_num();
+            }
+
+        });
+    });
+
+    $( '#new_orders' ).click(function () {
+        clearAllNotification();
+        location.href = this.href;
+    });
+
+    //----------------------- todo --------------------------//
+    $( '.action-todo-del' ).click(function () {
+        var a = this;
+        $.get( a.href, function (res) {
+            var li = $( a ).parents( 'li' );
+            li.html( '<del>'+li.html()+'</del>' );
+            $( a ).hide();
+        });
+    });
+
+    //显示各种状态的订单的数目
+    var check_num = function () {
+        $( '.order-create-num' ).text( $( '.order-create' ).size() );
+        $( '.order-delivering-num' ).text( $( '.order-delivering' ).size() );
+        $( '.order-receive-num' ).text( $( '.order-receive' ).size() );
+    };
+
+    //点击跳转到第一个未确认的订单
+    $( '.order-create-num' ).click(function () {
+        var $order_create = $( '.order-create' );
+        if( !$order_create.size() )return;
+        location.href = '#'+$( $order_create[0] ).parents('tr').attr( 'id' );
+    });
+
+    //----------------- init
+    check_num();
+
+    //判断是否新用户
+    var $new_customer = $('img.new_customer'),
+            user_ids = [],
+            back_num = 0,
+            total_num = $new_customer.size(),
+            new_marker = {};
+    //回头率
+    var $order_new = $('.order-new-num'),
+            $order_old = $('.order-old-num'),
+            $back_rate = $('.order-back-rate');
+
+    $new_customer.each(function(){
+        var $new_img = $(this),
+                user_id = $new_img.attr('user_id');
+        if( user_id ){
+            user_ids.push(user_id);
+            if( !new_marker[user_id] ) new_marker[user_id] = [];
+            new_marker[user_id].push( $new_img );
+        }
+    });
+    $.post('/dashixiongwx/admin/shop/'+ shop_id +'/get/order_nums', {user_ids:user_ids, y:y, m:m, d:d},
+            function(res){
+                for(var p in res){
+                    if( res[p] == 0 ){ //今日以前的时间里没下过单，说明是新用户，显示新客户的标识图片
+                        new_marker[p].length && new_marker[p][new_marker[p].length-1].show();
+                    }
+                }
+
+                $new_customer.each(function(){
+                    var $img = $(this);
+                    if( $img.is(':hidden') ) back_num++;
+                });
+
+                //-------------------- 回头率
+                $order_new.html( total_num - back_num );
+                $order_old.html( back_num );
+                $back_rate.find('span').html( ((back_num/total_num)*100).toFixed(1) );
+            });
+
+    //声音推送
+    if(power && power >=6){
+        var $push_btns = $('.push-btns');
+        $.get('/dashixiongwx/admin/shop/' + shop_id + '/set/voice', {isAjax:1}, function(res){
+            var btns = [];
+            $.each(res, function(i, btn){
+                btns.push('<input type="button" class="voice-btn" voice="'+ btn.voice +'" value="'+ btn.title +'" />')
+            });
+            $push_btns.html( btns.join('') );
+        });
+        $doc.on('click', '.voice-btn', function(){
+            var $btn = $(this),
+                    voice = $btn.attr('voice'),
+                    type = 'push voice';
+            var p = {voice:voice, type:type, shop_id:shop_id};
+            $.post('/dashixiongwx/admin/shop/' + shop_id + '/push/voice', {p:p}, function(res){});
+        });
+    }
+
+    var players = {};
+    var play_sound = function(data){
+        if( !players[data.voice] ){
+            players[data.voice] = new Audio('http://img.ksmimi.com/uploads/voices/'+ data.voice);
+        }
+        players[data.voice].play();
+    };
+    //客服给店家推送消息
+    socket.on('push voice', function (data) {
+        if(window.console) console.log(data);
+        play_sound(data);
+    });
+
+
+
+
+</script>
+<script type="text/javascript" charset="utf-8" src="http://s.ksmimi.com/dashixiong_static/jspro/sell_in_shop.js"> </script>
+
+
+
+
+
+

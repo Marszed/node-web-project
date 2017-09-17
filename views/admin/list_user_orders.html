@@ -1,0 +1,179 @@
+<style>
+	table, td, th{
+		border : 1px solid #CCC;	
+	}
+	h1{
+		padding : 10px;
+		font-size : 20px;	
+	}
+	.money {
+		padding : 10px;	
+	}
+	.good{
+		font-size : 18px;
+		color : green;	
+	}
+	.bad{
+
+		color : red;
+	}
+	.order-create{
+		color : red;	
+	}
+	.order-delivering{
+		color : green;	
+	}
+	.order-receive{
+		color : #CCC;	
+	}
+	.profit, .client-detail{
+		padding : 0 0 0 30px;	
+	}
+	.money {
+		padding : 10px;	
+	}
+	.user-name{
+		color : orange;
+	}
+    .android{
+        width: 20px;
+        height: 20px;
+    }
+    .android_span a{
+        line-height:  20px;
+        vertical-align:super;
+        color: #4f6b72;
+    }
+</style>
+
+<h1>
+	
+	<span class="user-name">${user_name}</span> 的所有订单如下：
+	
+</h1>
+
+{{if power>=6}}
+<p class="money">
+	共${orders.length}个订单，共收${total_in.toFixed(1) }元，赚了 ${ (total_in-total_cost).toFixed(1) } 元，利润贡献率为${ profit_rate }%
+    <a class="firstapp"></a>
+</p>
+<p class="apptips" style="padding: 10px;">
+
+</p>
+{{/if}}
+
+<table>
+	<tr>
+		<th>
+			订单id
+		</th>
+		<th>
+			时间
+		</th>
+		<th>
+			客户姓名
+		</th>
+		<th>
+			联系方式
+		</th>
+		<th>
+			地址
+		</th>
+		<th>
+			总价
+		</th>
+		<th>
+			订单详情
+		</th>
+		<th>
+			操作
+		</th>
+	</tr>	
+
+{{each(order, i) orders}}
+	<tr>
+		<td>
+            <span class="android_span">
+                {{if order.snapshot.isapp}}
+                <img class="android" title="app用户，不许怠慢!" src="http://s.ksmimi.com/dashixiong_static/img/android.png"/>
+                {{/if}}
+                <a>${order.id}</a>
+            </span>
+
+		</td>
+		<td>
+			${order.intime}(${order.timeTxt}) 
+			
+		</td>
+		<td>
+			<a href="/dashixiongwx/admin/order/list/${order.userId}/${order.name}">
+				${order.name}
+			</a>
+		</td>
+		<td>
+			${order.mobile}
+		</td>
+		<td>
+			${order.address}
+			{{if order.orderStatus == 0}}
+			(<span class="order-create status">未确认</span>)
+			{{else order.orderStatus == 1}}
+			(<span class="order-delivering status">配送中...</span>)
+			{{else order.orderStatus == 2}}
+			(<span class="order-receive status">已经送达</span>)
+			{{else order.orderStatus == 3}}
+			(<span class="order-receive status">订单取消</span>)
+			{{/if}}
+
+		</td>
+		<td>
+            {{if order.snapshot.total_pay}}
+			    ${order.snapshot.total_pay.toFixed(1)} 元
+            {{else}}
+                ${order.snapshot.total_pay} 元
+            {{/if}}
+		</td>
+		<td>
+			<ul>
+			{{each(product, i) order.snapshot.products_bought}}
+				<li>
+					${product.title} x ${product.count}
+				</li>
+			{{/each}}
+                {{if order.snapshot.isapp}}
+                <span class="apporder" style="color: #ff0000">(app订单)</span>
+                {{/if}}
+			</ul>
+		</td>
+		<td><!--
+			<a href="/dashixiongwx/admin/order/${order.id}/status/update/3">订单取消</a> |
+			-->
+			<a class="action" type="deliver" href="/dashixiongwx/admin/order/${order.id}/status/update/1" onclick="return false;">配送</a> | 
+			<a class="action" type="receive" href="/dashixiongwx/admin/order/${order.id}/status/update/2" onclick="return false;">确认收货</a>
+		</td>
+	</tr>
+{{/each}}
+
+</table>
+<script type="text/javascript">
+	$('.action').click(function(){
+		var $a = $(this);
+		var a = this;
+		$.get(this.href, function(res){
+			var $sts = $a.parents('tr').find('.status');
+			if($a.attr('type')=='deliver'){
+				$sts.html('配送中...');
+				$sts[0].className = 'order-delivering status';
+			}else if($a.attr('type')=='receive'){
+				$sts.html('已经送达');
+				$sts[0].className = 'order-receive status';
+			}
+		});
+	});
+    var apporder = $('.apporder').length;
+    if(apporder==1){
+        $('.firstapp').html("<b style='color: red;font-size: 28px;'>&nbsp;&nbsp;app首单</b>");
+    }else{
+        $('.apptips').html("app订单共"+apporder+"个");
+    }
+</script>

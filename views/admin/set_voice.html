@@ -1,0 +1,33 @@
+<style type="text/css" media="all">
+    .red{color:red;}
+    .query-btn{cursor:pointer;}
+    .input-style{width:500px;}
+    .btns{padding:10px 0;}
+    .voice-edit{margin-right:10px;}
+</style>
+
+<table class="btns">
+    <tr>
+        <th>按钮</th>
+        <th>操作</th>
+    </tr>
+    {{each(btn, i) btns}}
+    <tr>
+        <td><input type="button" value="${btn.title}" /></td>
+        <td>
+            <a href="/dashixiongwx/admin/shop/${shop_id}/edit/voice/${btn.id}" class="voice-edit">编辑</a>
+            <a href="/dashixiongwx/admin/shop/${shop_id}/del/voice/${btn.id}" class="voice-del">删除</a>
+        </td>
+    </tr>
+    {{/each}}
+</table>
+
+<h1>添加推送按钮</h1>
+<div class="queryBox">
+    <form action="/dashixiongwx/admin/shop/${shop_id}/product/doadd/voice" enctype="multipart/form-data" method="post">
+        <p>按钮名称 : <input type="text" placeholder="如：有单" name="title" class="input-word input-style" /></p>
+        <p>绑定店铺 : <input type="text" placeholder="如：1，0表示所有店铺共用" name="shopId" class="input-style" value="" /></p>
+        <p>上传声音 : <input name="voice" type="file" /></p>
+        <input type="submit" class="query-btn" value="提 交"/>
+    </form>
+</div>

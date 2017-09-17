@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>时间信息</title>
+    <script src="http://s.ksmimi.com/dsx/jspro/jquery-1.8.0.min.js" type="text/javascript"></script>
+</head>
+<style type="text/css">
+    body{
+        width: 100%;
+        background: #eeeeee;
+        color: #242424;
+    }
+    h2{
+        padding-top: 50px;
+        margin-bottom: 10px;
+        color: #989898;
+        text-align: center;
+        font-size:25px;
+    }
+    th{
+        height: 30px;
+        font-size: 13px;
+        text-align: center;
+    }
+    td{
+        border-right: 1px solid #ececec;
+        border-top: 1px solid #ececec;
+        background: #dcdcdc;
+    }
+    table{
+        border-bottom: solid 1px #959595;
+        border-collapse: collapse;
+        width: 100%;
+        border-spacing: 1px;
+        border-top: 1px solid #959595;
+    }
+    .timeStr{
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+    .another{
+        background: #fe6200;
+    }
+    input{
+        display: block;
+        margin:30px 10%;
+        width: 80%;
+        height: 40px;
+        background: #fe6200;
+        border-radius:3px;
+        color: white;
+        border: 0;
+        font-size: 20px;
+        font-weight: 700;
+    }
+    p{
+        margin-bottom: 15px;
+        font-size: 18px;;
+        color: #989898;
+        text-align: center;
+    }
+    .f {
+        width: 50px;
+        height: 30px;
+        position: relative;
+        background-color: #dcdcdc;
+        font-size: 12px;
+    }
+
+    .f:before {
+        position: absolute;
+        top: 2px;
+        right: 0;
+        left: 35px;
+        bottom: 0;
+        border-bottom: 10px solid #dcdcdc;
+        border-right: 1px solid transparent;
+        content: "星期";
+    }
+
+    .f:after {
+        position: absolute;
+        left: 0px;
+        padding-left: 0px;
+        right: 0;
+        top: 0px;
+        padding-top: 0px;
+        bottom: 100px;
+        border-bottom: 30px solid white;
+        border-right: 78px solid transparent;
+        content: "";
+    }
+</style>
+<body>
+    <table>
+        <tbody>
+        <h2>空闲时间表</h2>
+        <p>请点击空白区域，选择您有空的时间段</p>
+        <tr>
+            <th class="f"><span style=" margin-left: 10px; position: absolute;display: block;z-index: 999;">时间</span></th>
+            <th>一</th>
+            <th>二</th>
+            <th>三</th>
+            <th>四</th>
+            <th>五</th>
+            <th>六</th>
+            <th>天</th>
+        </tr>
+        <tr>
+            <th class="timeStr">09:00~11:00</th>
+            <td week="星期一"></td>
+            <td week="星期二"></td>
+            <td week="星期三"></td>
+            <td week="星期四"></td>
+            <td week="星期五"></td>
+            <td week="星期六"></td>
+            <td week="星期天"></td>
+        </tr>
+        <tr>
+            <th class="timeStr">11:00~13:00</th>
+            <td week="星期一"></td>
+            <td week="星期二"></td>
+            <td week="星期三"></td>
+            <td week="星期四"></td>
+            <td week="星期五"></td>
+            <td week="星期六"></td>
+            <td week="星期天"></td>
+        </tr>
+        <tr>
+            <th class="timeStr">13:00~15:00</th>
+            <td week="星期一"></td>
+            <td week="星期二"></td>
+            <td week="星期三"></td>
+            <td week="星期四"></td>
+            <td week="星期五"></td>
+            <td week="星期六"></td>
+            <td week="星期天"></td>
+        </tr>
+        <tr>
+            <th class="timeStr">15:00~17:00</th>
+            <td week="星期一"></td>
+            <td week="星期二"></td>
+            <td week="星期三"></td>
+            <td week="星期四"></td>
+            <td week="星期五"></td>
+            <td week="星期六"></td>
+            <td week="星期天"></td>
+        </tr>
+        <tr>
+            <th class="timeStr">17:00~19:00</th>
+            <td week="星期一"></td>
+            <td week="星期二"></td>
+            <td week="星期三"></td>
+            <td week="星期四"></td>
+            <td week="星期五"></td>
+            <td week="星期六"></td>
+            <td week="星期天"></td>
+        </tr>
+        <tr>
+            <th class="timeStr">19:00~21:00</th>
+            <td week="星期一"></td>
+            <td week="星期二"></td>
+            <td week="星期三"></td>
+            <td week="星期四"></td>
+            <td week="星期五"></td>
+            <td week="星期六"></td>
+            <td week="星期天"></td>
+        </tr>
+        <tr>
+            <th class="timeStr">21:00~23:00</th>
+            <td week="星期一"></td>
+            <td week="星期二"></td>
+            <td week="星期三"></td>
+            <td week="星期四"></td>
+            <td week="星期五"></td>
+            <td week="星期六"></td>
+            <td week="星期天"></td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+    <input class="job_btn" type="button" value="提交">
+</body>
+<script type="application/javascript">
+    $("table tr td").click(function(){
+        $(this).toggleClass("another");
+    });
+    $('input:button').click(function(){
+        var time = [];
+        var num = $("td.another").size()
+        $('td.another').each(function() {
+            var $td = $(this);
+            time.push($td.attr('week') + ' ' + $td.closest('tr').find('th').text());
+        });
+        if(num !=0){
+            $.post('/dashixiongwx/shop/${shop_id}/employee/dojobtime',{time:time, isAjax: 1},function(data){
+                if(data){
+                    window.location.href = "http://www.ksmimi.com/dashixiongwx/shop/${shop_id}/employee/thanks";
+                }
+            });
+        }else{
+            alert("请选择您有空的时间段!");
+        }
+    });
+</script>
+</html>

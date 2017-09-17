@@ -1,0 +1,115 @@
+<style>
+	h1{
+		font-size : 32px;
+		padding : 20px;
+	}
+	p{
+		margin : 20px 10px;
+	}
+	input {
+		line-height : 28px;
+		border : 1px solid #CCC;
+	}
+	.submit{
+		padding : 5px;
+	}
+    .cancel-discount{
+        cursor: pointer;
+        background-color: #11F0A2;
+        color: #ffffff;
+     }
+</style>
+
+
+<h1>修改“${product.title}”的库存状态</h1>
+<iframe class="iframe_empty" src="#?shit=1" name="iframe_empty" frameborder="0" style="display: none;"></iframe>
+<form action="/dashixiongwx/admin/shop/${shop_id}/warehouse/${w_id}/product/${product.code}/doupdate" class="submit_form" method="post">
+	<input name="product[code]" type="hidden" value="${product.code}" />
+	<p>
+		<label>库存</label><input name="product[count]" type="text" value="${product.count}" />
+	</p>
+	<p>
+		<label>下架库存</label><input name="product[secureCount]" type="text" value="${product.secureCount}" />
+	</p>
+    <p>
+        <label>进货库存</label><input name="product[warningCount]" type="text" value="${product.warningCount}" />
+    </p>
+	<p>
+		<label>销售状态(0 已不卖, 1 在售)</label>
+        <input name="product[onSelling]" type="text" value="${product.onSelling}" />
+	</p>
+    <p>
+		<label>产品状态(0 正常, 1 下架, 2 售罄)</label><input name="product[productStatus]" type="text" value="${product.productStatus}" />
+	</p>
+    <p>
+        <label>1元限次抢购(0不参与,1参与)</label><input name="product[limitStatus]" type="text" value="${product.limitStatus}" />
+    </p>
+    <p>
+        <!--<label>产品productStrategyId</label><input name="product[productStrategyId]" type="text" value="${product.productStrategyId}" />-->
+        <label>产品折扣</label>
+        <select name="product[productStrategyId]" id="strategy">
+            <option value="${product.productStrategyId}">{{if product.productStrategyId}}${product.type}{{else}}请选择{{/if}}</option>
+        </select>
+        {{if product.productStrategyId>0}}<span class="cancel-discount" title="取消促销样式">取消折扣</span>{{/if}}
+    </p>
+	<p><input class="submit" type="submit" value="提交" /></p>
+</form>
+
+<script>
+    (function(){
+        if( location.href.indexOf('shit') != -1 ) return;
+
+        if( location.href.indexOf('is_frame=1') > 0 ){
+            $('.submit_form').attr('target', 'iframe_empty');
+            $('input[type=submit]')
+                .click(function(){
+                    alert('更新成功！');
+                     $('.iframe-box', window.parent.document).css("z-index",-1);
+                })
+                .blur();
+        }
+        //异步加载所有的策略
+        var $doc = $(document),
+                $strategy = $('#strategy'),
+                strategyId = '${product.productStrategyId}';
+        $doc.ready(function(){
+            $.get('/dashixiongwx/admin/shop/${shop_id}/section/strategy?isAjax=true',function(data){
+                data = JSON.parse(data);
+                for(var i= 0, len=data.length; i < len; i++){
+//                    if(strategyId!=data[i].id){
+                        var optionStr = $('<option value="'+data[i].id+'">'+data[i].type+'-'+data[i].content+'</option>');
+                        optionStr.appendTo($strategy);
+//                    }
+
+                }
+            });
+        });
+
+
+    })();
+</script>
+<script type="text/javascript">
+    $(function(){
+        $('.submit').click(function(){
+            var $text = this.value;
+            var $title = '${product.title}';
+            $.post('/dashixiongwx/admin/shop/${shop_id}/productop', {text: $text, title: $title}, function(res){});
+        });
+    });
+</script>
+<script type="text/javascript">
+    var $doc = $(document);
+    var pCode = "${product.code}",
+            pwId = "${w_id}",
+            shopId = "${shop_id}";
+    $doc.ready(function(){
+        var $cancelDiscount = $('.cancel-discount');
+        $cancelDiscount.click(function(){
+            $.post('/dashixiongwx/admin/shop/'+shopId+'/warehouse/'+pwId+'/product/'+pCode+'/cancelDiscount',function(data){
+                if(data == 'sus'){
+                    alert('成功取消产品折扣!');
+                }
+            });
+        });
+    });
+</script>

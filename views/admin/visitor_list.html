@@ -1,0 +1,127 @@
+<style>
+	body{
+		background : none;	
+	}
+	table, td, th{
+		border : 1px solid #CCC;	
+		padding : 5px;
+	}
+	table{
+		width : 95%;	
+	}
+	h1{
+		padding : 10px;
+		font-size : 20px;	
+	}
+	.money {
+		padding : 10px;	
+	}
+	.good{
+		font-size : 18px;
+		color : green;	
+	}
+	.bad{
+
+		color : red;
+	}
+	.order-create{
+		color : red;	
+	}
+	.order-delivering, .old{
+		color : green;	
+	}
+	.order-receive{
+		color : #CCC;	
+	}
+	.new{
+		color : #FF6A6A;
+	}
+</style>
+
+<h1>
+    <a href="/dashixiongwx/admin/shop/${shop_id}/visitor/detail/${pre_date_y}/${pre_date_m}/${pre_date_d}">
+		&lt;&lt;前一天 
+	</a>
+		${m}月${d}日顾客明细
+        <a href="/dashixiongwx/admin/shop/${shop_id}/visitor/detail/${next_date_y}/${next_date_m}/${next_date_d}">
+		后一天&gt;&gt;
+	</a>
+</h1>
+
+
+<p>
+{{if visitors_distinct}}
+访客总数 ${visitors_distinct.length}, 其中老客户${obj_counts.old_client_num}人, 新客户${obj_counts.new_client_num}人, 游客${obj_counts.guest_num}人
+{{else}}
+现在还没有人访问
+{{/if}}
+</p>
+
+<table>
+	<tr>
+		<th>
+			时间
+		</th>
+		<th>
+			类型
+		</th>
+		<th>
+			名字
+		</th>
+		<th>
+			地址
+		</th>
+		<th>
+			电话
+		</th>
+	</tr>	
+
+{{each(visitor, i) visitors}}
+	<tr>
+		<td>
+			${visitor.timeStamp} (${visitor.timeTxt}) 
+		</td>
+		<td>
+			{{if visitor.user_id}}
+				{{if visitor.isNewClient}}
+				<span class="new">新顾客</span>
+				{{else}}
+				<span class="old">老顾客</span>
+				{{/if}}
+				{{else}}
+				<span class="guest">游客</span>
+			{{/if}}
+		</td>
+		<td>
+			{{if visitor.address}}
+            <a href="/dashixiongwx/admin/shop/${shop_id}/order/list/${visitor.user_id}/${visitor.address.name}">
+				<span class="old">${visitor.address.name}</span>
+			</a>
+			(${visitor.wx_id})
+
+			{{else}}
+			<span class="guest">${visitor.wx_id}</span>
+			{{/if}}
+
+			{{if visitor.order_count}}
+			<img title="今天${visitor.address.name}下了${visitor.order_count}个单子" width="28" src="http://s.ksmimi.com/dashixiong_static/img/bought.jpg" /> x ${visitor.order_count}	
+			{{/if}}
+
+		</td>
+		<td>
+			{{if visitor.address }}
+				<span>${visitor.address.address}</span>
+			{{/if}}
+		</td>
+		<td>
+			{{if visitor.address }}
+				<span>${visitor.address.mobile}</span>
+			{{/if}}
+		</td>
+		
+		
+	</tr>
+{{/each}}
+
+</table>
+

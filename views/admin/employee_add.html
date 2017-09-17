@@ -1,0 +1,72 @@
+<style type="text/css" media="all">
+    .note{ color : red; } 
+</style>
+<h1>为店面添加员工</h1>
+<p class="note">以下信息全部为必填项</p>
+<form action="/dashixiongwx/admin/shop/${shop_id}/employee/doadd" method="post" accept-charset="utf-8">
+    <h2>基本信息</h2>
+    <p>
+        姓名 
+        <input type="text" name="employee[name]" value="" />
+    </p>
+    <p>
+        身份证号
+        <input type="text" name="employee[idCardNum]" value="" />
+    </p>
+    <p>
+        员工类型
+        <select name="employee[type]">
+            <option value="fulltime">全职</option>
+            <option value="parttime">兼职</option>
+        </select>
+    </p>
+    <p>
+        用户id
+        <input type="text" name="employee[userId]" value="" />
+    </p>
+    <p>
+        所在分店id
+        <input type="text" name="employee[shopId]" value="" />
+    </p>
+    <p>
+        级别
+        <input type="text" name="employee[level]" value="0" />
+    </p>
+
+    <h2>银行信息</h2>
+    <p>
+        工资卡号
+        <input type="text" name="employee[bankCardNum]"/>
+    </p>
+    <p>
+        发卡银行
+        <select name="employee[bankName]">
+            <option value="招行">招行</option>
+            <option value="农商银行">农商银行</option>
+            <option value="工行">工行</option>
+            <option value="建行">建行</option>
+            <option value="农行">农行</option>
+            <option value="中行">中行</option>
+        </select>
+    </p>
+
+    <h2>联系信息</h2>
+    <p>
+        手机
+        <input type="text" name="employee[mobile]"/>
+    </p>
+    <p>
+        QQ
+        <input type="text" name="employee[qq]"/>
+    </p>
+    <p>
+        微信号
+        <input type="text" name="employee[wxNick]"/>
+    </p>
+
+
+    <p>
+         <input type="submit" name="" value="提交" />
+    </p>
+
+</form>

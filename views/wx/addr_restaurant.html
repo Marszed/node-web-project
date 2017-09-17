@@ -1,0 +1,1338 @@
+<!-- 
+	class的写法用"-"连接两个单词. id,name 用下划线命名法
+-->
+
+<style>
+
+    textarea,
+    input[type="color"],
+    input[type="text"],
+    input[type="email"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime"],
+    input[type="datetime-local"],
+    input[type="week"],
+    input[type="month"] {
+        -webkit-box-sizing:border-box;
+        -ms-box-sizing:border-box;
+        box-sizing:border-box;
+        -webkit-appearance: none;
+    }
+    .container{font:14px Arial,sans-serif; max-width:640px;box-sizing:border-box;-webkit-box-sizing:border-box;-ms-box-sizing:border-box;margin:0 auto;width:100%;padding:10px 10px 10px 10px;border:0 none;}
+	h2{font-size:20px;font-weight:700;line-height:32px;margin-bottom:15px;border-bottom:1px dashed #CCC;}
+	.addr-item{width:100%;padding:5px;overflow:hidden;-webkit-box-sizing:border-box;-ms-box-sizing:border-box;}
+	.new-item{padding:5px;}
+	.new-item input, .input-item input{padding:5px;	border:1px solid #CCC;line-height:24px;background:#EEE;}
+    .item{margin-bottom:15px;}
+	.new-item label, .input-item label{line-height:25px;} 
+	input[type=radio], input[type=checkbox]{margin:2px 5px 5px;} 
+	#addr_submit_btn{background:#cb3637;padding:12px;color:#FFF;text-decoration:none;border-radius:5px;}
+	.submit{padding:30px 30px 30px 0;}
+	.info-wraper input{width:100%;}
+	.info-wraper p.input{margin-bottom:10px;}
+	.section{margin:0 0 20px 0;}	
+	.other-requirement input{width:100%;padding:5px;border:1px solid #CCC;line-height:24px;background:#eee;-webkit-box-sizing:border-box;border-radius:3px;} 
+	.other-requirement label{line-height:24px;}
+	#submit_btn_head{font-size:16px;background:#cb3637;border-radius:5px;padding:5px;color:#FFF;text-decoration:none;float:right;line-height:18px;}
+    #create_new_addr2{font-size:16px;float:right;line-height:28px;padding:0 10px 0 0;}
+    #create_new_addr, #create_new_addr2{color:#66a6ae;}
+	.head{clear:both;}
+    .msg{font-size:16px;color:red;}
+    .blue-link{color:#66a6ae;text-decoration:underline;}
+    .tool-title{font-weight:700;font-size:20px;color:#000;} 
+    .del-addr{color:#CCC;font-size:12px;}
+    .order-sumary{padding:10px;background:#FFFACD;border-radius:5px;border:1px solid #FFDEAD;}
+    .original-total-pay{color:#CCC;font-size:14px;text-decoration:line-through;}
+    .total-num,.total-pay{padding:5px;color:orange;}
+    .order-sumary{font-size:18px;}
+    .order-sumary p{color:#333;}
+    .order-sumary h2{margin-top:15px;font-size:16px;}
+    .tools{margin-top:15px;}
+    .express-fetch-info{border:1px solid #CCC;color:#aaa;width:100%;height:100px;padding:5px;line-height:22px;}
+    .addr-item label{display:block;padding-left:20px;text-indent:-24px;}
+    .fetch{margin-bottom:10px;} 
+    .express-list li{padding:0 0 10px 20px;text-indent:-15px;}
+    .receiver-addr{line-height:31px;}
+    .express-sent-sender-info{padding:10px;background:#FFFACD;border-radius:5px;border:1px solid #FFDEAD;width:76%;margin-bottom:25px;}
+    .margin_b_30{margin-bottom:30px;}
+    input.receiver-input{background:#FFFAF0;margin-top:10px;}
+    .list-item{display:-webkit-box; position:relative;margin-bottom:10px;}
+    .list-item .d{-webkit-box-flex:1;}
+    .tools .d{margin-left:10px;margin-top:-2px;}
+    .p-pic{border:1px solid #eee; height:50px;width:50px;border-radius:4px;}
+    .d-tit{font-size:16px;font-weight:bold; color:#333;line-height:1.2em;}
+    .d-main{font-size:14px;line-height:1.2em;color:#999;margin-top:3px;}
+    .use{color:#f50; border:1px solid #f50;text-decoration:none; font-size:14px;padding:3px 5px; border-radius:4px;position:absolute;right:0px;top:-3px;line-height:1;}
+    .none{display:none;}
+    .list-last{text-align:right;font-size:14px;}
+    .tools li:last{margin-bottom:0;text-decoration:underline;}
+    .isUse{border:1px solid #ccc;color:#ccc;}
+    .del{text-decoration:line-through;font-size:14px;color:#999;}
+    .booking{margin:0 0 10px 0;}
+    .booking-times{display:block;}
+    .booking-times select{color:#333;font-size:26px;border:1px solid #ccc;}
+    .mb10{margin-bottom:10px;}
+</style>
+
+{{if action}}
+<form id="submit_form" action="${action}" method="POST">
+{{else}}
+<form id="submit_form" action="/dashixiongwx/order/finish" method="POST">
+{{/if}}
+<input type="hidden" id="order_date" name="order_date" value="今天">
+<input type="hidden" name="shop_name" value="${shop_name}">
+<input type="hidden" name="shop_type" value="${shop_type}">
+<div class="container">
+    {{if is_booking == 1}}
+    <div class="booking">
+        <!--<div class="booking-text">设置送达时间 ></div>-->
+        <div class="booking-times">
+            <select name="day" class="booking-day">
+
+            </select>
+            <select name="hour" class="booking-hour">
+
+            </select>时
+            <select name="minute" class="booking-minute">
+
+            </select>分
+        </div>
+
+    </div>
+    {{/if}}
+    <div class="order-sumary">
+        <p class="mb10">
+            <span class="total-num">${total_num}</span>份快餐，共
+                <span class="total-pay">${total_pay}</span> 元。
+
+        </p>
+        {{if tools.length && section_type == 'self'}}
+        <p style="color:red">注意:1)使用道具后总价小于10元的需要跑腿费的哦. 跑腿很辛苦的, 请谅解！</p>
+        <p style="color:red">2)使用道具的订单不再返还人品咯! </p>
+        <div class="tools">
+            <ul class="list">
+            {{each(tool, i) tools}}
+            <li class="tool list-item {{if i>1}}none{{/if}}">
+                <a href="#" class="p" ><img class="p-pic" width="40" height="40" src="${tool.img}" alt="${tool.title}" /></a>
+                <div class="d">
+                    <h4 class="d-tit"> ${tool.title} </h4>
+                    <p class="d-main"> ${tool.description} </p>
+                </div>
+                <a href="#" tool-id="${tool.id}" tool-tid="${tool.tId}" tool-type="${tool.type}" class="use" onclick="return false;">使用</a>
+            </li>
+    		{{/each}}
+            {{if tools.length>2}}
+            <li class="list-last show-more-tool"><a href="#" onclick="return false">显示所有道具>></a></li>
+            {{/if}}
+            </ul>
+        </div>
+        {{/if}}
+    </div>
+</div>
+
+<div class="container">
+    {{if msg}}
+    <div class="msg">
+        ${msg}
+    </div>
+    {{/if}}
+
+	<div class="section">
+		<h2 class="head">送餐信息  <a id="submit_btn_head" href="#" onclick="return false;">配送到选定地址&gt;&gt;</a> <a id="create_new_addr2" href="#" onclick="return false;">新建地址</a></h2>
+		<input name="user_id" type="hidden" value="${user_id}" />
+		<input name="wx_id" type="hidden" value="${wx_id}" />
+		<input name="order_id" type="hidden" value="${order_id}" />
+		<input name="w_id" type="hidden" value="${w_id}" /><!-- 当前仓库的id  -->
+		<input name="shop_id" type="hidden" value="${shop_id}" /><!-- 当前店铺的id  -->
+        <input name="section_id" type="hidden" value="${section_id}" /><!-- 货架id -->
+        <input id="is_express_info_fetch_new" name="is_express_info_fetch_new" type="hidden" value="1" /><!-- 取件信息默认是新的 -->
+		<input id="total_num" type="hidden" value="${total_num}" />
+		<input id="total_pay" type="hidden" value="${total_pay}" />
+		<input id="tool_ids" name="tool_ids" type="hidden" value="" />
+		<input id="data_products" name="products" type="hidden" value="${JSON.stringify(products)}" />
+		<input id="data_tools" name="tools" type="hidden" value="" />
+		<input id="addr_id" name="addr[id]" type="hidden" />
+		<input id="addr_name" name="addr[name]" type="hidden" />
+		<input id="addr_mobile" name="addr[mobile]" type="hidden" />
+        <input id="addr_shortTel" name="addr[shortTel]" type="hidden" />
+		<input id="addr_addr" name="addr[address]" type="hidden" />
+		<input id="addr_requirements" name="addr[requirements]" type="hidden" />
+
+		{{each(addr, i) address}}
+		<div class="addr-item">
+            {{if addr.shortTel != 0}}
+			<label>
+                <input type="radio" id="${addr.id}" name="addr_select" /><span class="name">${addr.name}</span> <span class="address">${addr.address} </span><a class="mobile">${addr.mobile}</a><a class="shortTel">(${addr.shortTel})</a><a href="/dashixiongwx/addr/del/${addr.id}" class="del-addr" onclick="return false;">删除</a>
+			</label>
+            {{else}}
+            <label>
+                <input type="radio" id="${addr.id}" name="addr_select" /><span class="name">${addr.name}</span> <span class="address">${addr.address} </span><a class="mobile">${addr.mobile}</a><a href="/dashixiongwx/addr/del/${addr.id}" class="del-addr" onclick="return false;">删除</a>
+            </label>
+            {{/if}}
+		</div>
+		{{/each}}
+
+		<div id="new_addr" class="new-item" style="display:none;">
+			<p><label><input id="addr_new_radio" name="addr_select" type="radio" />姓名</label></p>
+			<div class="info-wraper">
+				<p class="input"><input id="input_addr_name" type="text" /></p>
+				<p><label>手机</label></p>
+				<p class="input"><input id="input_addr_mobile" type="text" /></p>
+                <p><label>短号</label></p>
+                <p class="input"><input id="input_addr_shortTel" type="text" /></p>
+				<p><label>地址</label></p>
+				<p class="input"><input id="input_addr_addr" {{if shop_id==25}}placeholder="格式:小区+单元+房号,如:澳讯2楼D20档"{{else}}placeholder="如: xx区5栋206"{{/if}} type="text" /></p>
+			</div>
+		</div>
+	</div>
+
+	<div class="section requirements">
+        {{if total_num == 1}}
+		<h2>其他吩咐</h2>
+		<div class="addr-item requirement">
+			<label>
+				<input type="checkbox" /><span>我是女汉子, 给我加点饭</span>
+			</label>
+		</div>
+        <div class="addr-item requirement">
+			<label>
+				<input type="checkbox" /><span>我减肥，少点饭</span>
+			</label>
+		</div>
+		<div class="addr-item requirement">
+			<label>
+				<input type="checkbox" /><span>我是猛男，加多多饭</span>
+			</label>
+		</div>
+        <div class="addr-item requirement">
+			<label>
+				<input type="checkbox" /><span>饭菜分开</span>
+			</label>
+		</div>
+	    {{/if}}
+		<div class="addr-item other-requirement">
+			<label> 特别吩咐: </label> <input id="other_requirement" type="text" value=""/>
+
+		</div>
+	</div>
+	<div class="submit">
+		<a id="create_new_addr" href="#" onclick="return false;">新建地址</a> &nbsp;<a id="addr_submit_btn" href="#" onclick="return false;">配送到选定地址&gt;</a>
+	</div>
+</div>
+
+</form>
+
+<!--<div id="dialog" style="display:none;" title="大师兄提醒你"></div>-->
+<div id="dialog" style="display:none;">
+     <p>
+         <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+         <span id="dialog_msg">${possibleReach ? possibleReach.content : ''}</span>
+     </p>
+</div>
+
+<!--<script type="text/javascript" src="http://s.ksmimi.com/dsx/jspro/layer.min.js?v=123"></script>-->
+<link rel="stylesheet" href="http://s.ksmimi.com/dashixiong_static/csspro/hot_sneaks/jquery-ui-1.10.4.custom.min.css">
+<script src="http://s.ksmimi.com/dashixiong_static/jspro/jquery-ui-1.10.4.custom.min.js"></script>
+<script type="text/javascript">
+    var user_id = ${user_id},
+        isNewUser = ${isNewUser},
+        is_booking = ${is_booking};
+    var shop_id = ${shop_id};
+
+    var $booking = $('.booking'),
+        $requirement = $('#other_requirement');
+    var guest_info = localStorage.getItem('guest_info');
+
+    if(guest_info){
+        guest_info = guest_info.replace(/(\d{4}-\d{2}-\d{2})/, '$1 ');
+        $('#other_requirement').val(guest_info);
+        localStorage.clear();//清除当前存储的信息
+    }
+
+
+
+    //----20141020---第二版---start----by-lufeng--//
+
+    //一：生成预定时间---function
+    function generateReserveTime(hourArr,minuteArr,preparationTime,step, serverHour, serverMinute){
+//-----start----预定功能时间调整一下：早上最早的时间为11:15，下午为17:15-----@2014/10/28--//
+        //上午
+        hourArr[0] = 10;
+        minuteArr[0] = 45;
+        /*if( shop_id == 6 ){
+            hourArr[0] = 11;
+            minuteArr[0] = 00;
+        }*/
+
+        //下午
+        hourArr[2] = 16;
+        minuteArr[2] = 45;
+        /*if( shop_id == 6 ){
+            hourArr[2] = 17;
+            minuteArr[2] = 00;
+        }*/
+
+//-----end----预定功能时间调整一下：早上最早的时间为11:15，下午为17:15--------@2014/10/28--//
+
+        var flagPM = 0;//用于区别上午与下午开始时间是否加上预留时间：preparationTime，小时有增加
+        var flagAM = 0;
+
+        //根据设定时间的开始
+        var $day = $('.booking-day');
+        var $hour = $('.booking-hour');
+        var $minute = $('.booking-minute');
+
+        //把预留时间计入预定选择时间内
+        if((minuteArr[0] + preparationTime) >= 60){
+            hourArr[0] += 1;
+            minuteArr[0] =  minuteArr[0] + preparationTime - 60;
+            flagAM = 1;
+        }
+        if((minuteArr[2] + preparationTime) >= 60){
+            hourArr[2] += 1;
+            minuteArr[2] = minuteArr[2] + preparationTime - 60;
+            flagPM = 1;
+        }
+
+        var startHourAM;//上午预定开始时间
+        var endHourAM;//上午预定结束时间
+        var hourIntervalAM;//上午预定小时间隔
+
+        var startHourPM;//下午预定开始时间
+        var endHourPM;//下午预定结束时间
+        var hourIntervalPM;//下午预定小时间隔
+
+        /*
+        * 一、根据给定的参数值计算预定开始与结束的小时范围
+        * */
+        //上午：用步长flag和minuteArr相加大于60分钟，小时进一
+        startHourAM = hourArr[0];
+
+        //判断上午几时结束
+        endHourAM = hourArr[1];
+
+        startHourPM = hourArr[2];
+        endHourPM = hourArr[3];
+        //计算上午小时间隔
+        hourIntervalAM = Math.ceil(endHourAM - startHourAM);
+        //计算下午小时间隔
+        hourIntervalPM = Math.ceil(endHourPM - startHourPM);
+
+        if(((hourArr[3]-0) < serverHour) || (((hourArr[3]-0)==serverHour) && ((minuteArr[3]-0) < serverMinute))){   //判断当前服务器时间是否已超过当天最后营业时间：是--只显示明天可预定时间
+            $day.empty();
+            var option = $("<option></option>");
+            option.html("明天");
+            option.val("明天");
+            $day.append(option);
+            $hour.empty();
+            //注入上午小时
+            for(i=0;i < (hourIntervalAM + 1);i++){
+                var option = $("<option></option>");
+                option.html(startHourAM + i);
+                option.val(startHourAM + i);
+                $hour.append(option);
+            }
+            //注入下午小时
+            for(i=0;i<(hourIntervalPM + 1);i++){
+                var option = $("<option></option>");
+                option.html(startHourPM + i);
+                option.val(startHourPM + i);
+                $hour.append(option);
+            }
+        }else{  //判断当前服务器时间是否已超过当天最后营业时间：否--显示今天、明天可预定时间
+            $day.empty();
+            var option1 = $("<option></option>");
+            option1.html("今天");
+            option1.val("今天");
+            var option2 = $("<option></option>");
+            option2.html("明天");
+            option2.val("明天");
+            $day.append(option1);
+            $day.append(option2);
+            if(((hourArr[0]-0)>serverHour) || (((hourArr[0]-0)==serverHour) && ((minuteArr[0]-0) > serverMinute))){  //判断服务器时间是否已超过上午最后预定时间：是--显示上午、下午可预定时间
+                $hour.empty();
+                //注入上午小时
+                for(i=0;i < (hourIntervalAM + 1);i++){
+                    var option = $("<option></option>");
+                    option.html(startHourAM + i);
+                    option.val(startHourAM + i);
+                    $hour.append(option);
+                }
+                //注入下午小时
+                for(i=0;i < (hourIntervalPM + 1);i++){
+                    var option = $("<option></option>");
+                    option.html(startHourPM + i);
+                    option.val(startHourPM + i);
+                    $hour.append(option);
+                }
+            }else if(((hourArr[2]-0)>serverHour) || (((hourArr[2]-0)==serverHour) && ((minuteArr[2]-0) > serverMinute))){   //判断服务器时间是否已超过上午最后预定时间：是--只显示下午可预定时间
+                $hour.empty();
+                //注入下午小时
+                for(i=0;i < (hourIntervalPM + 1);i++){
+                    var option = $("<option></option>");
+                    option.html(startHourPM + i);
+                    option.val(startHourPM + i);
+                    $hour.append(option);
+                }
+            }else{
+
+            }
+        }
+        /*
+        * 注入基本的分钟范围
+        * */
+        //清空分钟默认值
+        $minute.empty();
+        //计算出分钟选择范围有几种可能
+        var minuteIntervalCount = 60 / step;
+        if(step == 15){
+            //循环注入分钟范围
+            var tmpStep = 0-0;//步长变量值
+            for(i=0; i < minuteIntervalCount; i++){
+                var option = $("<option></option>");
+                if(tmpStep==0){
+                    tmpStep = "00";
+                }
+                option.html(tmpStep + '~' + (tmpStep + 15));
+                option.val(tmpStep);
+                $minute.append(option);
+                tmpStep = tmpStep-0;
+                tmpStep += 15;
+            }
+        }else if(step == 30){
+            //循环注入分钟范围
+            var tmpStep = 0;//步长变量值
+            for(i=0; i < minuteIntervalCount; i++){
+                var option = $("<option></option>");
+                if(tmpStep==0){
+                    tmpStep = "00";
+                }
+                option.html(tmpStep + '~' + (tmpStep + 30));
+                option.val(tmpStep);
+                $minute.append(option);
+                tmpStep += 30;
+            }
+        }else{
+
+        }
+
+        //最后：把计算好的小时注入到select中
+        //循环注入上下午小时
+
+        $hour.change(function(){
+        //特例判断一、当startHourAM = Select-value时，分钟的从用户设置开始
+            var selectHourValue = $hour.val();
+            if(selectHourValue == hourArr[0]){
+                $minute.empty();
+                var sumMInuteToSix = 60 - minuteArr[0];//上午开始预定分钟到60的间隔
+                var tmpStepCount = Math.floor(sumMInuteToSix / step);
+                var minuteAddStep = minuteArr[0];
+                if(((minuteArr[0] + preparationTime) < 60) && (flagAM == 0)){
+                    minuteAddStep = minuteArr[0] + preparationTime;
+                    sumMInuteToSix = 60 - minuteAddStep;
+                    tmpStepCount = Math.floor(sumMInuteToSix / step);
+                    $minute.empty();
+                    for(i=0; i<tmpStepCount; i++){  //循环加入分钟范围
+                        var option = $("<option></option>");
+                        if(i == (tmpStepCount-1)){ //说明是最后一个分钟范围
+                            option.html(minuteAddStep + '~60');
+                            option.val(minuteAddStep);
+                            $minute.append(option);
+                            break;
+                        }
+                        option.html(minuteAddStep + '~' + (minuteAddStep + step));
+                        option.val(minuteAddStep);
+                        $minute.append(option);
+                        minuteAddStep += step;
+                    }
+                }else{
+                    for(i=0; i<tmpStepCount; i++){  //循环加入分钟范围
+                        var option = $("<option></option>");
+                        if(i == (tmpStepCount-1)){ //说明是最后一个分钟范围
+                            option.html(minuteAddStep + '~60');
+                            option.val(minuteAddStep);
+                            $minute.append(option);
+                            break;
+                        }
+                        option.html(minuteAddStep + '~' + (minuteAddStep + step));
+                        option.val(minuteAddStep);
+                        $minute.append(option);
+                        minuteAddStep += step;
+
+
+                    }
+                }
+            }else
+            if(selectHourValue == hourArr[2]){
+                $minute.empty();
+                var sumMInuteToSix = 60 - minuteArr[2];//上午开始预定分钟到60的间隔
+                var tmpStepCount = Math.floor(sumMInuteToSix / step);
+                var minuteAddStep = minuteArr[2];
+                if(((minuteArr[2] + preparationTime) < 60) && (flagPM == 0)){
+                    minuteAddStep = minuteArr[2] + preparationTime;
+                    sumMInuteToSix = 60 - minuteAddStep;
+                    tmpStepCount = Math.floor(sumMInuteToSix / step);
+                    $minute.empty();
+                    for(i=0; i<tmpStepCount; i++){  //循环加入分钟范围
+                        var option = $("<option></option>");
+                        if(i == (tmpStepCount-1)){ //说明是最后一个分钟范围
+                            option.html(minuteAddStep + '~60');
+                            option.val(minuteAddStep);
+                            $minute.append(option);
+                            break;
+                        }
+                        option.html(minuteAddStep + '~' + (minuteAddStep + step));
+                        option.val(minuteAddStep);
+                        $minute.append(option);
+                        minuteAddStep += step;
+                    }
+                }else{
+                    for(i=0; i<tmpStepCount; i++){  //循环加入分钟范围
+                        var option = $("<option></option>");
+                        if(i == (tmpStepCount-1)){ //说明是最后一个分钟范围
+                            option.html(minuteAddStep + '~60');
+                            option.val(minuteAddStep);
+                            $minute.append(option);
+                            break;
+                        }
+                        option.html(minuteAddStep + '~' + (minuteAddStep + step));
+                        option.val(minuteAddStep);
+                        $minute.append(option);
+                        minuteAddStep += step;
+                    }
+                }
+            }else
+            if(selectHourValue != hourArr[0] || selectHourValue != hourArr[2]){
+
+                 //二、根据给定的参数值计算预定开始与结束的分钟范围
+                //清空分钟默认值
+                $minute.empty();
+                //计算出分钟选择范围有几种可能
+                var minuteIntervalCount = 60 / step;
+                if(step == 15){
+                    //循环注入分钟范围
+                    var tmpStep = 0;//步长变量值
+                    for(i=0; i < minuteIntervalCount; i++){
+                        var option = $("<option></option>");
+                        option.html(tmpStep + '~' + (tmpStep + 15));
+                        option.val(tmpStep);
+                        $minute.append(option);
+                        tmpStep += 15;
+                    }
+                }else if(step == 30){
+                    //循环注入分钟范围
+                    var tmpStep = 0;//步长变量值
+                    for(i=0; i < minuteIntervalCount; i++){
+                        var option = $("<option></option>");
+                        option.html(tmpStep + '~' + (tmpStep + 30));
+                        option.val(tmpStep);
+                        $minute.append(option);
+                        tmpStep += 30;
+                    }
+                }else{
+
+                }
+            }
+
+            //特例判断二、当startHourAM = Select-value时，分钟的从用户设置开始
+            if(selectHourValue == hourArr[1]){
+                var minuteTmp = 0;
+                //清空分钟默认值
+                $minute.empty();
+                if(minuteArr[1] == 00){
+                    var option = $("<option></option>");
+                    option.html(minuteTmp + '0~0' + minuteTmp);
+                    option.val(minuteTmp);
+                    $minute.append(option);
+                }else{
+                    //计算出分钟选择范围有几种可能
+                    var minuteIntervalCount = minuteArr[1] / step;
+                    if(minuteArr[1] % step != 0){
+                        minuteIntervalCount = Math.ceil(minuteArr[1] / step);
+                    }
+                    for(i=0; i < minuteIntervalCount;i++){
+                        var option = $("<option></option>");
+                        if(i == (minuteIntervalCount - 1)){
+                            option.html(minuteTmp + '~' + minuteArr[1]);
+                            option.val(minuteTmp);
+                            $minute.append(option);
+                            break;
+                        }
+                        option.html(minuteTmp + '~' + (minuteTmp + step));
+                        option.val(minuteTmp);
+                        $minute.append(option);
+                        minuteTmp += step;
+                    }
+                }
+            }
+            if(selectHourValue == hourArr[3]){
+                var minuteTmp = 0;
+                //清空分钟默认值
+                $minute.empty();
+                if(minuteArr[3] == 00){
+                    var option = $("<option></option>");
+                    option.html(minuteTmp + '0~0' + minuteTmp);
+                    option.val(minuteTmp);
+                    $minute.append(option);
+                }else{
+                    //计算出分钟选择范围有几种可能
+                    var minuteIntervalCount = minuteArr[3] / step;
+                    if(minuteArr[3] % step != 0){
+                        minuteIntervalCount = Math.ceil(minuteArr[3] / step);
+                    }
+                    for(i=0; i < minuteIntervalCount;i++){
+                        var option = $("<option></option>");
+                        if(i == (minuteIntervalCount - 1)){
+                            option.html(minuteTmp + '~' + minuteArr[3]);
+                            option.val(minuteTmp);
+                            $minute.append(option);
+                            break;
+                        }
+                        option.html(minuteTmp + '~' + (minuteTmp + step));
+                        option.val(minuteTmp);
+                        $minute.append(option);
+                        minuteTmp += step;
+                    }
+                }
+
+            }
+
+            //特例三、当服务器时间在可选预定时间后面时，隐藏已过时可选时间
+        });
+
+        $day.change(function(){
+            if($day.val() == '明天'){
+                $hour.empty();
+                //注入上午小时
+                for(i=0;i < (hourIntervalAM + 1);i++){
+                    var option = $("<option></option>");
+                    option.html(startHourAM + i);
+                    option.val(startHourAM + i);
+                    $hour.append(option);
+                }
+                //注入下午小时
+                for(i=0;i < (hourIntervalPM + 1);i++){
+                    var option = $("<option></option>");
+                    option.html(startHourPM + i);
+                    option.val(startHourPM + i);
+                    $hour.append(option);
+                }
+                /*================-------------- 8号店处理完之后，删掉这行 --------------================*/
+//                if( shop_id == 8 ) $hour.find('option:first').remove();
+            }
+            if($day.val() == '今天'){
+                if(((hourArr[0]-0)>serverHour) || (((hourArr[0]-0)==serverHour) && ((minuteArr[0]-0) > serverMinute))){  //判断服务器时间是否已超过上午最后预定时间：是--显示上午、下午可预定时间
+                    $hour.empty();
+                    //注入上午小时
+                    for(i=0;i < (hourIntervalAM + 1);i++){
+                        var option = $("<option></option>");
+                        option.html(startHourAM + i);
+                        option.val(startHourAM + i);
+                        $hour.append(option);
+                    }
+                    //注入下午小时
+                    for(i=0;i < (hourIntervalPM + 1);i++){
+                        var option = $("<option></option>");
+                        option.html(startHourPM + i);
+                        option.val(startHourPM + i);
+                        $hour.append(option);
+                    }
+                }else if(((hourArr[2]-0)>serverHour) || (((hourArr[2]-0)==serverHour) && ((minuteArr[2]-0) > serverMinute))){   //判断服务器时间是否已超过上午最后预定时间：是--只显示下午可预定时间
+                    $hour.empty();
+                    //注入下午小时
+                    for(i=0;i < (hourIntervalPM + 1);i++){
+                        var option = $("<option></option>");
+                        option.html(startHourPM + i);
+                        option.val(startHourPM + i);
+                        $hour.append(option);
+                    }
+                }else{
+
+                }
+                /*================-------------- 8号店处理完之后，删掉这行 --------------================*/
+//                if( shop_id == 8 ) $hour.find('option:first').remove();
+            }
+            $('.booking-hour').trigger('change');
+
+        });
+
+        $('.booking-hour').trigger('change');
+    }
+
+    function generateReserveTime2(hourArr,minuteArr,preparationTime,step, serverHour, serverMinute){
+
+//-----start----预定功能时间调整一下：早上最早的时间为11:15，下午为17:15-----@2014/10/28--//
+        //上午
+        hourArr[0] = 10;
+        minuteArr[0] = 45;
+
+//-----end----预定功能时间调整一下：早上最早的时间为11:15，下午为17:15--------@2014/10/28--//
+
+        var flagAM = 0;//用于区别上午与下午开始时间是否加上预留时间：preparationTime，小时有增加
+
+        //根据设定时间的开始
+        var $day = $('.booking-day');
+        var $hour = $('.booking-hour');
+        var $minute = $('.booking-minute');
+
+        //把预留时间计入预定选择时间内
+        if((minuteArr[0] + preparationTime) >= 60){
+            hourArr[0] += 1;
+            minuteArr[0] =  minuteArr[0] + preparationTime - 60;
+            flagAM = 1;
+        }
+
+        var startHourAM;//上午预定开始时间
+        var endHourAM;//上午预定结束时间
+        var hourIntervalAM;//上午预定小时间隔
+
+
+        startHourAM = hourArr[0];
+        //判断上午几时结束
+        endHourAM = hourArr[1];
+        //计算上午小时间隔
+        hourIntervalAM = Math.ceil(endHourAM - startHourAM);
+
+        if((serverHour>hourArr[1]) || (serverHour==hourArr[1] && serverMinute>minuteArr[1])){   //当前服务器时间已超过当天最后营业时间-只能预定明天
+            $day.empty();
+            var option = $("<option></option>");
+            option.html("明天");
+            option.val("明天");
+            $day.append(option);
+
+            $hour.empty();
+            //注入上午小时
+            for(i=0;i < (hourIntervalAM + 1);i++){
+                var option = $("<option></option>");
+                option.html(startHourAM + i);
+                option.val(startHourAM + i);
+                $hour.append(option);
+            }
+        }else{  //当前服务器时间没有超过当天最后营业时间-可以预定今天、明天
+            $day.empty();
+            var option1 = $("<option></option>");
+            option1.html("今天");
+            option1.val("今天");
+            $day.append(option1);
+            var option2 = $("<option></option>");
+            option2.html("明天");
+            option2.val("明天");
+            $day.append(option2);
+
+            $hour.empty();
+            //注入上午小时
+            for(i=0;i < (hourIntervalAM + 1);i++){
+                var option = $("<option></option>");
+                option.html(startHourAM + i);
+                option.val(startHourAM + i);
+                $hour.append(option);
+            }
+        }
+
+
+        /*================-------------- 8号店处理完之后，删掉这行 --------------================*/
+//        if( shop_id == 8 ) $hour.find('option:first').remove();
+
+        $hour.change(function(){
+            var selectHourValue = $hour.val();
+            if(selectHourValue == hourArr[0]){
+                $minute.empty();
+                var sumMInuteToSix = 60 - minuteArr[0];//上午开始预定分钟到60的间隔
+                var tmpStepCount = Math.floor(sumMInuteToSix / step);
+                var minuteAddStep = minuteArr[0];
+                if(((minuteArr[0] + preparationTime) < 60) && (flagAM == 0)){
+                    minuteAddStep = minuteArr[0] + preparationTime;
+                    sumMInuteToSix = 60 - minuteAddStep;
+                    tmpStepCount = Math.floor(sumMInuteToSix / step);
+                    $minute.empty();
+                    for(i=0; i<tmpStepCount; i++){  //循环加入分钟范围
+                        var option = $("<option></option>");
+                        if(i == (tmpStepCount-1)){ //说明是最后一个分钟范围
+                            option.html(minuteAddStep + '~60');
+                            option.val(minuteAddStep);
+                            $minute.append(option);
+                            break;
+                        }
+                        option.html(minuteAddStep + '~' + (minuteAddStep + step));
+                        option.val(minuteAddStep);
+                        $minute.append(option);
+                        minuteAddStep += step;
+                    }
+                }else{
+                    for(i=0; i<tmpStepCount; i++){  //循环加入分钟范围
+                        var option = $("<option></option>");
+                        if(i == (tmpStepCount-1)){ //说明是最后一个分钟范围
+                            option.html(minuteAddStep + '~60');
+                            option.val(minuteAddStep);
+                            $minute.append(option);
+                            break;
+                        }
+                        option.html(minuteAddStep + '~' + (minuteAddStep + step));
+                        option.val(minuteAddStep);
+                        $minute.append(option);
+                        minuteAddStep += step;
+
+
+                    }
+                }
+            }else if(selectHourValue != hourArr[0] && selectHourValue != hourArr[1]){
+
+                //二、根据给定的参数值计算预定开始与结束的分钟范围
+                //清空分钟默认值
+                $minute.empty();
+                //计算出分钟选择范围有几种可能
+                var minuteIntervalCount = 60 / step;
+                if(step == 15){
+                    //循环注入分钟范围
+                    var tmpStep = 0;//步长变量值
+                    for(i=0; i < minuteIntervalCount; i++){
+                        var option = $("<option></option>");
+                        option.html(tmpStep + '~' + (tmpStep + 15));
+                        option.val(tmpStep);
+                        $minute.append(option);
+                        tmpStep += 15;
+                    }
+                }else if(step == 30){
+                    //循环注入分钟范围
+                    var tmpStep = 0;//步长变量值
+                    for(i=0; i < minuteIntervalCount; i++){
+                        var option = $("<option></option>");
+                        option.html(tmpStep + '~' + (tmpStep + 30));
+                        option.val(tmpStep);
+                        $minute.append(option);
+                        tmpStep += 30;
+                    }
+                }else{
+
+                }
+            }else if(selectHourValue == hourArr[1]){
+                var minuteTmp = 0;
+                //清空分钟默认值
+                $minute.empty();
+
+                if(minuteArr[1] == 00){
+                    var option = $("<option></option>");
+                    option.html(minuteTmp + '0~0' + minuteTmp);
+                    option.val(minuteTmp);
+                    $minute.append(option);
+                }else{
+                    //计算出分钟选择范围有几种可能
+                    var minuteIntervalCount = minuteArr[1] / step;
+                    if(minuteArr[1] % step != 0){
+                        minuteIntervalCount = Math.ceil(minuteArr[1] / step);
+                    }
+                    for(i=0; i < minuteIntervalCount;i++){
+                        var option = $("<option></option>");
+                        if(i == (minuteIntervalCount - 1)){
+                            option.html(minuteTmp + '~' + minuteArr[1]);
+                            option.val(minuteTmp);
+                            $minute.append(option);
+                            break;
+                        }
+                        option.html(minuteTmp + '~' + (minuteTmp + step));
+                        option.val(minuteTmp);
+                        $minute.append(option);
+                        minuteTmp += step;
+                    }
+                }
+
+            }
+        });
+
+        $('.booking-hour').trigger('change');
+    }
+
+    //----20141020----V1.2----end-//
+
+
+	$(function(){
+        var wx_id = '${wx_id}';
+		var init = function(){
+			var radio = $('input[type=radio]')[0];
+			if( radio.id == 'addr_new_radio' ){
+				showNewAddressBook();
+			}
+			$(radio).attr('checked', true);
+		};
+
+        var useTool = function ( user_tool_id ) {
+            var ids = $( '#tool_ids' ).val();
+            if( !ids ){
+                ids = user_tool_id;
+            }else{
+                ids += ','+user_tool_id;
+            }
+            $( '#tool_ids' ).val( ids );
+        };
+
+
+
+//--------------start--------------第一次进页面,分别取得值---------lufeng--------------------//
+        //----20141020---第二版-start--//
+
+        //隐藏设置送达时间
+        /*$('.booking-text').hide('speed').siblings().show('speed');*/
+
+        var hourArr   =   [0,0,0,0];       //动态接受的预定小时分类
+        var minuteArr =   [0,0,0,0];       //动态结束预定的分钟种类
+        var preparationTime = 30;   //预留时间（分钟）
+        var step = 15,              //配送步长
+            close_time = "${close_time}";
+
+
+        //解析colse_time--close_time = 1130,1300|1930,2100;
+        //解析colse_time--close_time = 1130,1300;
+        close_time = close_time.replace(/\s*/ig,'');//去掉字符串的所有空格
+        var close_time_Lenght = close_time.length;
+        if(close_time_Lenght != 0){
+            if(close_time_Lenght == 19){     //营业时间有两个区间
+                //取出小时
+                var j = 0;
+                for(i=0;i<4;i++){
+                    hourArr[i] = close_time.substr(j,2) - 0;
+                    j += 5;
+                }
+                //取出分钟
+                j = 2;
+                for(i=0;i<4;i++){
+                    minuteArr[i] = close_time.substr(j,2) - 0;
+                    j += 5;
+                }
+                //获取服务器时间
+                $.get('/dashixiongwx/api/getServerTime',function(data){
+                    //后台传来的服务器时间
+                    var count = data.indexOf(':');
+                    var serverHour = data.substring(0,count)-0;
+                    var serverMinute = data.substring(count+1,data.length)-0;
+                    generateReserveTime(hourArr,minuteArr,preparationTime,step, serverHour, serverMinute);
+                });
+            }else if(close_time_Lenght == 9){  //营业时间只有一个区间
+                //取出小时
+                var j = 0;
+                for(i=0;i<2;i++){
+                    hourArr[i] = close_time.substr(j,2) - 0;
+                    j += 5;
+                }
+                //取出分钟
+                j = 2;
+                for(i=0;i<2;i++){
+                    minuteArr[i] = close_time.substr(j,2) - 0;
+                    j += 5;
+                }
+                //获取服务器时间
+                $.get('/dashixiongwx/api/getServerTime',function(data){
+                    //后台传来的服务器时间
+                    var count = data.indexOf(':');
+                    var serverHour = data.substring(0,count)-0;
+                    var serverMinute = data.substring(count+1,data.length)-0;
+                    generateReserveTime2(hourArr,minuteArr,preparationTime,step, serverHour, serverMinute);
+                });
+            }else{
+                if( window.console ) console.log("后台输入营业时间格式有误~!如：0930,1300  1130,1300|1930,2100");
+            }
+        }
+
+
+        //----20141020----V1.2----end-//
+//----------------end---------------第一次进页面,分别取得值--------lufeng--------------------//
+
+
+
+
+
+        var checkBookingTime = function(serverHour,serverMinute){
+            var $day = $booking.find('.booking-day'),
+                $hour = $booking.find('.booking-hour'),
+                $minute = $booking.find('.booking-minute');
+              var hour = serverHour+'',
+                minute = serverMinute,
+                s_hour = $hour.val(),
+                s_minute = $minute.val(),
+                current_time,
+                select_time;
+            if( (minute-0) < 10 ) minute = '0' + minute;
+            if( (s_minute-0) < 10 ) s_minute = '0' + s_minute;
+
+            current_time = (hour + minute) - 0;
+            select_time = (s_hour + s_minute) - 0;
+
+            //如果是今天，判断一下所选时间是否合理
+            if( $day.val() == '今天' && select_time < current_time ){
+                return false;
+            }
+
+            return true;
+        };
+
+	/****************************************************************************************************/
+        var getOrderInfo = function () {
+            return {
+                total_num  : $( '#total_num' ).val() - 0,
+                total_pay :  $( '#total_pay' ).val() - 0,
+                str_products : $( '#data_products' ).val()
+            };
+        };
+		
+        var showCoupon = function (total_pay_new, total_pay_old) {
+            $( '.total-pay' ).text( total_pay_new );
+            $( '#total_pay' ).val( total_pay_new );
+            $( '.original-total-pay' ).show();
+        };
+		var showNewAddressBook = function(){
+			$('#new_addr').show();
+			$('#create_new_addr').hide();
+			$('#create_new_addr2').hide();
+		};
+		var getRequirements = function(){
+			var requirements = [];
+			$('div.requirement').each(function(i, div){
+				var isChecked = $(this).find('input').attr('checked');
+				if( isChecked ){//有特殊要求
+					requirements.push( $(this).find('span').html() );
+				}
+			});
+
+			var other_requirement = $requirement.val();
+			if( other_requirement ){
+				requirements.push( other_requirement);
+			}
+
+            //添加预订时间
+            if( $booking.size() ) requirements.push( getBookingTime() );
+
+			$( '#addr_requirements' ).val( requirements.join('\n') );
+
+		};
+
+		$('#create_new_addr,#create_new_addr2').click(function(){
+			showNewAddressBook();
+			$('#addr_new_radio').attr('checked', true);
+		});
+
+		$('div.requirement').find('input').change(function(){
+			getRequirements();
+		});
+		$requirement.change(function(){
+			getRequirements();
+		});
+		
+		$( '#submit_btn_head' ).click(function(){
+			$('#addr_submit_btn').trigger('click');
+		});
+
+        var checkUseOfTool = function(){
+            var isToolUsed = false,
+                $use = $('.use');
+            if( $use.size() == 0 ) return true;
+            $use.each(function(){
+                if( $(this).hasClass('isUse') ){
+                    isToolUsed = true;
+                }
+            });
+            return isToolUsed;
+        };
+
+        //获取预订配送时间
+        var getBookingTime = function(){
+            var $booking_day = $('.booking-day'),
+                $booking_hour = $('.booking-hour'),
+                $booking_minute = $('.booking-minute');
+
+            if( !$booking.size() ) return '';
+
+            var minute = $booking_minute.val() - 0,
+                hour = $booking_hour.val()-0;
+
+            var hourRrrivalEnd = $booking_hour.val() - 0,
+                minuteRrrivalEnd = $booking_minute.val() - 0;
+
+            if( minute < 10 ){
+                minute = '0' + minute;
+                minuteRrrivalEnd = minuteRrrivalEnd + 15;
+            }else{
+                if(minuteRrrivalEnd + 15 >= 60){
+                    hourRrrivalEnd  = hourRrrivalEnd + 1;
+                    minuteRrrivalEnd = minuteRrrivalEnd + 15 - 60;
+                    if(minuteRrrivalEnd == 0){
+                        minuteRrrivalEnd = minuteRrrivalEnd + '0';
+                    }
+                }else{
+                    minuteRrrivalEnd = minuteRrrivalEnd + 15;
+                }
+            }
+
+            return '/------- 预订订单，请于' + '今天' + ', ' + hour + ':' +  minute + '~' + hourRrrivalEnd + ':' + minuteRrrivalEnd  +  '送达 --/';
+        };
+
+		//按下提交, 准备数据, 然后让表单提交
+		var $submit_form = $('#submit_form');
+		$('#addr_submit_btn').click(function(){
+
+            //获取点击时服务器时间
+            $.get('/dashixiongwx/api/getServerTime',function(data){
+
+                //后台传来的服务器时间
+                var count = data.indexOf(':');
+                var serverHour = data.substring(0,count)-0;
+                var serverMinute = data.substring(count+1,data.length)-0;
+
+
+                 //此段注释有逻辑冲突--
+                /*if(close_time_Lenght == 9){         //只有一段营业时间
+                    if((hourArr[1] < serverHour) || ((hourArr[1]==serverHour) && (minuteArr[1] < serverMinute))){
+                        alert('抱歉，您的订单已失效！');
+                        location.href = '/dashixiongwx/shop/'+ shop_id +'?wx_id=' + wx_id;
+                       return false;
+                    }
+                }
+                if(close_time_Lenght == 19){        //只有两段营业时间
+                    if(((hourArr[3] < serverHour) || ((hourArr[3]==serverHour) && (minuteArr[3] < serverMinute)))){    //
+                        alert('抱歉，您的订单已失效！');
+                        location.href = '/dashixiongwx/shop/'+ shop_id +'?wx_id=' + wx_id;
+                        return false;
+                    }
+                    if(((hourArr[1] < serverHour) || ((hourArr[1]==serverHour) && (minuteArr[1] < serverMinute))) && ((serverHour<hourArr[2]) || ((serverHour==hourArr[2]) && (serverMinute<minuteArr[2])))){
+                        alert('抱歉，您的订单已失效！');
+                        location.href = '/dashixiongwx/shop/'+ shop_id +'?wx_id=' + wx_id;
+                        return false;
+                    }
+
+                }*/
+
+
+                var $radio = $('input:radio:checked');
+
+                if(!$radio.attr('id')){
+                    alert('请先填写正确地址!');
+                    return;
+                }
+
+                //如果是提前订餐，判断有没选择时间
+                if( is_booking ){
+                    if( $booking.size() && ($booking.find('.booking-hour').val() == -1 || $booking.find('.booking-minute').val() == -1) ){
+                        alert('请先设置送达时间！');
+                        window.scrollTo(0,0);
+                        return;
+                    }
+                    //如果选的是过去的时间，不提交表单
+                    if( !checkBookingTime(serverHour,serverMinute) ){
+                        alert('抱歉，时间不能倒流～');
+                        return;
+                    }
+                }
+
+                //获取特殊吩咐，主要是加上预订的时间
+                getRequirements();
+
+                if( $radio.attr('id') == 'addr_new_radio' ){//选择了新建地址
+                    var name = $('#input_addr_name').val();
+                    var mobile = $('#input_addr_mobile').val();
+                    var address = $('#input_addr_addr').val();
+                    var shortTel = $('#input_addr_shortTel').val();
+                    $('#addr_id').val('');//没有这个id说明是一个新地址
+                    $('#addr_name').val(name);
+                    $('#addr_mobile').val(mobile);
+                    $('#addr_addr').val(address);
+                    $('#addr_shortTel').val(shortTel);
+                    name = $.trim( name );
+                    mobile = $.trim( mobile );
+                    address = $.trim( address );
+                    shortTel = $.trim(shortTel);
+                    if( (!name) || (!mobile) || (!address) ){
+                        alert('请先填写正确的送餐信息!短号可选择填写！');
+                        return;//没写联系方式不许提交表单
+                    }
+                }else{//使用旧的地址
+                    var $item = $radio.parents('.addr-item');
+                    $('#addr_id').val($radio.attr('id'));//有这个id说明是一个旧地址
+                    $('#addr_name').val( $item.find('.name').text() );
+                    $('#addr_mobile').val( $item.find('.mobile').text() );
+                    $('#addr_shortTel').val( $item.find('.shortTel').text() );
+                    $('#addr_addr').val( $item.find('.address').text() );
+                }
+
+                var infos = $( '.express-info-fetch' );
+                if( infos.size() ==0 ){
+                    $( '#is_express_info_fetch_new' ).val(1);
+                }
+
+                infos.each(function (i, span) {
+                    if( $(span).text() == $( '#express_info_fetch' ).val() ) {//不是new的,没必要再each
+                        $( '#is_express_info_fetch_new' ).val('');
+                        return false;
+                    }
+                });
+
+                //增加一个“预计送达”的公告
+                if( ${possibleReach.isShow} ){
+                    $( '#dialog' ).dialog({
+                        modal : true,
+                        show: {
+                            effect: "fade",
+                            duration: 618
+                        },
+                        hide: {
+                            effect: "fade",
+                            duration: 618
+                        },
+                        buttons: {
+                            '我可以等' : function() {
+                                $('#submit_form').submit();
+                                $( this ).dialog( "close" );
+                            },
+                            '再考虑一下' : function() {
+                                $( this ).dialog( "close" );
+                            }
+                        }
+                    });
+                    return;
+                }
+
+                $('#order_date').val($('.booking-day').val());
+
+                if( isNewUser && !checkUseOfTool() ){
+                    if( confirm('这位爷，你还没使用道具呢，真要提交吗？') ){
+                        //直接提交表单
+                        $submit_form.submit();
+                    }
+                    return;
+                }
+
+                //直接提交表单
+                $submit_form.submit();
+            });
+
+		});
+
+        //--------------------
+        $('.del-addr').click(function (e) {
+            var yes = confirm( '确定要删除这个地址么?' );
+            if( yes ){
+                var a = this;
+                $.get( this.href, function (res) {
+                    $( a ).parents( 'div.addr-item' ).remove();
+                });
+            }
+
+        });
+
+        $( '.express-use-this' ).click(function () {
+            var txt = $( this ).parents( 'li' ).find( '.express-info-fetch' ).text();
+            var val = $( '#express_info_fetch' ).val();
+            var info_fetch = $( '#express_info_fetch' );
+            if( val ){
+                info_fetch.val( [ val, txt ].join( ' ' ) );
+                return;
+            }
+            info_fetch.val( txt );
+
+        });
+
+        $( '.express-del-this' ).click(function () {
+            var yes = confirm( '确定要删除这个取件信息么?' );
+            if( yes ){
+                var a = this;
+                $.get( this.href, function () {
+                    $( a ).parents( 'li' ).remove();
+                }); 
+            }
+            
+        });
+
+        $( '.show-more-tool' ).click(function () {
+            $(this).siblings('li').css({'display':'-webkit-box'});
+            $(this).remove();
+        });
+
+
+        //-------------------
+        $( '.use' ).click(function () {
+            var $a = $( this );
+            var size = $a.parents('ul').find('.isUse').size();
+            if( $a.is('.isUse') ){
+                //$a.removeClass('isUse');
+                return;
+            }
+            if(size){
+                alert('一次只能使用一个道具');
+                return;
+            }
+
+            var yes = confirm( '确定使用本道具?' );
+            if( yes ){
+                var order_info = getOrderInfo();
+                var user_tool_id = $a.attr( 'tool-id' );
+                $.post( '/dashixiongwx/tool/use', {
+                    str_products : order_info.str_products,
+                    total_num : order_info.total_num,
+                    total_pay : order_info.total_pay,
+                    user_tool_id : user_tool_id,
+                    tool_id : $a.attr( 'tool-tid' ),
+                    user_id : user_id 
+                }, function (res) {
+                    if( res.code ){
+                        alert( '有问题, 重试看看能不能解决问题?' );
+                        return;
+                    }
+                    $a.addClass('isUse');
+                    if( res.type == 'coupon' ){
+                        showCoupon( res.ret.total_pay.toFixed(1), order_info.total_pay.toFixed(1) );
+                    }
+                    useTool( user_tool_id );
+                });
+            }
+        });
+
+        //设置预订的送达时间
+        /*$('.booking-text').click(function(){
+            $(this).hide().siblings().show();
+        });*/
+
+		//---------------------
+		init();
+	});
+	
+
+</script>
+
+<script type="text/javascript" charset="utf-8" src="http://s.ksmimi.com/dashixiong_static/jspro/jquery.cityselect.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(function () {
+        $("#city").citySelect({
+            url:"city",  
+            nodata:"none" //当子集无数据时，隐藏select 
+        });
+        
+        var p = {
+            url:"city",  
+            prov : '广东',
+            nodata:"none" //当子集无数据时，隐藏select 
+        };
+
+        p.city = '惠州' 
+        if( shop_id != 1 ){
+            p.city = '广州';
+        }
+
+        $("#city_sender").citySelect( p );
+
+        //-----------------------------
+        $( '#new_sender_info_btn' ).click(function () {
+            $( '.express-sent-new-sender-info' ).show();
+            $( '.express-sent-sender-info' ).hide();
+        });
+
+
+    });
+</script>
+
+
+
+
+
+

@@ -1,0 +1,78 @@
+<style>
+	h1{
+		font-size : 32px;	
+		padding : 20px;
+	}
+	p{
+		margin : 20px 10px;	
+	}
+	input {
+		line-height : 28px;	
+		border : 1px solid #CCC;
+	}
+	.submit{
+		padding : 5px;	
+	}
+	.content{
+		height : 200px;
+		width : 600px;	
+	}
+    label{
+        display:inline-block;
+        width:85px;
+    }
+</style>
+
+<h2>货架广告</h2>
+<form action="/dashixiongwx/admin/shop/${shop_id}/section/${section.id}/doUpdateSectionAd" enctype="multipart/form-data" method="post">
+    <p>
+        <label>广告图片</label>
+        {{if section.ad}}
+        <img src="http://img.ksmimi.com/uploads/products/ad/${section.ad}" />
+        {{/if}}
+        <input type="file" name="section_ad" />
+        <input class="submit" type="submit" value="提交" />
+    </p>
+</form>
+
+<h2>修改货架</h2>
+<form action="/dashixiongwx/admin/shop/${shop_id}/section/doupdate" method="post">
+	<input name="section[id]" type="hidden" value="${section.id}" />
+    <p>
+        <label>货架短标题</label>
+        <input name="section[short_title]" type="text" value="${section.short_title}" /> *
+    </p>
+	<p>
+        <label>货架名称</label>
+        <input name="section[name]" style="width:90%;" type="text" value="${section.name}" /> *
+        <label></label>
+        <textarea style="width:500px;background:none;border:none;" rows="5">
+            <label class="label-quick">快</label>
+            <label class="label-delicious">好吃</label>
+            <label  class="label-jiecao">节操</label>
+        </textarea>
+    </p>
+
+	<p><label>排序</label> <input name="section[showOrder]" type="text" value="${section.showOrder}" /> *</p>	
+	<p><label>是否可用</label> <input name="section[isAvailable]" type="text" value="${section.isAvailable}" /> *<span>(1 可用, 0 不可用)</span></p>
+    <p><label>可拼餐数</label> <input name="section[nPin]" type="text" value="${section.nPin}" /> * <span>(0 单点，2 双拼)</span></p>
+    <p><label>货架广告</label> <input name="section[ad]" type="text" value="${section.ad}" /> *</p>
+    <p><label>className</label> <input name="section[className]" placeholder="输入英文字母" type="text" value="${section.className}" />(redemption:表示为换购货架)</p>
+    <p><label>置顶时间</label><input name="section[topTime]" value="${section.topTime}" placeholder="时间段,格式：0900,1301"> <span>（货架在此时间内会优先显示）</span></p>
+    <p>
+        <label>货架类别</label>
+        <select name="section[type]">
+            <option value="self" {{if section.type == 'self'}}selected{{/if}}>直营</option>
+            <option value="other" {{if section.type == 'other'}}selected{{/if}}>加盟</option>
+        </select>
+    </p>
+
+    <p>
+		<label>货架内容(一个javascript数组字符串)</label> 
+		<textarea class="content" name="section[content]"  >${section.content}</textarea>
+	</p>
+	<p><input class="submit" type="submit" value="提交" /></p>	
+</form>
+
+
+

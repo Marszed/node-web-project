@@ -1,0 +1,91 @@
+<style>
+	table, td, th{
+		border : 1px solid #CCC;	
+	}
+	tr{
+		line-height : 24px;
+	}
+	h1{
+		padding : 10px;
+		font-size : 20px;	
+	}
+	.add-warehouse{
+		margin : 10px;	
+	}
+	.selection{
+		text-align : center;	
+		font-size : 24px;
+		vertical-align : middle;
+	}
+	.menu{
+		margin : 10px;	
+	}
+</style>
+
+
+
+<p class="menu">
+	<a href="/dashixiongwx/admin/shop/${shop_id}/product/list/all">产品管理&gt;&gt;</a>
+</p>
+<p>
+{{if cur_warehouse}}
+	 
+<div>当前仓库是: ${cur_warehouse.name} 
+{{/if}}
+</p>
+<p>
+	<a href="/dashixiongwx/admin/shop/${shop_id}/warehouse/add">添加仓库</a>
+</p>
+
+<table>
+	<tr>
+		<th>
+			是否当前
+		</th>
+		<th>
+			id
+		</th>
+		<th>
+			名称
+		</th>
+		<th>
+			操作
+		</th>
+	</tr>	
+
+{{each(warehouse, i) warehouses}}
+	<tr>
+		<th class="selection">
+			{{if cur_warehouse&&(cur_warehouse.id-0 == warehouse.id) }}
+				*
+			{{/if}}
+		</th>
+		<td>
+			${warehouse.id}	
+		</td>
+		<td>
+			<a href="/dashixiongwx/admin/shop/${shop_id}/warehouse/${warehouse.id}/product/list/all">${warehouse.name}</a>
+		</td>
+		<td>
+			&nbsp;<a class="action" type="del" href="/dashixiongwx/admin/shop/${shop_id}/warehouse/${warehouse.id}/del" onclick="ondel(this); return false;">删除</a> | 
+			<!--
+			&nbsp;<a class="action" type="del" href="/dashixiongwx/admin/warehouse/${warehouse.id}/edit">编辑</a> | 
+			-->
+			&nbsp;<a class="action" type="cur" href="/dashixiongwx/admin/shop/${shop_id}/warehouse/${warehouse.id}/cur">设为当前仓库</a> | 
+
+			<a href="/dashixiongwx/admin/shop/${shop_id}/warehouse/${warehouse.id}/${warehouse.name}/inproducts">进货</a>&nbsp; 
+		</td>
+	</tr>
+{{/each}}
+
+</table>
+
+<script type="text/javascript" charset="utf-8">
+    var ondel = function (ele) {
+        var yes = confirm( '真的要删么？后果很严重哦！ ' );
+        if( yes ){
+            location.href = ele.href;
+        }
+    };    
+</script>
+

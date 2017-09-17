@@ -1,0 +1,103 @@
+<style>
+	h2{
+		font-size : 20px;	
+		font-weight : 700;
+		line-height : 32px;
+		margin-bottom : 15px;
+		border-bottom : 1px dashed #CCC;
+	}
+	
+	ul{
+		margin-bottom : 15px;	
+		list-style : disc inside;
+	}
+	.addr-item{
+		width : 90%;
+		padding : 5px;
+		overflow : hidden;
+	}
+	.new-item{
+		padding : 5px;
+	}
+	.new-item input{
+		padding : 5px;	
+		border : 1px solid #CCC;
+		line-height : 24px;
+		background : #EEE;
+
+	}
+	
+	.new-item label{
+		line-height : 22px;	
+	}
+
+	#addr_submit_btn{
+		background : #40a0c0;
+		padding : 12px;
+		color : #FFF;
+		text-decoration : none;
+    border : none;
+	}
+	.submit{
+		padding : 30px 30px 30px 0;
+	}
+	.info-wraper{
+		padding : 0 0 0 25px;	
+	}
+	.info-wraper input{ 
+		width : 80%;
+	}
+	.info-wraper p.input{
+		margin-bottom : 10px;	
+	}
+	
+	.section{
+		margin : 0 0 20px 0;	
+	}	
+	.head{
+		clear : both;	
+	}
+  .needed{
+    color : red; 
+  }
+  .desc{
+    color : #CCC;
+    font-size : 12px;
+    padding-left : 10px;
+  }
+  p{
+    line-height : 18px; 
+    padding : 5px 0;
+  }
+  input[type=radio]{
+        padding : 5px; 
+        margin : 5px; 
+  }
+
+</style>
+
+
+<form id="submit_form" action="" method="GET">
+<input type="hidden" name="wx_id" id="" value="${wx_id}" />
+<div class="container">
+	<div class="section">
+		<h2 class="head">请选择离你最近的分店</h2>
+        <div>
+            <div id="new_addr" class="new-item">
+                <p><label><input name="shop_id" type="radio"  value="5" checked='checked' />广州大学城店</label></p>
+		    	<p><label><input name="shop_id" type="radio" value="1" />惠州经济学院店</label></p>
+		    	<p><label><input name="shop_id" type="radio"  value="2"/>广东工程学院店</label></p>
+		    	<p><label><input name="shop_id" type="radio"  value="1"/>惠州学院店</label></p>
+		    	<p><label><input name="shop_id" type="radio"  value="2"/>暨南大学店</label></p>
+		    	<p><label><input name="shop_id" type="radio"  value="2"/>广东工业大学(龙洞校区)店</label></p>
+		    </div>
+        </div>
+    </div>
+	<div class="submit">
+		<input type="submit" id="addr_submit_btn" value="提交" /> 
+	</div>
+
+</div>
+
+</form>
+

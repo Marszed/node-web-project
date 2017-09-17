@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>用户行为分析</title>
+    <style type="text/css">
+        .analysis-div{
+            height:100px;
+            min-width:100px;
+            line-height:100px;
+            display:inline-block;
+            background:url("http://s.ksmimi.com/dsx/img/pointer.png") no-repeat right center;
+            padding-right:62px;
+            margin-right:10px;
+            text-align:center;
+        }
+        .analysis-div:last-child{background:none;}
+        .analysis-div img{
+            vertical-align:middle;
+            margin-top: 3px;
+            margin-bottom: 5px;
+        }
+        .analysis-box{ }
+        .current-date{margin:0 20px;}
+        .ops{
+            margin-bottom:20px;
+        }
+        .wid{
+            width: 40px;
+        }
+        .stime,.push-msg{
+            margin-left: 50px;
+        }
+        .tip{
+            margin-left: 10px;
+            color: red;
+            display: none;
+        }
+        .selUser{
+            width: 40px;
+        }
+        .push-userId-input,.push-groupId-input{
+            width: 250px;
+        }
+        .push-wx-msg{
+            cursor: pointer;
+        }
+        .msg-content{
+            width: 600px;
+            vertical-align: bottom;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ops">
+        <a href="?y=${pre_date_y}&m=${pre_date_m}&d=${pre_date_d}">前一天</a>
+        <span class="current-date">当前日期为：${y}年${m}月${d}日</span>
+        <a href="?y=${next_date_y}&m=${next_date_m}&d=${next_date_d}">后一天</a>
+        <span class="stime">请选择查看信息时间：</span>
+        <input type="radio" name="data" class="radios" id="oneweek" value="oneweek"/>一周内
+        <input type="radio" name="data" class="radios" id="onemonth" value="onemonth"/>一月内
+        &nbsp;&nbsp;<a id="selinfo" href="javascript:goto();">点击查询</a>
+        <span class="tip">请先选择要查看的用户</span>
+        {{if power>=10}}
+        <span class="push-msg">群发消息:</span>
+        <input class="push-userId-input" type="text" placeholder="请输入逗号分割的用户ID或选择用户(选填)" />|
+        <input class="push-groupId-input" type="text" placeholder="请输入逗号分割的wx_groupId(选填)" />
+        <textarea class="msg-content" placeholder="输入要发送的内容"></textarea>
+        <input type="submit" class="push-wx-msg" value="发送">
+        {{/if}}
+    </div>
+    <div class="ops">
+        <input type="button" class="delmsg" value="删除选中用户行为记录"/>
+    </div>
+    <div class="ops">共有${row}人到店,下单率为<span class="analysis_rate"></span>%</div>
+
+    <table>
+        <tr>
+            <td class="wid">
+                <div class="selUser"><div>全选</div><input id="ckall" name="ckall" type="checkbox" /></div>
+                <div class="selUser"><div>选择新用户</div><input id="ckNewUser" name="ckNewUser" type="checkbox" /></div>
+            </td>
+            <td class="wid">用户ID</td>
+            <td class="wid">用户名</td>
+            <td>点击记录</td>
+        </tr>
+        {{each(ret,i) rets}}
+        <tr>
+            <td><input class="ck" value="${ret.userId}" type="checkbox" name="ck" /></td>
+            {{if ret.nick}}
+                <td><a href="/dashixiongwx/admin/shop/${shop_id}/order/list/${ret.userId}/${ret.nick}" title="${ret.ua}">${ret.userId}
+                    <img style="display: none;" class="none new_customer new_${ret.userId}" user_id="${ret.userId}" title="${ret.nick}是一个新客户，不许怠慢!" src="http://s.ksmimi.com/dashixiong_static/img/new.png"/></a></td>
+                {{if ret.nick}}
+                    <td>${ret.nick}</td>
+                {{else}}
+                    <td>--</td>
+                {{/if}}
+                <td><div class="analysis-box record_${ret.userId}">{{html ret.content}}</div></td>
+            {{else}}
+                <td><a href="/dashixiongwx/admin/shop/${shop_id}/order/list/${ret.userId}/null" title="${ret.ua}">${ret.userId}
+                    <img style="display: none;" class="none new_customer new_${ret.userId}" user_id="${ret.userId}" title="${ret.nick}是一个新客户，不许怠慢!" src="http://s.ksmimi.com/dashixiong_static/img/new.png"/></a></td>
+                {{if ret.nick}}
+                    <td>${ret.nick}</td>
+                {{else}}
+                    <td>--</td>
+                {{/if}}
+                <td><div class="analysis-box record_${ret.userId}">{{html ret.content}}</div></td>
+            {{/if}}
+        </tr>
+        {{/each}}
+    </table>
+
+    <script src="http://www.ksmimi.com:6889/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        //判断是否新用户
+        var $new_customer = $('img.new_customer'),
+                user_ids = [],
+                back_num = 0,
+                total_num = $new_customer.size(),
+                new_marker = {};
+
+        $new_customer.each(function(){
+            var $new_img = $(this),
+                    user_id = $new_img.attr('user_id');
+            if( user_id ){
+                user_ids.push(user_id);
+                if( !new_marker[user_id] ) new_marker[user_id] = [];
+                new_marker[user_id].push( $new_img );
+            }
+        });
+        $.post('/dashixiongwx/admin/shop/'+ ${shop_id} +'/get/order_nums', {user_ids:user_ids, y:${y}, m:${m}, d:${d}},
+            function(res){
+                for(var p in res){
+                    if( res[p] == 0 ){ //今日以前的时间里没下过单，说明是新用户，显示新客户的标识图片
+                        new_marker[p].length && new_marker[p][new_marker[p].length-1].show();
+                    }
+                }
+
+                $new_customer.each(function(){
+                    var $img = $(this);
+                    if( $img.is(':hidden') ) back_num++;
+                });
+
+            });
+
+        //实时推送用户的行为
+        var socket = io.connect('http://www.ksmimi.com:6889'),
+            $table = $('table'),
+            loc = location;
+        var append_record = function(data){
+            var $analysis = $('.record_' + data.user_id),
+                $tr_first = $table.find('tr').eq(0);
+            if( $analysis.size() ){
+                $tr_first.after( $analysis.append(data.content).closest('tr') );
+                return;
+            }
+            loc.reload();
+        };
+        //通过这个请求上报一下自己的店铺id
+        socket.emit('report_shop_id', {
+            shop_id : ${shop_id}
+        });
+        socket.on('push record', function (data) {
+            if(window.console) console.log(data);
+            append_record(data);
+        });
+    </script>
+    <script type="text/javascript">
+        Array.prototype.indexOf = function(val) {
+            for(var i=0;i<this.length;i++) {
+                if(this[i] == val) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        Array.prototype.remove = function(val) {
+            var index = this.indexOf(val);
+            if(index > -1) {
+                this.splice(index, 1);
+            }
+        }
+
+        var ids = [];
+        var ck = $('input[name="ck"]');
+        var ckLen = ck.length;
+        $('#ckall').click(function(){
+            ck.prop('checked',this.checked);
+            ck.each(function(){
+                if(this.checked) {//如果选中，则插入
+                    if(ids.indexOf($(this).val()) == -1) {
+                        ids.push($(this).val());
+                    }
+                }else{//否则，删除
+                    ids.remove($(this).val());
+                }
+            });
+        });
+        ck.click(function(){
+            if(this.checked) {//如果选中，则插入
+                if(ids.indexOf($(this).val()) == -1) {
+                    ids.push($(this).val());
+                }
+            }else{//否则，删除
+                ids.remove($(this).val());
+            }
+            var checkedLen = ck.filter(':checked').length;
+            checkedLen>=ckLen ? $('#ckall').prop('checked',true) : $('#ckall').prop('checked',false);
+        });
+        $('#ckNewUser').click(function(){
+            var newchk = $('.new_customer:visible').closest('tr').find('input[type="checkbox"]').prop('checked',this.checked);
+            newchk.each(function(){
+                if(this.checked) {
+                    if(ids.indexOf($(this).val()) == -1) {
+                        ids.push($(this).val());
+                    }
+                }else{
+                    ids.remove($(this).val());
+                }
+            });
+        });
+
+        function goto() {
+            if(ids.length == 0) {
+                $('.tip').show();
+                return;
+            }
+            var radioVal = $('input[type="radio"]:checked').val();
+            location.href = '/dashixiongwx/admin/shop/${shop_id}/${y}/${m}/${d}/user/actived/'+radioVal+'?ids='+ids;
+        };
+    </script>
+<script type="text/javascript">
+    var $doc = $(document),
+            $pushUserId = $('.push-userId-input'),
+            $pushGroupId = $('.push-groupId-input'),
+            $pushWXMSGSubmit = $('.push-wx-msg'),
+            $textAreaMsg = $('.msg-content');
+    $pushWXMSGSubmit.click(function(e){
+        var $checked = $('input[name="ck"]:checked'),
+                userIdSet = [];
+        $checked.each(function(i){
+            userIdSet.push($(this).val());
+        });
+        var userIdArr = $pushUserId.val().split(',');
+        for(var j= 0,len=userIdArr.length;j < len; j++){
+            userIdSet.push(userIdArr[j]-0);
+        }
+        if($pushUserId.val() || $pushGroupId.val() || (userIdSet.length>0)){
+            var obj = {
+                checkedUserId: userIdSet,
+                msg: $textAreaMsg.val()
+            };
+            if(confirm('确认发送吗？')){
+                $.post('/dashixiongwx/admin/api/push/wx_msg',{args: obj},function(data){
+                    if(data=='sus'){
+                        alert('success');
+                    }else{
+                        alert('发送失败！！');
+                    }
+                });
+            }
+
+        }else{
+            alert('输入数据不对！请核对后重试！');
+            return false;
+        }
+    });
+
+</script>
+<script type="text/javascript">
+    $('.delmsg').click(function(){
+        if(confirm('确认删除')){
+            var $checked = $('input[name="ck"]:checked'),
+                userIdSet = [];
+            $checked.each(function(i){
+                userIdSet.push($(this).val());
+            });
+            $.post('/dashixiongwx/admin/shop/'+ ${shop_id} +'/del/analysis', {userIdSet:userIdSet, y:${y}, m:${m}, d:${d}},
+                function(data){
+                    if(data=='sus'){
+                        location.reload();
+                    }else{
+                        alert('删除失败！');
+                    }
+            });
+        }else{
+            return false;
+        }
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var imgs = $('img');
+        var success = 0;
+        imgs.each(function(i){
+            if($(this).attr('src') == 'http://s.ksmimi.com/dsx/img/success.gif'){
+                success += 1;
+            }
+        });
+        var row = ${row};
+        var rate = (success / row).toFixed(2);
+        var data = rate*100;
+        $('.analysis_rate').text(data);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<style>
+	h2{
+		font-size : 20px;	
+		font-weight : 700;
+		line-height : 32px;
+		margin-bottom : 15px;
+		border-bottom : 1px dashed #CCC;
+	}
+	
+	ul{
+		margin-bottom : 15px;	
+		list-style : disc inside;
+	}
+	.addr-item{
+		width : 90%;
+		padding : 5px;
+		overflow : hidden;
+	}
+	.new-item{
+		padding : 5px;
+	}
+	.new-item input{
+		padding : 5px;	
+		border : 1px solid #CCC;
+		line-height : 24px;
+		background : #EEE;
+
+	}
+	
+	.new-item label{
+		line-height : 22px;	
+	}
+
+	#addr_submit_btn{
+		background : #40a0c0;
+		padding : 12px;
+		color : #FFF;
+		text-decoration : none;
+    border : none;
+	}
+	.submit{
+		padding : 30px 30px 30px 0;
+	}
+	.info-wraper{
+		padding : 0 0 0 25px;	
+	}
+	.info-wraper input{ 
+		width : 80%;
+	}
+	.info-wraper p.input{
+		margin-bottom : 10px;	
+	}
+	
+	.section{
+		margin : 0 0 20px 0;	
+	}	
+	.head{
+		clear : both;	
+	}
+  .needed{
+    color : red; 
+  }
+  .desc{
+    color : #CCC;
+    font-size : 12px;
+    padding-left : 10px;
+  }
+  .exist-msg{
+      display:none;
+      color:#ff0000;
+      margin-top:10px;
+  }
+</style>
+
+<form id="submit_form" action="/dashixiongwx/account/bind/${wx_id}" method="POST">
+<input type="hidden" name="shop_name" value="${shop_name}">
+<div class="container">
+	<div class="section">
+		<h2 class="head">账号绑定</h2>
+
+		<div id="new_addr" class="new-item" >
+			<div class="info-wraper">
+                <p><span class="needed">*</span><label>邮箱</label><span class="desc">重要信息会通过邮箱确认</span></p>
+				<p class="input">
+                    <input name="account[email]" class="email" type="text" />
+                    <span class="exist-msg">该邮箱已经被注册过了，请换一个。</span>
+                </p>
+				<p><span class="needed">*</span><label>密码<span class="desc">设定一个密码以便在微信以外的工具(网页、app)登录</span></label></p>
+				<p class="input"><input name="account[pwd]" class="password" type="password" /></p>
+                <p><span class="needed">*</span><label>昵称</label><span class="desc">给自己起一个牛B的称号</span></p>
+				<p class="input"><input name="account[nick]" class="nick" type="text" /></p>
+			</div>
+		</div>
+	</div>
+	<div class="submit">
+		<input type="submit" id="addr_submit_btn" value="OK, 绑定之！" /> 
+	</div>
+
+</div>
+
+</form>
+
+<script type="text/javascript">
+    var $form = $('#submit_form'),
+        $addr_submit_btn = $('#addr_submit_btn'),
+        $email = $('.email'),
+        $password = $('.password'),
+        $nick = $('.nick'),
+        $exist_msg = $('.exist-msg'),
+        ok = true;
+    $addr_submit_btn.click(function(){
+        var email = $email.val(),
+            password = $password.val(),
+            nick = $nick.val();
+
+        if( !email || !password || !nick ){
+            alert('抱歉，信息不完整！');
+            return false;
+        }
+         //****************************************
+        $.post('/dashixiongwx/get_user_by_email', {email:email}, function(res){
+            //用户已经存在，不能使用此邮箱
+            if( res.status ){
+                $exist_msg.css({display:'block'});
+                return;
+            }
+            $exist_msg.hide();
+            $form.submit();
+        });
+        return false;
+    });
+</script>

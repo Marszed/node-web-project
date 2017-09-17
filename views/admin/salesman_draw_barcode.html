@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>添加业务员配送的订单条码</title>
+    <style>
+        body{
+            background-image: url(http://s.ksmimi.com/imgpro/grid.png);
+        }
+        textarea{
+            vertical-align: bottom;
+            height: 250px;
+            width: 250px;
+        }
+        input[type="date"]{
+        }
+        table{
+            border-spacing: 0;
+        }
+        tr,th,td{
+            border: 1px solid darkseagreen;
+            text-align: center;
+        }
+        table{
+            border: 1px solid darkseagreen;
+            width: 500px;
+        }
+    </style>
+</head>
+<body>
+<h3>查询当前店铺用户</h3>
+捡、递、送:
+<select class="os" name="os">
+    <option value="J">捡货联</option>
+    <option value="D">递货联</option>
+    <option value="S">送货联</option>
+</select>
+开始时间:<input type="date" class="start-date" placeholder="格式:2015-03-01" />&nbsp;&nbsp;结束时间:<input class="end-date" type="date" placeholder="格式:2015-03-03" />&nbsp;
+<input class="find" type="button" value="查询" />
+<div class="table-barcode">
+
+</div>
+<h1>扫描条码</h1>
+<input name="shop_id" value="${shop_id}" type="hidden">
+<input name="idCardNum" value="${idCardNum}" type="hidden">
+<textarea class="barcode"></textarea>
+<input class="submit" type="button" value="提交" />
+</body>
+<script type="text/javascript" src="http://s.ksmimi.com/dsx/jspro/jquery-2.1.1.min.js"></script>
+<script>
+    $(document).ready(function(){
+        //加载页面完成后，让文本域获得焦点
+        $('textarea').focus();
+
+        //保存用户的订单配送条码
+        var $barcode = $('.barcode'),
+            $submit = $('.submit');
+        var shop_id = "${shop_id}",
+            idCardNum = "${idCardNum}";
+        $submit.click(function(){
+            var barcodeVal = $barcode.val();
+            $barcode.val('');
+            var arg = {
+                    shopId: shop_id || '0',
+                    idCardNum: idCardNum || '0',
+                    barcode: barcodeVal
+            };
+            if(barcodeVal){
+                $.post('/dashixiongwx/admin/shop/save/barcode', {arg: arg}, function(data){
+                    if(data=='sus'){
+                        alert('保存成功！');
+                    }else if(data=='failure') {
+                        alert('保存失败!');
+                    }else{
+                        alert('保存失败!提示：可能存在相同的条码！！'+data);
+                    }
+                });
+            }else{
+                alert('请先扫描条码！');
+            }
+
+        });
+
+        //查询用户的订单配送条码
+        var $find = $('.find'),
+                $startDate = $('.start-date'),
+                $endDate = $('.end-date'),
+                $os = $('.os');
+
+        $find.click(function(e){
+            $('.table-barcode').empty();
+            var argJson = {
+                idCardNum: idCardNum || '0',
+                start: new Date($startDate.val()).getTime(),
+                end: new Date($endDate.val()).getTime(),
+                shopId: shop_id || '0',
+                os: $os.val()
+            };
+            var $table = $('<table class=""></table>'),
+                    $th = $('<tr><th>序号</th><th>身份证号码</th><th>orderId</th><td>货联</td></tr>');
+            $table.append($th);
+            if($startDate.val() && $endDate.val()){
+                $.post('/dashixiongwx/admin/shop/find/barcode',{arg: argJson},function(data){
+                    var data = JSON.parse(data);
+                    for(var i = 0, len = data.length; i < len; i++){
+                        var $tr = $('<tr><td>'+(len-i)+'</td><td>'+data[i].idCardNum+'</td><td>'+data[i].orderId+'</td><td>'+data[i].operationStatus+'</td></tr>');
+                        $table.append($tr);
+                    }
+                    $('.table-barcode').append($table);
+                });
+            }else{
+                alert('请选择正确的时间段!');
+            }
+        });
+
+    });
+</script>
+</html>

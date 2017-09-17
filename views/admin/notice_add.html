@@ -1,0 +1,24 @@
+<style>
+	h1{
+		font-size : 32px;	
+		padding : 20px;
+	}
+	p{
+		margin : 20px 10px;	
+	}
+	input {
+		line-height : 28px;	
+		border : 1px solid #CCC;
+	}
+	.content{
+		padding : 5px;
+        width : 90%;
+	}
+</style>
+
+
+<h1>添加公告</h1>
+<form action="/dashixiongwx/admin/shop/${shop_id}/notice/doadd" method="post">
+	<p><label>内容</label> <input name="content" class="content" type="text" /> *</p>
+	<p><input class="submit" type="submit" value="提交" /></p>	
+</form>

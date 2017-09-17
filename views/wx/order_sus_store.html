@@ -1,0 +1,363 @@
+<style>
+    html{
+        background-color: #fff;
+    }
+	h1{
+		font-size : 20px;	
+		margin-bottom : 5px;
+        color: #cb3637;
+        height:50px;
+        text-align:center;
+        padding:15px 0px;
+	}
+    /*.succes_not{float:left;margin-right:10px;}*/
+	h2{
+		line-height : 14px;
+		padding : 8px 8px 10px 20px;
+		margin-bottom : 0px;
+		color : #888;
+
+	}
+	ul{
+		margin-bottom : 11px;
+		list-style : none;
+	}
+	.title-color{
+		color : #333;	
+	}
+	.num{
+		color : #CCC;
+	}
+	.total-pay, .total-num{
+		color : orange;	
+		font-size : 18px;
+	}
+    .express-info{
+        margin-bottom : 10px;
+    }
+    .express-info p{
+        line-height : 25px;
+        padding-left: 20px;
+    }
+    .express-info label{
+        text-decoration : underline;
+    }
+    .margin_b_30{
+        margin-bottom : 30px; 
+    }
+    .margin_b_10{
+        margin-bottom : 10px; 
+    }
+    .container{
+        max-width: 640px;
+        margin: 0 auto;
+        position: relative;
+        min-height:100%;
+        padding: 0;
+        border: 0;
+        padding-bottom:20px;
+    }
+    .back-to-store{
+        text-align: center;
+        border-radius: 5px;
+        margin-bottom: 4px;
+        width: 100%;
+        left: 0;
+        position: fixed;
+        bottom: 2px;
+    }
+    .back-to-store a{
+        background: #cb3637;
+        text-decoration: none;
+        color: #fff;
+        font-size: 18px;
+        display: block;
+        padding: 12px 0;
+        width: 98%;
+        max-width: 630px;
+        border-radius: 5px;
+        margin: 0 auto;
+    }
+    .borde-bottom-line{
+        border-bottom: 1px solid #ccc;
+    }
+    .get-rp{
+        padding: 10px 6px 10px 20px;
+        font-size: 18px;
+        display: inline-block;
+        line-height:22px;
+    }
+    .reciver-info{
+        padding: 20px 10px 20px 20px;
+    }
+    .reciver-title{
+        font-size: 18px;
+        padding-bottom:10px;
+    }
+    .info{
+        font-size:16px;
+        line-height:22px;
+    }
+    ul{
+        padding-left: 20px;
+    }
+    .total-info{
+        text-align:right;
+        padding:15px 15px 25px 15px;
+    }
+    .back-to-store-not{
+        padding:0px 30px;
+    }
+    .success_title{
+        background: url("http://s.ksmimi.com/dsx/img/success_bg.png") no-repeat left center;
+        padding-left: 70px;
+        width: 130px;
+        line-height: 24px;
+        margin: 0 auto;
+        text-align: left;
+        color: #333;
+        font-size: 18px;
+        padding-top: 18px;
+    }
+    .wcpay-h1{
+        padding-top: 10px;
+        background-color: #f9faf5;
+    }
+    .wcpay-h1 h1{
+        height: 10px;
+        padding: 6px 0;
+        color: #333;
+    }
+    .wcpay-submit-div{
+        width: 122px;
+        text-align: center;
+        line-height: 30px;
+        height: 30px;
+        margin: 20px auto;
+        background-color: #43c83c;
+        color: #fff;
+        border-radius: 3px;
+    }
+    .wcpay-submit-div img{
+        width: 38px;
+        margin-right: 5px;
+    }
+</style>
+
+
+<div class="container">
+    {{if pay_way=='afterpay'}}
+    <div class="borde-bottom-line afterpay-h1">
+        <h1 class="success_title">
+            下单成功，<br />
+            大师兄马上就来
+        </h1>
+    </div>
+    {{else}}
+    <div class="borde-bottom-line wcpay-h1">
+        <h1>
+            感谢您提交订单
+        </h1>
+        <h1>
+            我们将在你支付成功后处理订单
+        </h1>
+        <div class="wcpay-submit-div">
+            <img src="http://a.ksmimi.com/store/src/img/wx.png"><span>微信支付</span>
+        </div>
+    </div>
+    {{/if}}
+    <div class="borde-bottom-line afterpay-h1" style="display: none;">
+        <h1 class="success_title">
+            下单成功，<br />
+            大师兄马上就来
+        </h1>
+    </div>
+    <div class="borde-bottom-line wcpay-h1" style="display: none;">
+        <h1>
+            感谢您提交订单
+        </h1>
+        <h1>
+            我们将在你支付成功后处理订单
+        </h1>
+        <div class="wcpay-submit-div">
+            <img src="http://a.ksmimi.com/store/src/img/wx.png"><span>微信支付</span>
+        </div>
+    </div>
+
+
+    {{if rp-0 > 0}}
+    <div class="borde-bottom-line"><span class="get-rp">恭喜你获得<b class="total-pay">${rp}</b>个人品<br/> 大师兄在确认收货后立马发放到你的账户~</span></div>
+    {{/if}}
+
+    <div class="borde-bottom-line">
+        <h2 class="title-color">收货信息</h2>
+        <ul class="info">
+            <li>
+                <span>${address.name}</span>
+                <span>${address.mobile}</span>
+                {{if address.shortTel}}
+                <span>${address.shortTel}</span>
+                {{/if}}
+                <span>${address.address}</span>
+            </li>
+        </ul>
+    </div>
+
+
+    {{if total.snapshot.requirements}}
+    <div class="borde-bottom-line">
+        <h2 class="title-color">其他吩咐</h2>
+        <ul class="bag">
+            {{each(requirement, i) total.snapshot.requirements}}
+            <li>
+                <p>{{html requirement}}</p>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+    {{/if}}
+
+    
+    {{if tools}}
+    <div class="borde-bottom-line">
+        <h2 class="title-color">这位是大爷，TA用道具</h2>
+        <ul class="info">
+            {{each(tool, i) tools}}
+            <li>${tool.title}</li>
+            {{/each}}
+        </ul>
+    </div>
+    {{/if}}
+
+    <div class="borde-bottom-line">
+        <h2 class="title-color">购物袋信息</h2>
+        <ul class="bag" style="padding-left: 20px;padding-right: 10px;">
+            {{each(product, i) total.list}}
+            <li>
+                <p><span class="title">{{html product.title}}</span> <strong class="price">${product.price}元</strong>/<span class="unit">${product.unit}</span> <span class="num">x${product.set.length}</span></p>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+
+
+    {{if express_info_fetch}}
+    <h2 class="title-color" style="margin-top: 5px;">取件信息</h2>
+    <div style="padding: 5px 0 10px 0;" class="express-info borde-bottom-line">
+        <p>
+            ${express_info_fetch}
+	    </p>
+    </div>
+
+    {{/if}}
+
+    {{if express_info_sent}}
+    <h2 class="title-color">寄件信息</h2>
+	<div class="express-info">
+        <p class="margin_b_10">
+            <label>寄件公司 </label>: ${express_info_sent.company}
+        </p>
+        <p class="margin_b_10">
+            <label>收件人 </label>: ${express_info_sent.receiver.replace(/undefined/g,'')}
+        </p>
+        <p>
+            <label>寄件人 </label>: ${express_info_sent.sender.replace(/undefined/g,'')}
+        </p>
+        <p>
+            <label>重量 </label>: ${express_info_sent.weight.replace(/undefined/g,'')}
+        </p>
+	</div>
+    {{/if}}
+
+
+
+    <div class="total-info">
+        <strong class="total-num">${total.total_num}</strong>件东西，
+        共<strong class="total-pay">${total.total_pay.toFixed(1)}</strong>元
+        {{if deliver_info}}
+        ，含${deliver_info.price}元跑腿费
+        {{/if}}
+    </div>
+
+    <!--继续购买-->
+    <div class="back-to-store-not">
+        <a href="/dashixiongwx/shop/${shop_id}?wx_id=${wx_id}" class="analysis" analysis-position="continue_shopping@继续购买，别拦我">&lt;&lt;继续购买，别拦我</a>
+    </div>
+    <!--继续购买-->
+
+</div>
+<script id="shop_data">
+    var win = window;
+    win.dsx = {
+        openId : "${wx_id}",
+        position : 'come-finish'
+    };
+</script>
+<script type="text/javascript" src="http://s.ksmimi.com/dsx/jspro/analysis.js?v=1.0.2"></script>
+<script type="text/javascript">
+    var $doc = $(document),
+            order = {
+                order_id: '${order_id}',
+                wx_id: '${wx_id}',
+                ttp: '${total.total_pay}',
+                shop_id: '${shop_id}',
+                pay_way: '${pay_way}'
+            },
+            pay_way = '${pay_way}',
+            $after_pay = $('.afterpay-h1'),
+            $wcpay = $('.wcpay-h1'),
+            $wcpay_submit = $('.wcpay-submit-div');
+    //---------
+    //wechat--start------------
+    function isWeiXinBrowser(){
+        var ua = window.navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i)=='micromessenger'){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    function weChatPayFn(order){
+        $.post('/dashixiongwx/api/wcpay/getBrandWCPayRequest', {order: order},function(payargs){
+            if(payargs!='fail'){
+                WeixinJSBridge.invoke('getBrandWCPayRequest', payargs, function(res){
+                    switch (res.err_msg){
+                        case 'get_brand_wcpay_request:cancel':
+                                alert('您已取消微信支付！');
+                                break;
+                        case 'get_brand_wcpay_request:fail':
+                                alert("支付失败，请重试！或者选择货到付款！");
+                                break;
+                        case 'get_brand_wcpay_request:ok':
+                            // 这里可以跳转到订单完成页面向用户展示，隐藏提示用户付款页面
+                                $wcpay.hide();
+                                $after_pay.show();
+                                break;
+                        default :
+                                alert('微信支付不成功，请选择货到付款！');
+                    }
+                });
+            }else{
+                alert("微信支付失败，请重试");
+                return false;
+            }
+        });
+    }
+    function wechatPay(){
+        if(isWeiXinBrowser()){
+            weChatPayFn(order);
+        }else{
+            alert('您当前设备不支持微信支付！请选择货到付款！');
+        }
+
+    }
+    //wechat--end------------
+    if(pay_way=='wcpay'){//first
+        wechatPay();
+    }
+    $doc.ready(function(){
+        $wcpay_submit.click(function(e){
+            wechatPay();
+        });
+    });
+</script>

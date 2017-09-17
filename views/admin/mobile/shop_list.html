@@ -1,0 +1,33 @@
+	{{each(shop, i) shops}}
+    <table border="1" bordercolor="#ccc" cellpadding="1" cellspacing="1">
+        <thead>
+            <tr class="">
+                <th colspan="2">
+                    <a href="/dashixiongwx/admin/shop/${shop.id}">${shop.name}</a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr class="client-order">
+            <td>
+				${shop.address}
+            </td>
+            <td class="direct">
+				{{if shop.type == 'direct'}}
+				直营店
+				{{else}}
+				加盟店
+				{{/if}}
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2">
+                    <a class="action" type="del" href="/dashixiongwx/admin/shop/${shop.id}/edit">编辑</a> | 
+                    <a class="action" type="qr" target="_blank" href="/dashixiongwx/shop/${shop.id}/qr">二维码</a>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+	{{/each}}

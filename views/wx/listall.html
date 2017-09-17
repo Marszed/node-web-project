@@ -1,0 +1,408 @@
+<style>
+body{background:#EEE;max-width:640px;margin:0 auto;}
+#guide{margin:0 auto; padding:7px 0;font-size : 14px;background : #cb3637; color : #FFF; text-align : center; position : fixed; top : 0; width : 100%; z-index : 9999; max-width : 640px; vertical-align : middle;}
+ul:after{content:"";clear:both;display:block;width:100%;height:0px;overflow:hidden;}
+li{float : left;width : 33.333333%; margin : 0 0 15px 0;}
+.sections li:nth-child(4n){clear:both;width:100%;height:0px; overflow:hidden;margin:0;}
+h4{font-size : 22px;	font-weight : 700; color : #333; padding : 10px; border-bottom : 1px dashed #CCC; margin-bottom : 15px;}
+h5{padding : 10px;}
+#submit_deliver_fee{color : red; font-size : 24px;}
+#total_num, #total_pay{color : orange; font-size : 24px;}
+.container_div{background : #EEE; position : relative;}
+.pd_wrap{margin:0 10px;}
+.section{margin-bottom : -10px;}
+.shop-body{margin-top : 30px;}
+.product-img{width:100%;border-radius:5px; -webkit-tap-highlight-color:rgba(0,0,0,0);}
+.img_wrap{position:relative;}
+.actions div{text-align : center; font-size : 20px;	height:100%;}
+.actions{display:none; width :35px; height:35px; position : absolute; top:-10px; right:-10px;}
+li.selected .actions{display : block;}
+.actions .num{background: red; line-height:100%; color:#fff; border-radius:100px; line-height:35px;}
+.actions .ac_plus{background : green; display: none;}
+.actions .ac_minus{position: absolute; left:0px; top:0; right:0px; z-index:10; opacity:0; filter:alpha(opacity=0); -webkit-tap-highlight-color:rgba(0,0,0,0);}
+.submit {text-align : center; font-size : 18px; line-height : 30px;}
+.price{color : orange;}
+.submit_actions{border : 1 solid #CCC;	background : #cb3637;}
+.submit_actions a {display : block; color : #FFF; line-height : 48px;}
+.closed{color : red; margin : 34px 0 0 10px;}
+.notice, .notice-info{color : red; margin : 34px 0 0 10px; line-height : 24px; padding : 10px 0;}
+.notice-info{color:green;}
+.ad{margin-top:40px;}
+.go-down{padding:5px; background:#66a6ae;color:#FFF;text-decoration:none;float:right;margin-right:10px; border-radius: 5px;}
+.remain{color:orange;}
+.pao-tui{color:#888;font-size:14px;}
+.section-tag-list{border : 1px solid red; margin : 11px 0px 0px 0px; background : #FFF; border : none; border-bottom : 2px solid #cb3637; padding : 6px 0 0px 15px; position : fixed; z-index : 9999; margin : 0 auto; top : 39px; max-width : 640px;}
+.section-tag-list li a{color : #666; text-decoration : none; text-align : left;}
+.section-tag-list li a.tag-selected{background : #66a6ae; color : #FFF; padding : 5px; border-radius: 5px;}
+.section-tag-handle{float : left; margin-left : 10px; background:#66a6ae; padding:5px 10px; color : #FFF; text-decoration : none; border-radius: 5px;}
+.note{font-size:18px;color:#FFF;display: inline-block;height:26px;line-height:26px;}
+.stub{width : 1px; height : 1px; position : relative; top : -35px;}
+
+.sign-wrap{padding:10px;-webkit-box-sizing:border-box;box-sizing:border-box;background:#e1e1e1; color:#888;line-height:1;}
+.sign-wrap .user, .sign-btn-wrap{display:-ms-flexbox;display:-webkit-box;display:box;}
+.p-pic{border-radius:4px;}
+.sign-wrap .d{-webkit-box-flex:1;-ms-flex:1;margin-top:-2px;line-height:1.2em;margin-left:10px;}
+.user .p{width:40px;height:40px;}
+.user .p-pic{width:40px;height:40px;}
+.sign-btn-wrap{margin-top:10px;}
+.sign-btn{-webkit-box-flex:1; -ms-flex:1;box-flex:1;display:block;background:#eee;width:100%;margin-right:10px;text-align:center;padding:5px 0;border-radius:2px;text-decoration:none;box-shadow:1px 1px 3px #ccc;color:#333;}
+.sign-wrap .last{margin-right:0;}
+.story{margin-top:15px;}
+.tools{ overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width:100%; display:block;}
+.story-list>li{width:50%;}
+.story-item{margin:0 10px;}
+.story-list>li img{width:100%;border-radius:4px; padding:3px; background:#fff;}
+.num{color:#f50;}
+.t-tit:after{ content: "×"; color: #f50; margin-left:3px; }
+#rank{text-decoration:none;padding:0 5px;}
+#top{position:fixed;right:10px; bottom:10px; display:inline-block;width:48px;height:48px; background:#ccc;line-height:48px; text-align:center;}
+</style>
+<div class="container_div">
+    <h3 id="guide">
+        <a class="section-tag-handle" href="#" onclick="return false;">分类</a><span class="note">点击图片即可选购</span><a class="go-down" href="#submit_form">结账↓</a>
+    </h3>
+    <ul class="section-tag-list" style="display:none;">
+        {{each(section, i) sections}}
+        <li><a href="#section${section.tagId}">${section.tagName}</a></li>
+        {{/each}}
+    </ul>
+	{{if notice}}
+	<p class="notice"><strong>大师兄(${config_obj.shopName})公告: </strong>{{html notice.content}}</p>
+	{{else}}
+	<p class="notice-info"><strong>大师兄(${config_obj.shopName})</strong>热烈“荒淫”你~啦啦啦^o^</p>
+	{{/if}}
+    <div class="sign-wrap">
+        <div class="user">
+            <div class="p">
+                <img src="${user.head ||'http://s.ksmimi.com/dashixiong_static/img/default-p-pic.jpg'}" alt="${user.nick}" class="p-pic">
+            </div>
+            <div class="d">
+                <p id="tools" class="tools">你拥有:</p>
+                <p class="mt5">位居<a href="/dashixiongwx/listWealth/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}" class="fbs" >福布斯财富榜</a>第<a href="#" class="rank" id="rank" onclick="return false"></a>位</p>
+            </div>
+        </div>
+        <div class="sign-btn-wrap">
+            <a href="#" class="sign-btn" id="good">做好事,攒人品</a>
+            <a href="/dashixiongwx/rp/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}" class="sign-btn last">兑换道具</a>
+        </div>
+        <div class="story none" id="story">
+            <p style="margin:8px;">点击以下图片, 签到做好事: </p>
+            <ul class="list story-list">
+                <li>
+                    <div class="story-item" gid="2">
+                        <img src="${env.imgpro}/suaidao.png" alt="">
+                        <p>扶摔倒老奶奶, 土豪的表现</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="story-item" gid="1">
+                        <img src="${env.imgpro}/rangzuo.jpg" alt="">
+                        <p>给老奶奶过让座, 红领巾不留名</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+	<div class="shop-body">
+		{{each(section, index) sections}}
+		{{if section.products.length}}
+        <div class="stub" id="section${section.tagId}"></div>
+        <div class="section" section="${index+1}">
+			<h4>${section.tagName}</h4>
+			<ul class="sections">
+				{{each(product, i) section.products}}
+				<li>
+					<div class="pd_wrap">
+						<div class="img_wrap">
+                            {{if index==1}}
+                            <img class="product-img" pid="${product.id}" width="100%"
+                                 src="${env.upload}/${product.img}"/>
+                            {{else}}
+                            <img class="product-img" pid="${product.id}"
+                                 original="${env.upload}/${env.qn ? product.imgQN : product.img}"  title="${product.title}" width="100%" src="http://${env.staticRoot}/dashixiong_static/img/product_bg.jpg"/>
+                            {{/if}}
+							<div class="actions"><div class="ac_plus" >+</div><div class="num">0</div><div class="ac_minus" >-</div></div>
+						</div>
+
+						{{if product.promotePrice}}
+						<h5><del>${product.price}元</del> <strong class="price">${product.promotePrice}元</strong>/<span class="unit">${product.unit}</span> <span class="title">${product.title}</span></h5>
+						{{else}}
+						<h5><strong class="price">${product.price}元</strong>/<span class="unit">${product.unit}</span> <span class="title">${product.title}</span></h5>
+						{{/if}}
+					</div>
+				</li>
+				{{if (i+1)%3==0 }}
+				<li></li>
+				{{/if}}
+				{{/each}}
+			</ul>
+		</div>
+		{{/if}}
+		{{/each}}
+		<div class="submit">
+			<p id="submit_info">你的购物袋中有<strong id="total_num"></strong>件东西，共<strong id="total_pay"></strong>元 </p>
+			<p id="submit_none" style="display:none;">购物袋里没有东西哦~</p>
+			<p id="submit_deliver_fee" style="display:none;">你的订单不足10元，要加1元跑腿费哟</p>
+			<p class="submit_actions"><a id="submit_btn" href="#" onclick="return false;">就这些，结账吧&gt;&gt;</a></p>
+			<form id="submit_form" action="/dashixiongwx/addr?userId=${user.userId}&wx_id=${wx_id}" method="POST">
+				<input id="submit_products" name="products" type="hidden"  />
+				<input type="hidden" name="shop_id" value="${shop_id}"  />
+				<input type="hidden" name="user_id" value="${user.id}"  />
+				<input type="hidden" name="shop_name" value="${cur_shop.name}"  />
+				<input name="cur_warehouse_id" type="hidden" value="${cur_warehouse_id}"  />
+				<input id="input_total_num" name="total_num" type="hidden" value=""  />
+				<input id="input_total_pay" name="total_pay" type="hidden" value=""  />
+			</form>
+		</div>
+	</div>
+</div>
+{{if !agent&&power>0}}
+    <a href="#" id="top">TOP</a>
+{{/if}}
+<script type="text/javascript" src="${env.jspro}/jquery.lazyload.js"></script>
+<script type="text/javascript" src="${env.jspro}/fastclick.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        FastClick.attach(document.body);
+    });
+    //-------- UI -------------
+    var section_tag_list = $( '.section-tag-list' );
+
+
+    //-----------------------------
+	var bag = [];//购物袋
+	var addProductNum = function(ele){
+		var $li = $(ele).parents('li');
+		var $num = $li.find('.num');
+		var num = $num.html();
+		var price = $li.find('.price').html();//产品单价
+		var unit = $li.find('.unit').html();//产品单位
+		var title = $li.find('.title').html();//产品名称
+		num -= 0;
+		++num;
+		price = parseFloat(price);
+		$num.html(num);
+        var section = $(ele).parents('.section').attr('section');
+
+		//往购物袋里加一个东西
+		bag.push({
+			id : $(ele).attr( 'pid' )-0,
+			price : price,
+			unit : unit,
+            section: section,
+			title : title
+		});
+
+		//检查一下跑腿费
+		checkDeliverFee();
+
+	};
+	var reduceProductNum = function(ele){
+		var $li = $(ele).parents('li');
+		var $num = $li.find('.num');
+		var num = $num.html();
+		var $img = $li.find('.product-img');
+		num -= 0;
+		--num;
+		if(num<=0){
+			num=0;
+			$li.removeClass('selected');
+		}
+		$num.html(num);
+
+		//从购物袋中拿掉一个东西
+		$.each(bag, function(i, product){
+			if(product.id == $img.attr('pid')){//找到需要拿掉的商品
+				bag.splice(i,1);
+				return false;//马上结束循环
+			}
+		});
+
+		checkDeliverFee();
+	};
+
+	var count = function(){
+		var total_pay = 0;
+		var total_num = 0;
+		$('.selected').each(function(i, v){
+			var num = $(this).find('.num').html();
+			var price = $(this).find('.price').html();
+			num -= 0; price = parseFloat(price);
+			total_num += num;//累加一下看看总共有多少件产品
+			total_pay += (price*num);
+		});
+		return {
+			total_pay : total_pay.toFixed(1),//取得1位小数, 会不会因为这个亏钱啊...?
+			total_num : total_num
+		};
+	}
+	var checkDeliverFee = function(){
+		var obj = count();
+
+		if( obj.total_pay>0 && obj.total_pay<10 ){
+			//小于10元, 显示跑腿费提示
+			$('#submit_deliver_fee').text( '你的订单不足10元，要加1元跑腿费哟' );
+			$('#submit_deliver_fee').show();
+			return;
+		}
+
+        var total_pay_fake = obj.total_pay;
+        var cigarette_num = 0;
+        $.each(bag, function(i, product){
+            if( product.title.indexOf( '香烟' )!=-1 ) {
+                ++cigarette_num;
+                total_pay_fake -= product.price;
+                total_pay_fake += 5;//香烟在计算"邮费"的时候都当5元
+            }
+		});
+
+        if( cigarette_num == 1 && bag.length == 1 ){//买了1包烟
+            $('#submit_deliver_fee').html( '<p>只买一包烟，大爷需要再打赏给小的1元跑腿费哦！再选购多一样东西就不需要了！</p><p class="pao-tui">跑腿不易，请珍惜临时工!</p>' );
+			$('#submit_deliver_fee').show();
+            return;
+        }
+
+        if( cigarette_num > 0 && total_pay_fake < 10 ){//买了烟, 木有利润, 求买点别的
+            $('#submit_deliver_fee').html( '<p>大爷哟~ 再给伦家买<span class="remain">'+ ( 10-total_pay_fake ).toFixed(1) +'元</span>非烟产品嘛~好不好？</p><p class="pao-tui">跑腿不易，请珍惜临时工!</p>' );
+			$('#submit_deliver_fee').show();
+            return;
+        }
+
+		$('#submit_deliver_fee').hide();
+	};
+
+	var showInfo = function(){
+		var total = count();
+		if(!total.total_num){
+			$('#submit_none').show();
+			$('#submit_info').hide();
+			return;
+		}
+
+		$('#submit_none').hide();
+		$('#submit_info').show();
+		$('#total_num').html(total.total_num);
+		$('#total_pay').html(total.total_pay);
+		$('#input_total_num').val(total.total_num);
+		$('#input_total_pay').val(total.total_pay);
+	};
+    var add = function (a) {
+		$(a).parents('li').addClass('selected');
+		addProductNum(a);
+		showInfo();
+    };
+    var reduce = function (a) {
+        reduceProductNum(a);
+		showInfo();
+    };
+
+
+    //if( !document.ontouchstart ){
+        $('img.product-img').click(function(e){
+	    	//this.blur();
+	    	$('#notice').html('添加了一件 '+this.title);
+	    	$(this).parents('li').addClass('selected');
+	    	addProductNum(this);
+	    	showInfo();
+	    	e.stopPropagation();
+	    });
+
+	    $('.actions .ac_plus').click(function(){
+	    	$(this).parents('li').find('img.product-img').trigger('click');
+	    });
+	    $('.actions .ac_minus').click(function(e){
+            reduceProductNum(this);
+		    showInfo();
+		    e.stopPropagation();
+	    });
+    //}
+
+
+
+	$('#submit_btn').click(function(){
+		var json_str = [];
+		if(!bag.length)return;
+
+        $.each(bag, function(i, product){
+            if( window.JSON ){
+                json_str.push(JSON.stringify({
+                    id : product.id,
+                    price : product.price,
+                    title : product.title,
+                    section : product.section,
+                    unit : product.unit
+                })) ;
+                return;
+            }
+            var str = '{"id":'+product.id+',"price":'+product.price+', "title":"'+product.title+'", "unit":"'+product.unit+', "section":"'+product.section+'"}';
+			json_str.push( str.replace( /\t/ig, '' ) ) ;
+		});
+		json_str = json_str.join(',');
+		$('#submit_products').val('['+ json_str +']');
+        document.getElementById( 'submit_form' ).submit();
+	});
+
+	showInfo();
+
+	$(function(){
+		var now = new Date().getHours();
+		if(now >=0 && now<8 ){
+			$('.closed').show();
+		}
+	});
+
+    $( '.section-tag-list li a' ).click(function () {
+        $( '.section-tag-list li a' ).removeClass( 'tag-selected' );
+        $( this ).addClass( 'tag-selected' );
+        section_tag_list.hide();
+    });
+
+    $( '.section-tag-handle' ).click(function () {
+        section_tag_list.toggle();
+    });
+
+
+	//------------------------ lazyload -----------------------------//
+
+	$('img.product-img').lazyload({
+		effect : "show"
+	});
+
+    $('#good').click(function(){
+        $('#story').toggle();
+    });
+    var $story = $('.story-item');
+
+
+    $story.click(function(){
+        var id = $(this).attr('gid');
+        $.post('/dashixiongwx/doSign/${user.openId}/'+id,function(obj){
+            if(obj && !obj.code){
+                alert(obj.msg);
+            }else{
+                alert('做好事的人太多了,请稍后再来吧~');
+            }
+        });
+    });
+
+
+    $.get('/dashixiongwx/getRankAndWealth/${user.openId}',function(obj){
+        if(obj&&obj.tools&&obj.rank){
+            obj.rank = obj.rank || {};
+            obj.tools = obj.tools || [];
+            if(obj.tools.length == 0 ){
+                $('#tools').html('你尚未兑换任何道具').siblings('p').html('位于<a href="/dashixiongwx/listWealth/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}">福布斯财富榜</a>千里之外~~');
+                return;
+            }
+            $('#rank').text(obj.rank.rownum);
+            var tools = '你拥有: ';
+            $.each(obj.tools, function(i, tool){
+                tools+= '<span class="t-tit">'+tool.title+'</span><span class="num">' +tool.num +'</span> &nbsp; ';
+            })
+            $('#tools').html(tools);
+            return;
+        }
+        $('#tools').html('你尚未兑换任何道具').siblings('p').html('位于<a href="/dashixiongwx/listWealth/${user.openId}?wx_id=${user.openId}&timestamp=${sigObj.timestamp}&sig=${sigObj.sig}">福布斯财富榜</a>千里之外~~');
+    });
+
+</script>

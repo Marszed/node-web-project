@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .time{
+            margin-bottom: 10px;
+        }
+        td{
+            width: 80px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<h3>渠道${qId}的具体信息</h3>
+<p>总关注人数：${allAttentionNum}</p>
+<p>实际关注人数：${validAttentionNum}</p>
+<p>取消关注人数：${cancelAttentionNum}</p>
+<div class="time">开始时间：<input class="start_date" type="date"/>&nbsp;&nbsp;结束时间：<input class="end_date" type="date"/>&nbsp;&nbsp;<a href="#" class="query" onclick="return false;">查询</a></div>
+<table class="qinfo">
+    <tr>
+        <td>渠道ID</td>
+        <td>人数</td>
+    </tr>
+    <tr>
+        <td>${tarObj.qId}</td>
+        <td>${tarObj.count}</td>
+    </tr>
+</table>
+</body>
+<script type="text/javascript">
+    $('.query').click(function(){
+        var start_date = $('.start_date').val();
+        var end_date = $('.end_date').val();
+        var $table = $('.qinfo');
+        if(!start_date || !end_date) {
+            alert('请选择开始时间和结束时间！');
+            return;
+        }
+        $.get('/dashixiongwx/admin/shop/${shop_id}/queryChannelInfo/qId/${qId}/specific_info', {start_date: start_date, end_date: end_date, isAjax: 1}, function(res){
+            var res = JSON.parse(res);
+            var $th = '<tr><td>渠道ID</td><td>人数</td></tr>';
+            var $tr = '<tr><td>'+res.qId+'</td><td>'+res.count+'</td></tr>';
+            $table.empty();
+            $table.append($th);
+            $table.append($tr);
+        });
+    });
+</script>
+</html>

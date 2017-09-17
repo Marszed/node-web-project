@@ -1,0 +1,82 @@
+<style>
+	h1{
+		font-size : 20px;	
+		line-height : 24px;
+		margin-bottom : 5px;
+	}
+	h2{
+		line-height : 21px;
+		border-bottom : 1px dashed #CCC;		
+		padding : 8px 8px 8px 0;
+		margin-bottom : 10px;
+		color : #888;
+
+	}
+	ul{
+		margin-bottom : 25px;	
+		list-style : disc inside;
+	}
+	li{
+		color : #333;	
+	}
+	.num{
+		color : #CCC;
+	}
+	.total-pay, .total-num{
+		color : orange;	
+		font-size : 18px;
+	}
+	.back-to-store{
+		margin-bottom : 15px;	
+	}
+    .msg{
+        color : red; 
+    }
+    .free{
+        color : orange;
+    }
+    .total-pay{
+        text-decoration : line-through; 
+    }
+</style>
+
+
+<div class="container">
+{{if products.length}}
+    <h1>恭喜你! 抢到东西啦！身手敏捷啊！我们会在明天给你送货的啦！以下是你的战利品:</h1>
+
+	<h2>收货信息</h2>
+	<ul class="info">
+		<li>${address.name}</li>
+		<li>${address.mobile}</li>
+		<li>${address.address}</li>
+	</ul>
+
+    <h2>购物袋信息(<strong class="total-num">${total.total_num}</strong>件东西，共<strong class="total-pay">${total.total_pay.toFixed(1)}</strong>元), 活动期间这些都<span class="free">不要钱<span>。</h2>
+    <div class="msg">
+        部分产品可能被人抢走啦！就剩这些咯:
+    </div>
+	<ul class="bag">
+		{{each(product, i) total.list}}
+		<li>
+		<p><span class="title">${product.title}</span> <strong class="price">${product.price}元</strong>/<span class="unit">${product.unit}</span> <span class="num">x${product.set.length}</span></p>
+		</li>
+		{{/each}}
+	</ul>
+	{{if total.snapshot.requirements}}
+	<h2>其他吩咐</h2>
+		<ul class="bag">
+			{{each(requirement, i) total.snapshot.requirements}}
+			<li>
+				<p>${requirement}</p>
+			</li>
+			{{/each}}
+		</ul>
+	{{/if}}
+{{else}}
+	<h1>很遗憾, 你一件也没抢到... 对手太强大了！ 不过没关系，明天大师兄还有一份鼓励奖送到府上! 表难过啦~~~~ 敬请期待哦~  </h1>
+    <div class="back-to-store" style="display:none;">
+		<a href="/dashixiongwx/product/list/all?wx_id=${wx_id}">&lt;&lt;返回小卖部</a>
+	</div>
+{{/if}}
+</div>

@@ -1,0 +1,225 @@
+<style type="text/css" media="all">
+    .mt30{
+        margin-top:30px;
+    }
+    .memberList{
+        padding-left:0;
+    }
+    .memberList li label {
+        width: 80px;
+        display: inline-block;
+    }
+    .addMember-label {
+        display: inline-block;
+        width: 78px;
+    }
+    .power{
+        margin-right:10px;;
+    }
+    .ml30{
+        margin-left:30px;
+    }
+    .gray{
+        color:#999;
+    }
+    .fs12{
+        font-size:12px;
+    }
+    .bg td{
+        background-color:#f8f8f8;
+    }
+    .inline{
+        display:inline;
+    }
+    .fl{
+        float:left;
+    }
+    .fr{
+        float:right;
+    }
+    .cl{
+        clear:both;
+    }
+    .ml20{
+        margin-left:20px;
+    }
+</style>
+
+<h2>查找Id</h2>
+<div class="seekId mt30">
+        <label class="ml30">用户名：</label>
+        <input class="email_address" type="text" name="seek[name]" placeholder="请填写邮箱">
+        <input type="submit" value="开始查找" class="search_id">
+        <label class="seekid" style="margin-left: 10px;">您的Id号为</label>
+</div>
+
+<h2>修改密码</h2>
+<div class="chgPwd mt30">
+    <form id="chg_pwd" action="/dashixiongwx/admin/shop/${shop_id}/pwd/change" method="post">
+        <label class="ml30">userId：</label>
+        <input class="ml30" type="text" name="pwd[id]" placeholder="请填写userId">
+        <label class="ml30">修改密码：</label>
+        <input class="password" type="password" name="pwd[password]">
+        <input type="submit" value="确认修改" id="chgUser">
+    </form>
+</div>
+<h2>添加用户</h2>
+<div class="newUser mt30">
+    <form id="add_form" action="/dashixiongwx/admin/shop/${shop_id}/user/doadd" method="post">
+        <label class="ml30">用户名：</label>
+        <input class="email"  type="text" name="user[name]" placeholder="请填写邮箱">
+        <label class="ml30">密码：</label>
+        <input class="addpassword" type="password" name="user[password]" id="password">
+        <input class="pushpwd" type="button" onclick="MathRand()" value="生成密码"/>
+        <input type="button" class="showpwd" value="显示密码" onclick="ShowPwd()"/>
+        <!--<label><input class="showpwd" type="checkbox"/>显示密码</label>-->
+        <label class="ml30">级别：</label>
+        <input class="power" type="text" name="user[power]">
+        <label class="">shopId：</label>
+        <input class="shopId" type="text" name="user[shopId]">
+        <input type="submit" value="添加用户" id="addUser">
+    </form>
+</div>
+<h2>设置权限</h2>
+<div class="addMember mt30">
+    <form action="/dashixiongwx/admin/members/doupdate" method="post">
+        <label class="addMember-label">userId：</label>
+        <input id="memberName" type="text" name="member[id]" placeholder="请填写userId">
+        <label class="ml30">级别：</label>
+        <input id="memberPow" type="text" name="member[power]">
+        <label class="ml30">绑定到：</label>
+        <input id="bindTo" placeholder="格式:1,2,3" type="text" name="member[bindTo]"> 号店
+        <input id="section_id" type="text" name="member[sectionId]"> 号货架
+        <label class="ml30">转移到：</label>
+        <input id="shopId" type="text" name="member[shopId]"> 号店
+        <input id="shop_id" type="hidden" name="member[shop_id]" value="${shop_id}" />
+        <input type="submit" value="设置" id="addMember">
+    </form>
+</div>
+
+<div class="memberBox mt30">
+    <table class="infos fl">
+        <tr>
+            <th>昵称</th>
+            <th>用户ID</th>
+            <th>级别</th>
+            <th>关注的店铺</th>
+            <th>绑定的店铺</th>
+            <th>绑定的铺位（货架）</th>
+            <th>操作</th>
+        </tr>
+        {{each(user, i) users}}
+        <tr ${(i+1)%2 ==0 ? ' class=bg' : ''}>
+            <td><input class="user_nick" style="border: 0px;" type="text" value="${user.nick}"/></td>
+            <td>${user.id}</td>
+            <td>${user.power}</td>
+            <td>${user.shopId}</td>
+            <td>${user.bindTo}</td>
+            <td>${user.sectionId}</td>
+            <td><a href="#" class="sure" userNick="${user.nick}" userId="${user.id}" onclick="return false;">确定修改</a></td>
+        </tr>
+        {{/each}}
+    </table>
+    <table class="fl ml20">
+        <tr>
+            <th>店铺ID</th>
+            <th>货架名称</th>
+            <th>货架ID</th>
+        </tr>
+        {{each(section, i) sections}}
+        <tr ${(i+1)%2 ==0 ? ' class=bg' : ''}>
+            <td>${section.shopId}</td>
+            <td>${section.name}</td>
+            <td>${section.id}</td>
+        </tr>
+        {{/each}}
+    </table>
+    <div class="cl"></div>
+</div>
+<!--================================================Zed======================================================-->
+<script type="text/javascript">
+    var $addMember = $('#addMember'),
+            $chgUser = $('#chgUser'),
+            $form = $('#add_form'),
+            $addUser = $('#addUser'), //submmit button
+            $email = $('.email'),
+            $email_address = $('.email_address'),
+            $addpassword = $('.addpassword'),
+            $power = $('.power'),
+            $shopId = $('.shopId'),
+            $search_id = $('.search_id'),
+            temp = 0,
+            ok = true,
+            $sure = $('.sure');
+    {{if power==10}}
+    //新增用户基本验证
+    $addUser.click(function(){
+        var email = $email.val(),
+                addpassword = $addpassword.val(),
+                power = $power.val(),
+                shopId =$shopId.val();
+        if( !email || !addpassword || !power || !shopId){//用户信息每项都不能为空
+            alert('抱歉，新用户信息不完整！');
+            return false;
+        }
+        $.post('/dashixiongwx/get_user_by_email', {email:email}, function(res){      //用户已经存在，不能使用此邮箱
+            if( res.status){
+                console.log("res.status = " + res.status);
+                alert('用户已经存在，不能使用此邮箱!');
+                return false;
+            }else{
+                $form.submit();
+            }
+
+        });
+        return false;
+    });
+
+    //生成6位随机数
+    function MathRand() {
+        var  $addpassword = $('.addpassword'),
+                Num = "";
+        for (var i = 0; i < 6; i++) {
+            Num += Math.floor(Math.random() * 10);
+        }
+        addpassword = $addpassword.val(Num);
+    }
+
+    //根据点击奇偶数判断是否显示密码
+    function ShowPwd(){
+        temp++;
+        if(temp % 2 == 0){
+            document.getElementById('password').type='password';
+        }
+        else{
+            document.getElementById('password').type='text';
+        }
+    }
+    {{/if}}
+    $search_id.click(function(){
+        {{if power==10}}
+        $.get('/dashixiongwx/api/get/user/id', {email: $email_address.val()}, function(data){
+
+            $(".seekid").html(data);
+        });
+        {{/if}}
+    });
+    {{if power==10}}
+    $chgUser.click(function(){
+        return confirm('确认密码无误？');
+    });
+
+    $addMember.click(function(){
+        return confirm('确定信息无误？');
+    });
+
+    $sure.click(function(){
+        var shop_id = ${shop_id};
+        var userId = $(this).attr('userId');
+        var userNick = $(this).parent().siblings().find('.user_nick').val();
+        $.post('/dashixiongwx/admin/shop/${shop_id}/members/update/user/nick', {shopId: shop_id, userId: userId, userNick: userNick}, function(res){
+            alert('修改成功!');
+        });
+    });
+    {{/if}}
+</script>

@@ -1,0 +1,50 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+	<meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1"/>
+	<title>
+        {{if title}}
+            ${title}
+        {{else}}
+		    {{if cur_shop}}
+		    	大师兄${cur_shop.name}
+		    {{else shop_name}}
+		    	大师兄${shop_name}
+		    {{else}}
+		    	大师兄小卖部
+		    {{/if}}
+        {{/if}}
+	</title>
+    <link rel="shortcut icon" type="image/x-icon" href="http://s.ksmimi.com/dashixiong_static/img/favicon.ico" />
+    <link rel="bookmark" type="image/x-icon"  href="http://s.ksmimi.com/dashixiong_static/img/favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="http://s.ksmimi.com/csspro/v0.93/base.css" />
+	<link rel="stylesheet" type="text/css" href="http://s.ksmimi.com/dashixiong_static/csspro/shop.css" />
+	<script src="http://s.ksmimi.com/dashixiong_static/jspro/zepto.min.js" type="text/javascript"></script>
+	<style>
+		body{
+			background-image: url(http://s.ksmimi.com/imgpro/grid.png);
+			background-repeat: repeat;
+			background-size: auto;
+			background-color : #CCC;
+			color : #888;
+		}
+		.container{
+			width:80%;
+			max-width:500px;
+			background : #FFF;
+			padding : 20px;
+			margin :  10px auto;
+			border-bottom : 1px solid #CCC;
+			border-right : 1px solid #CCC;
+		}
+		.note{color : #CCC;}
+		li{line-height : 24px;	}
+		a{color : orange;}
+	</style>
+
+</head> 
+<body> 
+	{{html body}}	
+</body> 
+</html> 

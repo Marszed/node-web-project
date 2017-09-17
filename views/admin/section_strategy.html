@@ -1,0 +1,85 @@
+<style>
+    table{
+        width: 50%;
+    }
+    .add-submit{
+        cursor: pointer;
+        background-color: #51B4FF;
+        color: white;
+    }
+    .delete{
+        cursor: pointer;
+    }
+
+</style>
+<h2>货架策略</h2>
+新增：
+<input class="strategy-type" type="text" value="" placeholder="策略类型（英文字符）">
+<input class="strategy-mark" type="text" value="" placeholder="策略说明（选填）">
+<input class="strategy-rate" type="text" value="" placeholder="折扣">
+<input class="strategy-nPin" type="text" value="" placeholder="n拼">
+<span type="submit" class="add-submit">新增</span>
+<table>
+    <tr>
+        <th>策略类型</th>
+        <th>策略说明</th>
+        <th>折扣</th>
+        <th>操作</th>
+    </tr>
+    {{each(strategy,i) strategies}}
+    <tr strategyId="${strategy.id}">
+        <td>${strategy.type}</td>
+        <td>${strategy.mark}</td>
+        <td>${strategy.content}</td>
+        <td class="delete">删除</td>
+    </tr>
+    {{/each}}
+</table>
+
+<script type="text/javascript">
+    var $doc = $(document),
+            shopId = "${shopId}",
+            $add_submit = $('.add-submit'),
+            $strategy_type = $('.strategy-type'),
+            $strategy_mark = $('.strategy-mark'),
+            $strategy_rate = $('.strategy-rate'),
+            $strategy_nPin = $('.strategy-nPin'),
+            $delete = $('.delete');
+    $doc.ready(function(){
+        $add_submit.click(function(){
+            if(!$strategy_type.val() || !$strategy_rate.val()){
+                alert("请填写完整!");
+                return false;
+            }else{
+                var obj = {
+                    shopId: shopId,
+                    type: $strategy_type.val(),
+                    mark: $strategy_mark.val(),
+                    content: $strategy_rate.val(),
+                    nPin: $strategy_nPin.val()
+                };
+                $.post('/dashixiongwx/admin/shop/'+shopId+'/section/strategy/add',{paramObj: obj},function(data){
+                    if(data=='success'){
+                        window.location.reload();
+                    }
+                });
+            }
+        });
+
+     $delete.click(function(e){
+         var $this = $(this),
+                 id = $this.closest('tr').attr('strategyId'),
+                 temp = {
+                     id: id
+                 };
+         if(confirm("确认删除吗?")){
+             $.post('/dashixiongwx/admin/shop/'+shopId+'/section/strategy/del',{arg: temp},function(data){
+                 if(data=='sus'){
+                     alert('成功！');
+                 }
+             });
+         }
+         return false;
+     });
+    });
+</script>

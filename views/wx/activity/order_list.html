@@ -1,0 +1,396 @@
+<style>
+	table, td, th{
+		border : 1px solid #CCC;	
+	}
+    ul{
+        padding : 0; 
+    }
+	h1{
+		padding : 10px;
+		font-size : 20px;	
+	}
+	.money {
+		padding : 10px;	
+	}
+	.good{
+		font-size : 18px;
+		color : green;	
+	}
+	.bad{
+
+		color : red;
+	}
+	.order-create{
+		color : red;	
+	}
+	.order-delivering{
+		color : green;	
+	}
+	.order-receive{
+		color : #CCC;	
+	}
+	.profit, .client-detail{
+		padding : 0 0 0 30px;	
+	}
+	
+	table{
+		margin : 10px;	
+	}
+	.resume td, .resume th{
+		padding : 5px;	
+	}
+	.warnning{
+		height : 20px;
+		background : yellow;
+		padding : 5px;
+	}
+	#new_orders{
+		display : block;	
+		color : orange;	
+		text-align : center;
+	}
+	.requirement{
+		font-size : 12px;
+		color : #FF1493;
+	}
+	/*-------------------------*/
+	.deliver_fatal {/* 超过半小时, 被客户骂惨了! */
+		background : #FF6A6A;	
+		color : #FFF;
+	}
+	.deliver_caution{/* 18~30分钟, 晚了 */
+		background : #FFC1C1;
+	}
+	.deliver_warnning{/* 8~18分钟, 应该去送了 */
+		background : #FFF8DC;	
+	}
+	.deliver_saved{/* 8分钟以内, 可以等等单子 */
+		background : #E0EEE0;	
+	}
+	.deliver_fatal a{
+		color : #FFF;
+	}
+    @media screen and (max-width:500px){
+        ul,li{margin:0px;padding:0px;}
+    }
+    
+    /*---------------------------*/
+    .todo{
+        background :  #FFFACD;
+        border : 1px dashed #DDD;
+    }    
+    .todo li{
+        list-style-type : disc 
+    }
+    .todo h3{
+        padding-left : 10px; 
+    }
+    .time-text{
+        font-size : 12px; 
+        color : #CCC;
+        padding-left : 2px;
+    }
+    .action-todo-del{
+        font-size : 12px; 
+        padding-left : 10px;
+    }
+    .todo-list{
+        padding-left : 40px; 
+    }
+    .extra{
+        font-size : 20px; 
+        color : pink; 
+        padding : 10px;
+    }
+
+</style>
+
+<div class="extra">
+    extra含有"${extra}"的订单如下:
+</div>
+<p class="total-lost">
+    共${total_lost.toFixed(1)} 元, 成本${total_cost.toFixed(1)} 元
+</p>
+<table>
+	<tr>
+		<th>
+			订单id
+		</th>
+		<th>
+			时间
+		</th>
+		<th>
+			客户姓名
+		</th>
+		<th>
+			联系方式
+		</th>
+		<th>
+			地址
+		</th>
+		<th>
+			总价
+		</th>
+		<th>
+			订单详情
+		</th>
+		<th>
+			操作
+		</th>
+	</tr>	
+
+{{each(order, i) orders}}
+	{{if order.deta_time <1000*60*8 && order.orderStatus!=2}}
+	<tr class="deliver_saved">
+	{{else order.deta_time < 1000*60*18 && order.orderStatus!=2}}
+	<tr class="deliver_warnning">
+	{{else order.deta_time <= 1000*60*30 && order.orderStatus!=2 }}
+	<tr class="deliver_caution">
+	{{else order.deta_time > 1000*60*30 && order.orderStatus<2 }}
+	<tr class="deliver_fatal">
+	{{else}}
+	<tr class="client-order">
+	{{/if}}
+		<td>
+			<a href="/dashixiongwx/admin/activity/shop/${shop_id}/order/${order.id}/detail?nobackup=1"> ${order.id} </a>
+		</td>
+		<td>
+			${order.intime_text}
+		</td>
+		<td class="client-name">
+			<a href="/dashixiongwx/admin/shop/${shop_id}/order/list/${order.userId}/${order.name}">
+				${order.name}
+				{{if order.isNewClient}}
+				<img title="${order.name}是一个新客户，不许怠慢!" src="http://s.ksmimi.com/dashixiong_static/img/new.png"/>
+				{{/if}}
+			</a>
+            
+		</td>
+		<td>
+            <a target="_blank" href="/dashixiongwx/admin/shop/${shop_id}/msg/${order.userId}/list">
+                <img width="20" src="http://s.ksmimi.com/dashixiong_static/img/wechat.png" alt="wechat" />
+            </a>
+			<a href="tel:${order.mobile}">
+				${order.mobile}
+			</a>
+		</td>
+		<td>
+			${order.address}
+			{{if order.orderStatus == 0}}
+			(<span class="order-create status"><img src="http://s.ksmimi.com/dashixiong_static/img/warning-icon.png"/>未确认</span>)
+			{{else order.orderStatus == 1}}
+			(<span class="order-delivering status">配送中...</span>)
+			{{else order.orderStatus == 2}}
+			(<span class="order-receive status">已经送达</span>)
+			{{else order.orderStatus == 3}}
+			(<span class="order-receive status">订单取消</span>)
+			{{/if}}
+
+		</td>
+		<td>
+			{{if order.snapshot}}
+				${order.snapshot.total_pay && order.snapshot.total_pay.toFixed(1)} 元
+			{{else}}
+				木有快照信息咧?
+			{{/if}}
+		</td>
+		<td>
+			{{if order.snapshot}}
+				<ul>
+				{{each(product, i) order.snapshot.products_bought}}
+					<li>
+						${product.title} x ${product.count}
+					</li>
+				{{/each}}
+				</ul>
+				{{if order.snapshot.requirements}}
+					<ul class="requirement">
+					{{each(requirement, i) order.snapshot.requirements}}
+						<li>
+							${requirement}
+						</li>
+					{{/each}}
+					</ul>
+				{{/if}}
+
+			{{else}}
+				木有快照信息咧?
+			{{/if}}
+		</td>
+		<td>
+            <a class="action" orderid="${order.id}" type="deliver" href="/dashixiongwx/admin/shop/${shop_id}/order/${order.id}/status/update/1" onclick="return false;">配送</a> | 
+            <a class="action" orderid="${order.id}" type="receive" href="/dashixiongwx/admin/shop/${shop_id}/order/${order.id}/status/update/2" onclick="return false;">确认收货</a> | 
+            <a class="action" orderid="${order.id}" type="cancel" href="/dashixiongwx/admin/shop/${shop_id}/order/${order.id}/status/update/3" onclick="return false;">取消订单</a>
+			{{if order.broken}}
+			| <a title="发现有成本为0的销售记录, 点击重新获取本单所有产品的售价以及成本, 然后更新到订单的快照当中" class="action" type="fixed" href="/dashixiongwx/admin/shop/${shop_id}/order/${order.id}/fix">修复</a>
+			{{/if}}
+		</td>
+	</tr>
+{{/each}}
+<div id="dialog" style="display:none;">
+     <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><span id="dialog_msg"></span> </p>
+</div>
+</table>
+<!--socket.io -->
+<script src="http://www.ksmimi.com:6889/socket.io/socket.io.js"></script>
+<script type="text/javascript" >
+    var shop_id = ${shop_id};
+    var notifications = [];
+    var clearAllNotification = function () {
+        notifications.forEach(function (notification, i) {
+            notification.close();
+        });
+    };
+
+
+	var askPermission = function(){
+		if(!window.webkitNotifications){
+			alert('你不是chrome浏览器没有办法开启桌面提醒-_-%');
+			return;
+		}
+		window.webkitNotifications.requestPermission(function(){
+			console.log(window.webkitNotifications.checkPermission());
+		});
+	};
+
+	var notify = function(notify, noSound){
+		if( window.webkitNotifications && window.webkitNotifications.checkPermission() == 0 ){
+			var icon = 'http://www.dangercove.com/html5-notifications/img/icon.png';
+
+			// Create a new notification
+			var notification = window.webkitNotifications.createNotification(icon, '【'+ notify.shop_id +'号店】'+notify.title, notify.message);
+			notification.show();
+			setTimeout(function(){
+				notification.close();
+			}, 8000);
+
+            notifications.push( notification );
+		}
+		if( !noSound ){
+			play_order_come_sound();
+			show_warnning();
+		}
+	}
+	//-------------------- warnning
+	var show_warnning = function(){
+		$('.warnning').show();
+	};
+	var hide_warnning = function(){
+		$('.warnning').hide();
+	};
+
+
+	//-------------------- sound
+	var order_come;
+	var play_order_come_sound = function(){
+		if(!order_come){
+			order_come = new Audio('http://s.ksmimi.com/dashixiong_static/res/order_come.mp3');	
+		}
+		order_come.play();
+	};
+
+	//-------------------- 用户动作响应
+	var btn_ask_permission = $('a.ask-permission');
+	btn_ask_permission.click(function(){
+		askPermission();
+	});
+
+	//-------------------- 初始化设置
+	if( !(window.webkitNotifications && window.webkitNotifications.checkPermission()) ){
+		btn_ask_permission.hide();
+	}
+</script>
+<script>
+var socket = io.connect('http://'+ location.host +':6889');
+//通过这个请求上报一下自己的店铺id
+socket.emit('report_shop_id', {
+    shop_id : shop_id
+});
+socket.on('order come', function (data) {
+	console.log(data);
+	notify(data);
+});
+//socket.on('message', function (data) {
+//	console.log(data);
+//	notify(data, true);
+//});
+
+</script>
+
+<script type="text/javascript">
+    //对订单的各种操作, 如: 配送中,确认收货,取消订单等
+	$('.action').click(function(){
+		var $a = $(this);
+        var $tr = $a.parents('tr');
+		var a = this;
+
+		var $sts = $a.parents('tr').find('.status');
+
+        if( $a.attr('type')=='cancel' ){
+            $sts.html('<del>订单取消</del>');
+            var name = $a.parents( '.client-order' ).find( '.client-name' ).text();
+            $( '#dialog_msg' ).text( '此订单的货物数量将返回库存, 确定要取消"'+ name +'"的订单?' );
+            $( '#dialog' ).dialog({
+                modal : true,
+                show: {
+                    effect: "fade",
+                    duration: 618
+                  },
+                hide: {
+                    effect: "fade",
+                    duration: 618
+                },
+                buttons: {
+                    '确定' : function() {
+                        var This = this;
+                        $.get( '/dashixiongwx/admin/shop/'+ shop_id +'/order/'+ $a.attr('orderid') +'/cancel', function (res) {
+                            $( This ).dialog( "close" );
+                            $tr.fadeOut();
+                        });
+                    },
+                    Cancel: function() {
+                        $( this ).dialog( "close" );
+                    }
+                }
+	        });
+            return;
+		}
+		$.get(this.href, function(res){
+			if($a.attr('type')=='deliver'){
+				$sts.html('配送中...');
+				$sts[0].className = 'order-delivering status';
+			}else if($a.attr('type')=='receive'){
+				$sts.html('已经送达');
+				$sts[0].className = 'order-receive status';
+				$a.parents('tr').removeClass('deliver_fatal');
+				$a.parents('tr').removeClass('deliver_caution');
+				$a.parents('tr').removeClass('deliver_warnning');
+				$a.parents('tr').removeClass('deliver_saved');
+			}
+
+		});
+	});
+
+    $( '#new_orders' ).click(function () {
+        clearAllNotification();
+        location.href = this.href;
+    });
+    
+    //----------------------- todo --------------------------//
+    $( '.action-todo-del' ).click(function () {
+        var a = this;
+        $.get( a.href, function (res) {
+            var li = $( a ).parents( 'li' );
+            li.html( '<del>'+li.html()+'</del>' );
+            $( a ).hide();
+        });
+    });
+
+</script>
+
+
+
+
+
+
+

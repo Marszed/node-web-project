@@ -1,0 +1,152 @@
+<style>
+	body{
+		background : none;
+	}
+	h2{
+		margin-top : 20px;
+		text-align : center;	
+	}
+	#limit{
+		padding : 10px;	
+	}
+</style>
+<script type="text/javascript" charset="utf-8" src="http://s.ksmimi.com/dsx/jspro/ichart.1.2.min.js"></script>
+
+<div id="limit">
+	<a href="/dashixiongwx/admin/shop/${shop_id}/dateresume?limit=30">最近30天</a> | 
+	<a href="/dashixiongwx/admin/shop/${shop_id}/dateresume?limit=60">最近60天</a> |
+	<a href="/dashixiongwx/admin/shop/${shop_id}/dateresume?limit=90">最近90天</a>
+</div>
+<div id="myChart"></div>
+<br/>
+<div id="visitor"></div>
+
+
+<script type="text/javascript" charset="utf-8">
+	var labels = {{html JSON.stringify(labels)}};
+	var labels_show = {{html JSON.stringify(labels_show)}};
+	var data_total_in = {{html JSON.stringify(data_total_in)}};
+	var data_profit = {{html JSON.stringify(data_profit)}};
+	var data_visitor_count = {{html JSON.stringify(data_visitor_count)}};
+	var data_order_num = {{html JSON.stringify(data_order_num)}};
+</script>
+
+<script type="text/javascript" charset="utf-8">
+	var data = [
+        	{
+				name : '营业额',
+        		value: data_total_in,
+        		color:'#1f7e92',
+        		line_width:2
+			},
+			{
+				name : '利润',
+        		value: data_profit,
+        		color:'#6cc4f4',
+        		line_width:2
+        	}
+       ];
+       
+	var chart = new iChart.Area2D({
+			render : 'myChart',
+			data: data,
+			title : '最近${limit}天销售额与利润趋势',
+			width : 1280,
+			height : 500,
+			align : 'center',
+			sub_option : {
+				smooth:true,
+				hollow_inside:false,
+				hollow_color : '#FEFEFE',
+				point_size:10,
+				label:false
+			},
+			
+			crosshair:{
+				enable:true,
+				line_width:2,
+				line_color:'#6cc4f4'//十字线的颜色
+			},
+			
+			tip:{
+				enable:true,
+				listeners:{
+					//tip:提示框对象、name:数据名称、value:数据值、text:当前文本、i:数据点的索引
+					parseText:function( tip, name, value, text, i ){
+								  return labels[i].date_txt+'('+ labels[i].date_day  +')'+name+":<br/><strong style='color:orange;'> "+value+"</strong>元";
+					}
+				}
+			},
+			//coordinate:{height:'90%',background_color:'#edf8fa'},
+			
+			labels:labels_show
+		});
+	
+	chart.draw();
+
+
+	var data2 = [
+        	{
+				name : '到店人数',
+        		value: data_visitor_count,
+        		color:'#1f7e92',
+        		line_width:2
+			},
+			{
+				name : '订单数',
+        		value: data_order_num,
+        		color:'#6cc4f4',
+        		line_width:2
+        	}
+       ];
+       
+	var chart2 = new iChart.Area2D({
+			render : 'visitor',
+			data: data2,
+			title : '最近${limit}天到店人数与订单数',
+			width : 1280,
+			height : 500,
+			align : 'center',
+			sub_option : {
+				smooth:true,
+				hollow_inside:false,
+				hollow_color : '#FEFEFE',
+				point_size:10,
+				label:false
+			},
+			
+			crosshair:{
+				enable:true,
+				line_width:2,
+				line_color:'#6cc4f4'//十字线的颜色
+			},
+			
+			tip:{
+				enable:true,
+				listeners:{
+					//tip:提示框对象、name:数据名称、value:数据值、text:当前文本、i:数据点的索引
+					parseText:function( tip, name, value, text, i ){
+								  return labels[i].date_txt+'('+ labels[i].date_day  +')'+name+":<br/> <strong style='color:orange;'>"+value+"</strong>";
+					}
+				}
+			},
+			//coordinate:{height:'90%',background_color:'#edf8fa'},
+			
+			labels:labels_show
+		});
+	
+	chart2.draw();
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>

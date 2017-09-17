@@ -1,0 +1,58 @@
+<style>
+	h1{
+		font-size : 32px;	
+		padding : 20px;
+	}
+	p{
+		margin : 20px 10px;	
+	}
+	input {
+		line-height : 28px;	
+		border : 1px solid #CCC;
+	}
+	.submit{
+		padding : 5px;	
+	}
+</style>
+
+
+<h1>修改产品</h1>
+<!--
+<form action="/dashixiongwx/admin/shop/${shop_id}/doupload" enctype="multipart/form-data" method="post">
+    -->
+<form action="/dashixiongwx/admin/shop/${shop_id}/product/${product.id}/updateimg" enctype="multipart/form-data" method="post">
+	<p><img src="http://img.ksmimi.com/uploads/products/${product.img}" width="50" /> <input name="img" type="file" /> <input class="submit" type="submit" value="更改图片" /></p>
+</form>
+
+
+<!--
+<input name="img" type="file" />
+-->
+<form action="/dashixiongwx/admin/shop/${shop_id}/product/${product.id}/doupdate" method="post">
+	<input name="product[id]" type="hidden" value="${product.id}" />
+	<input name="product[shopId]" type="hidden" value="${product.shopId}" />
+	<p><label>标题</label> <input name="product[title]" type="text" value="${product.title}" /></p>	
+	<p><label>条码</label> <input id="code_val" name="product[code]" type="text" value="${product.code}" /> <a id="code_btn" href="#" onclick="return false;">查看条码</a><img id="code" src=""/></p>	(无条码的产品需要自编。自编条码格式:20+五位分店id+五位产品id)
+	<p><label>价格</label> <input name="product[price]" type="text" value="${product.price}" /></p>	
+	<p><label>促销价格</label> <input name="product[promotePrice]" type="text" value="${product.promotePrice}" /></p>	
+	{{if power>=3 }}
+	<p><label>进货成本</label> <input name="product[cost]" type="text" value="${product.cost}"/></p>	
+	{{/if}}
+	<p><label>单位</label> <input name="product[unit]" type="text" value="${product.unit}" /></p>
+	<p><input class="submit" type="submit" value="提交" /></p>
+</form>
+<script type="text/javascript" charset="utf-8">
+	var code_val;
+	var getCode = function(){
+		code_val = $('#code_val').val();
+		var url = 'http://apps.99wed.com/baiduapp/barcode/barcode.php?codebar=BCGean13&text='+ code_val +'&resolution=2&thickness=30';
+		$('#code').attr('src',  url);
+	};
+	$('#code_btn').click(getCode);
+
+	//------- 初始化 ---------- //
+	code_val = $('#code_val').val();
+	if(code_val){
+		getCode();
+	}
+</script>	

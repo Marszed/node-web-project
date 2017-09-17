@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <style type="text/css">
+        .lucky-box{
+            text-align:center;
+            font-size:22px;
+        }
+        #oknum{
+            font-size:60px;
+            padding:20px 0 30px 0;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="lucky-box">
+        <div id="oknum" name="oknum" >请单击开始抽奖</div>
+        <button onclick="start()" accesskey="s">开始抽奖(<U>S</U>)</button>
+        <button onclick="ok()" accesskey="o">停止(<U>O</U>)</button>
+        <input type="text" id="showresult" value="">
+    </div>
+
+    <script type="text/javascript"><!--
+        var alldata = "${userIds.join(',')}"; //抽奖数据，以逗号分隔
+        var alldataarr = alldata.split(",");
+        var timer,
+            oknum = document.getElementById("oknum"),
+            show = document.getElementById("showresult");
+        function change(){
+            oknum.innerHTML = alldataarr[GetRnd(0,alldataarr.length-1)];
+        }
+        function start(){
+            clearInterval(timer);
+            timer = setInterval('change()',10); //随机数据变换速度，越小变换的越快
+        }
+        function ok(){
+            var num = oknum.innerText;
+            clearInterval(timer);
+            show.value = num;
+            delNum(num);
+            if( window.console ) console.log(alldataarr);
+        }
+        function GetRnd(min,max){
+            return parseInt(Math.random()*(max-min+1));
+        }
+        function delNum(num){
+            for(var i = 0, len = alldataarr.length; i < len; i++){
+                var elem = alldataarr[i];
+                if( elem == num ) alldataarr.splice(i, 1);
+            }
+        }
+
+    // --></script>
+</body>
+</html>

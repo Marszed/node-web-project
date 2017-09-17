@@ -1,0 +1,111 @@
+<style type="text/css" media="all">
+    .title{
+        font-size : 18px;
+    } 
+    .price{
+        padding-left : 10px;
+        color : orange;
+        font-size : 18px;
+    }
+    .del{
+        padding-left : 15px; 
+    }
+    .add{
+        padding : 10px;
+        border : 1px solid #CCD; 
+    }
+    li{
+        border-bottom : 1px dashed #CCC; 
+        padding : 5px;
+    }
+</style>
+<a href="/dashixiongwx/admin/shop/${shop_id}/takeaway/list">&lt;&lt;外卖单列表</a><h2> 外卖单菜单管理 <a class="save" href="#" onclick="return false;">保存</a></h2>
+
+<p class="add">
+    <label for="">菜名: </label><input id="title" type="text" name=""  />
+    <label for="">价格: </label><input id="price" type="text" name="" />
+    <button class="add-btn">添加</button>
+</p>
+
+<ul class="menu"> </ul>
+
+
+<script type="text/javascript" charset="utf-8">
+    var shop_id = ${shop_id};
+    var takeaway_list_id = ${takeaway_list.id};
+
+    var takeaway = {{html JSON.stringify(takeaway_list)}};
+    var food = takeaway.food;
+    food = JSON.parse( food );
+
+    var make_item =  function (obj) {
+        html = [
+            '<li>',
+                '<span class="title">'+ obj.title +'</span>',
+                '<span class="price">'+ obj.price+'</span>元',
+                '<a href="#" class="del" onclick="return false;">删除</a>',
+            '</li>'     
+        ] ;
+        return html.join('');
+    };
+    
+    var make_items = function (objs) {
+        var htmls = [];
+        objs.forEach(function (obj, i) {
+            htmls.push( make_item(obj) );
+        });
+        return htmls.join('');
+    };
+
+    var make_menu = function ( food ) {
+        $( '.menu' ).html( make_items( food ) );
+    };
+
+    var getResult = function () {
+        var ret = [];
+        $( '.menu li' ).each(function (i, li) {
+            var obj = {
+                title : $( li ).find( '.title' ).text(),
+                price : $( li ).find( '.price' ).text()
+            };
+            ret.push( obj );
+        });
+        $.post( '/dashixiongwx/admin/shop/'+ shop_id +'/takeaway/food/update/'+takeaway_list_id, {
+            food : JSON.stringify( ret ) 
+        }, function (res) {
+            location.href = '/dashixiongwx/admin/shop/'+shop_id+'/takeaway/list';
+        });
+        console.log( ret );
+    };
+
+
+    //--------------------------------
+    var add = function () {
+        var title = $( '#title' ).val();
+        var price = $( '#price' ).val();
+        var html = make_item({
+            title : title,
+            price : price
+        });
+        $( '.menu' ).append( html );
+        $( '#title' ).focus().val('');
+        $( '#price' ).val(''); 
+    };
+    $( '.add-btn' ).click(add);
+    $( '#price' ).keyup(function (e) {
+        if( e.keyCode == 13 ) {
+            add();
+        }
+    })
+    
+    $( '.save' ).click(function () {
+        getResult();
+    });
+
+    $( '.menu' ).delegate( 'a.del', 'click', function () {
+        $(this).parent('li').remove();
+    });
+
+    //--------------- 初始化 ----------------------
+    make_menu( food );
+</script>

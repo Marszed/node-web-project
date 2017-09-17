@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Hello, World</title>
+<style type="text/css">
+html{height:100%}
+body{height:100%;margin:0px;padding:0px}
+#container{height:100%}
+</style>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=swpGYexipoqcz4iFkGqQRIP3"></script>
+</head>
+ 
+<body>
+<div id="container"></div>
+<script type="text/javascript">
+var map = new BMap.Map("container");          // 创建地图实例
+//var point = new BMap.Point(116.404, 39.915);  // 创建点坐标
+var point = new BMap.Point(113.384795,23.219315);  // 创建点坐标
+var point_shop_1_warehouse = new BMap.Point( 114.483614,23.082802 );
+//var point_guangzhou = new BMap.Point( 113.3831,23.217056 );
+map.centerAndZoom(point, 18);                 // 初始化地图，设置中心点坐标和地图级别
+
+//var opts = {    
+//    width : 250,     // 信息窗口宽度    
+//    height: 100,     // 信息窗口高度    
+//    title : "Hello"  // 信息窗口标题   
+//};   
+//var infoWindow = new BMap.InfoWindow("大师兄小卖部", opts);  // 创建信息窗口对象    
+//map.openInfoWindow(infoWindow, point_shop_1_warehouse);      // 打开信息窗口
+
+
+//var icon = new BMap.Icon("http://img.ksmimi.com/uploads/articles/f1ffa17bcbfc14cfba873b3e4457595a.jpg", 
+//    new BMap.Size(50, 50), {  
+//        //offset: new BMap.Size(10, 25),  
+//        imageOffset: new BMap.Size(-20, -20)   // 设置图片偏移  
+//    });    
+//// 创建标注对象并添加到地图 
+var marker_auscar = new BMap.Marker(point); 
+var label = new BMap.Label("陈惠斌 5级英雄",{offset:new BMap.Size(20,-10)});
+
+
+//var marker = new BMap.Marker(point);        // 创建标注    
+//var marker_shop_1_warehouse = new BMap.Marker( point_shop_1_warehouse );
+////map.addOverlay(marker);
+map.addOverlay( marker_auscar);
+//
+//var label = new BMap.Label("陈惠斌 5级英雄",{offset:new BMap.Size(20,-10)});
+//marker_shop_1_warehouse.setLabel(label);
+//
+//setTimeout(function () {
+//    marker_shop_1_warehouse.setPosition( point );
+//},4000);
+
+
+</script>
+
+
+<script src="http://www.ksmimi.com:6889/socket.io/socket.io.js"></script>
+<script>
+var socket = io.connect('http://'+ location.host +':6889');
+
+socket.on('location', function (data) {
+    data.latitude -= 0;
+    data.lontitude -= 0;
+    var point = new BMap.Point(data.lontitude,data.latitude);  // 创建点坐标
+    var label = new BMap.Label(data.worker,{offset:new BMap.Size(20,-10)});
+    marker_auscar.setPosition( point );
+    marker_auscar.setLabel( label );
+});
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,144 @@
+<style>
+	h2{
+		font-size : 24px;	
+		font-weight : 400px;
+	}
+	body{
+		background : #FFF;
+	}
+	.shop{
+		margin-bottom : 20px;	
+	}
+	.content{
+		padding : 10px;	
+	}
+	.desc{
+		color : #AAA;	
+		line-height : 1.5em;
+	}
+	.title{
+	
+	}
+	.price{
+		float : right;	
+	}
+	.food-list{
+		margin-bottom : 10px;	
+	}
+	.afood{
+		line-height : 1.5em;
+		color : #333;
+	}
+	.tel{
+		font-size : 18px;	
+	}
+	.shop-name{
+		color : #40a0c0;
+		border-bottom : 1px dashed #CCC;
+		padding : 5px;
+	}
+	.random{
+		margin-top : 10px;
+		text-align : center;
+	}
+	.random p{
+		line-height : 1.5em;
+	}
+	.btn{
+		font-size : 16px;
+		background : #40a0c0;
+		line-height : 28px;
+		padding : 15px;
+		border-bottom : 1px solid #CCC;
+		border-right : #CCC;	
+	}
+	.result{
+		padding : 10px;
+		background : #40a0c0;
+		color : #FFF;
+		text-align : left;
+	}
+	.result a{
+		color : #FFD700;
+	}
+	.recommand-name{
+		/*
+		color : #FF6A6A;	
+		*/
+		color : #FF1493;
+	}
+	.loading{
+		visible : hidden;	
+	}
+</style>
+<div class="random">
+	<p>
+		<span id="noidea">不知道吃什么? 大师兄帮你:</span> <a id="btn" href="#" onclick="return false;">点这里</a>
+	</p>
+	<p class="result" style="display:none;">
+	</p>
+	<p class="recommandation">
+		<span id="loading" style="display:none;"><img src="http://s.ksmimi.com/dashixiong_static/img/recommanding.gif" /></span>
+	</p>
+</div>
+<div class="content">
+	{{each(fo, i) food}}
+	<div class="shop">
+		<h2 class="shop-name">${fo.name}</h2>	
+		<div class="desc">“${fo.desc||fo.description}”</div>
+		<div class="address">${fo.address}</div>
+		<ul class="food-list">
+			{{each(afood, i) fo.food}}
+			<li class="afood">
+				<span class="title">${afood.title}</span>
+				<span class="price">${afood.price} 元</span>
+			</li>
+			{{/each}}
+		</ul>
+		<div class="tel">
+			点击号码自动拨打:
+			{{each(tel, i) fo.tels}}
+			<a class="auto-call" href="tel:${tel}">${tel}</a>&nbsp;&nbsp;
+			{{/each}}
+		</div>
+	</div>
+	{{/each}}
+</div>
+<script type="text/javascript" charset="utf-8">
+	$(function(){
+		$('.auto-call').click(function(){
+			//return false;	
+		});
+	});
+
+	$( '#btn' ).click(function(){
+		var loading = $('#loading');
+		var result = $('.result');
+		loading.show();
+		result.hide();
+		
+		setTimeout(function(){
+			loading.hide();
+			result.show();
+			$( '#noidea' ).html( '还不满意?' );
+			$( '#btn' ).html( '再点这里' );
+		}, 618);
+		
+		//随机获取菜品
+		var $shop = $('.shop');
+		var shop_num = Math.floor( Math.random()*$shop.length );
+		var shop = $shop[ shop_num ];
+		var $auto_call = $( shop ).find( '.auto-call' );
+		var $food = $( shop ).find( 'li.afood' );
+		var food_num = Math.floor(Math.random()*$food.length);
+		var food = $( $food[ food_num ] );
+
+		var html = '吃“<span>'+ $( shop ).find( '.shop-name' ).html() +'</span>”的<span class="recommand-name">' +  food.find( '.title' ).html()+' '+food.find( '.price' ).html()+ '</span>吧。';
+		html += '电话: '+ $shop.find( '.tel' ).html();
+		result.html( html );
+	});
+</script>
+
+
+
+

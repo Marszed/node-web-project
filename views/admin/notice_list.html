@@ -1,0 +1,96 @@
+<style>
+    table, td, th{
+        border : 1px solid #CCC;
+    }
+    h1{
+        padding : 10px;
+        font-size : 20px;
+    }
+    .money {
+        padding : 10px;
+    }
+    .good{
+        font-size : 18px;
+        color : green;
+    }
+    .bad{
+
+        color : red;
+    }
+    .order-create{
+        color : red;
+    }
+    .order-delivering{
+        color : green;
+    }
+    .order-receive{
+        color : #CCC;
+    }
+    .add-notice{
+        margin : 10px;
+    }
+</style>
+
+<p>
+    {{if cur_notice}}
+
+<div>当前公告是: “ {{html cur_notice.content}} ” <a class="action" type="del" href="/dashixiongwx/admin/shop/${shop_id}/notice/curclear">清空当前公告</a></div>
+{{/if}}
+</p>
+
+<p class="add-notice">
+    <a href="/dashixiongwx/admin/shop/${shop_id}/notice/add">添加公告</a>
+</p>
+
+<table>
+    <tr>
+        <th>
+            id
+        </th>
+        <th>
+            时间
+        </th>
+        <th>
+            内容
+        </th>
+        <th>
+            操作
+        </th>
+    </tr>
+
+    {{each(notice, i) notices}}
+    <tr>
+        <td id="${notice.id}">
+            ${notice.id}
+        </td>
+        <td>
+            ${notice.intime}
+        </td>
+        <td>
+            <input class="content" type="text" value="${notice.content}" style="text-align:center; border: 0;padding: 0;margin: 0;width: 888px;height: 20px;">
+        </td>
+        <td>
+            &nbsp;<a class="action" type="del" href="/dashixiongwx/admin/shop/${shop_id}/notice/${notice.id}/del">删除</a> |
+            &nbsp;<a class="update" type="del" href="#" id="${notice.id}">编辑</a> |
+            &nbsp;<a class="action" type="del" href="/dashixiongwx/admin/shop/${shop_id}/notice/${notice.id}/cur">设为当前公告</a>
+        </td>
+    </tr>
+    {{/each}}
+
+</table>
+<script type="application/javascript">
+    //ajax将页面数据传给后台服务器处理
+    $(document).on('click', '.update', function(){
+        var $update = $(this),//获取当前点击的对象
+            $tr = $update.closest('tr'),//查找点击对象update最近的行tr
+            idValue = $update.attr('id');//将td的id绑在input上，并取出复制给idValue
+        $tr.find('input[type=text]').focus();//点击时间获取焦点input type=text的焦点
+        $tr.find('input[type=text]').blur(function(){//input type=text的焦点失去时触发的时间
+            var contentval = $tr.find('input[type=text]').val();
+            $.post('/dashixiongwx/admin/shop/${shop_id}/notice/id/update', {id : idValue , content: contentval}, function(data){
+                location.reload();
+            });
+        });
+    });
+</script>
+

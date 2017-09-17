@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .ops{
+            margin-bottom: 20px;
+        }
+        .current-date{margin:0 20px;}
+    </style>
+</head>
+<body>
+    <h3>货架产品操作记录</h3>
+    <div class="ops">
+        <a href="?y=${pre_date_y}&m=${pre_date_m}&d=${pre_date_d}">前一天</a>
+        <span class="current-date">当前日期为：${y}年${m}月${d}日</span>
+        <a href="?y=${next_date_y}&m=${next_date_m}&d=${next_date_d}">后一天</a>
+    </div>
+    <div class="ops">
+        <span>店号:</span><input class="storeId" type="text" placeholder="请输入店号"/>
+        <span>货架名称:</span><input class="sectionName" type="text" placeholder="请输入货架名称"/>
+        <span>产品名称:</span><input class="proName" type="text" placeholder="请输入产品名称"/>
+        <a class="query" href="#" onclick="return false;">查询</a>
+    </div>
+    <table class="origl" style="float: left; margin-right: 20px;">
+        <tr>
+            <td>id</td>
+            <td>用户ID</td>
+            <td>昵称</td>
+            <td>店号</td>
+            <td>货架ID</td>
+            <td>货架名称</td>
+            <td>产品ID</td>
+            <td>产品名称</td>
+            <td>操作名</td>
+            <td>时间</td>
+        </tr>
+        {{each(data, i) datas}}
+        <tr>
+            <td>${i+1}</td>
+            <td>${data.userId}</td>
+            <td>${data.nick}</td>
+            <td class="shopId" ret="${data.shopId}" dataId="${data.id}">${data.shopId}</td>
+
+            {{if data.sectionId && data.sectionId!=-1000}}
+            <td class="secId" ret="${data.sectionId}" dataId="${data.id}">${data.sectionId}</td>
+            {{else}}
+            <td  class="secId" ret="${data.sectionId}" dataId="${data.id}">--</td>
+            {{/if}}
+
+            {{if data.sectionName}}
+            <td class="secName" ret="${data.sectionName}" dataId="${data.id}">${data.sectionName}</td>
+            {{else}}
+            <td  class="secName" ret="${data.sectionName}" dataId="${data.id}">--</td>
+            {{/if}}
+
+            {{if data.pId && data.pId!=-1000}}
+            <td class="pId" ret="${data.pId}" dataId="${data.id}">${data.pId}</td>
+            {{else}}
+            <td class="pId" ret="${data.pId}" dataId="${data.id}">--</td>
+            {{/if}}
+
+            {{if data.title}}
+            <td class="pName" ret="${data.title}" dataId="${data.id}">${data.title}</td>
+            {{else}}
+            <td class="pName" ret="${data.title}" dataId="${data.id}">--</td>
+            {{/if}}
+
+            <td>${data.text}</td>
+            <td>${data.time}</td>
+        </tr>
+        {{/each}}
+
+    </table>
+
+    <table class="dataRow" style="display: none;">
+        <tr>
+            <td>id</td>
+            <td>用户ID</td>
+            <td>昵称</td>
+            <td>店号</td>
+            <td>货架ID</td>
+            <td>货架名称</td>
+            <td>产品ID</td>
+            <td>产品名称</td>
+            <td>操作名</td>
+            <td>时间</td>
+        </tr>
+        <tbody class="backdata"></tbody>
+    </table>
+
+</body>
+<script type="text/javascript">
+    $(function(){
+        $('.query').click(function(){
+            $('.dataRow').show();
+            var str1 = '';
+            var str2 = '';
+            var str3 = '';
+            var storeId = $('.storeId').val().trim();
+            var sectionName = $('.sectionName').val().trim();
+            var proName = $('.proName').val().trim();
+
+            if(storeId){
+                $('.shopId').each(function(){
+                    if(storeId == $(this).attr('ret')){
+                        str1 += $(this).attr('dataId')+',';
+                    }
+                });
+                str1 = str1.substring(0, str1.length-1);
+            }
+            if(sectionName){
+                $('.secName').each(function(){
+                    if(sectionName == $(this).attr('ret')){
+                        str2 += $(this).attr('dataId')+',';
+                    }
+                });
+                str2 = str2.substring(0, str2.length-1);
+            }
+            if(proName){
+                $('.pName').each(function(){
+                    if(proName == $(this).attr('ret')){
+                        str3 += $(this).attr('dataId')+',';
+                    }
+                });
+                str3 = str3.substring(0, str3.length-1);
+            }
+            if(str3.length>0){
+                isAjax(str3);
+            }else if(str2.length>0) {
+                isAjax(str2);
+            }else if(str1.length>0){
+                isAjax(str1);
+            }else{
+                alert('请输入查询条件！');
+                return;
+            }
+
+        });
+
+        var isAjax = function(str){
+            $.get('/dashixiongwx/admin/shop/{shop_id}/sectionop/select', {newStr: str, ajax: 1}, function(res){
+                var dataObj = JSON.parse(res);
+                $('.backdata').html( make_items(dataObj) );
+            });
+        };
+        var make_items = function (ms) {
+            var html = ['此人暂无任何道具和财富!'];
+            ms.forEach(function (msg, i) {
+                html.push( make_item( msg ) );
+            });
+            return html.join('');
+        };
+        var make_item = function (msg) {
+
+            var html = [
+                '<tr>',
+                '<td>',
+                msg.id,
+                '</td>',
+                '<td>',
+                msg.userId,
+                '</td>',
+                '<td>',
+                msg.nick,
+                '</td>',
+                '<td>',
+                msg.shopId,
+                '</td>',
+                '<td>',
+                msg.sectionId,
+                '</td>',
+                '<td>',
+                msg.sectionName,
+                '</td>',
+                '<td >',
+                msg.pId,
+                '</td>',
+                '<td>',
+                msg.title,
+                '</td>',
+                '<td>',
+                msg.text,
+                '</td>',
+                '<td>',
+                msg.time,
+                '</td>',
+                '</tr>'
+            ];
+            return html.join('');
+        };
+//        $('.content').html( make_items(datas) );
+
+    });
+</script>
+</html>

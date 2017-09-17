@@ -1,0 +1,128 @@
+<style>
+	table, td, th{
+		border : 1px solid #CCC;	
+	}
+	h1{
+		padding : 10px;
+		font-size : 20px;	
+	}
+	.add-motto{
+		margin : 10px;	
+	}
+</style>
+
+<p>
+{{if cur_motto}}
+	<div>当前的小票箴言是 {{html cur_motto.content}}  <a class="action" type="del" href="/dashixiongwx/admin/shop/${shop_id}/motto/curclear">清空当前箴言</a></div>
+{{else}}
+	当前小票箴言是“ 小卖部，大志向 ”
+{{/if}}
+</p>
+
+<p class="add-motto">
+	<a href="/dashixiongwx/admin/shop/${shop_id}/motto/add">添加箴言</a>
+    &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" size="12" id="shopid" placeholder="请输入店铺ID"/>
+    <input type="button" id="btnClick" value="查询"/>
+    <span id="tip" style="color: red;display: none;">亲,只能输入数字!</span>
+    &nbsp;&nbsp;&nbsp;&nbsp;<input type="text" placeholder="如:1,2,3(中间用逗号隔开)" size="22" class="cancelShopIds"/>
+    <a style="text-decoration: underline;cursor: pointer;" id="cancelStatus" class="cancelStatus" type="del">一键取消当前箴言</a>
+</p>
+
+<table>
+	<tr>
+		<th>
+			id
+		</th>
+        <th>
+            所在分店ID
+        </th>
+		<th>
+			时间
+		</th>
+		<th>
+			内容
+		</th>
+        <th>
+            设置箴言的店铺ID(快速通道)
+        </th>
+		<th>
+			操作
+		</th>
+	</tr>	
+
+{{each(motto, i) mottos}}
+	<tr>
+		<td>
+			${motto.id}	
+		</td>
+        <td class="shopid" shopIdVal="${motto.shopId}">
+            ${motto.shopId}
+        </td>
+		<td>
+			${motto.intime}
+		</td>
+		<td>
+			${motto.content}
+		</td>
+        <td>
+            <input type="text" placeholder="如:1,2,3(中间用逗号隔开)" size="22" class="moto_shopid"/>
+        </td>
+		<td>
+			&nbsp;<a class="action" type="del" href="/dashixiongwx/admin/shop/${shop_id}/motto/${motto.id}/del">删除</a> |
+			&nbsp;<a mottoId="${motto.id}" style="text-decoration: underline;cursor: pointer;" class="action"  type="del" >设为当前小票箴言</a>
+		</td>
+	</tr>
+{{/each}}
+</table>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#btnClick').click(function(){
+            var $shopid = $('#shopid').val()-0;
+            if($shopid){
+                $('#tip').hide();
+                $('.shopid').each(function(i,domEle){
+                    if($shopid != $(this).attr('shopIdVal')){
+                        $(this).parent('tr').hide();
+                    }
+                    if($shopid == $(this).attr('shopIdVal')){
+                        $(this).parent('tr').show();
+                    }
+                });
+            } else if($shopid == ''){
+                location.reload();
+            } else{
+                $('#tip').show();
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    document.onkeydown = function (e) {
+        var theEvent = window.event || e;
+        var code = theEvent.keyCode || theEvent.which;
+        if (code == 13) {
+            $("#btnClick").click();
+        }
+    }
+</script>
+<script type="text/javascript">
+    $('.action').click(function(){
+        var id = $(this).attr('mottoId');
+        var a = $(this).parent().siblings('td').children('input').val();
+        var arrays = [];
+            a = a.replace(/，/ig,',');
+            arrays = a.split(',');
+        $.get('/dashixiongwx/admin/shop/${shop_id}/motto/'+id+'/cur',{arrays:arrays},function(){
+            window.location.reload();
+        });
+    });
+    $('.cancelStatus').click(function(){
+        var a = $('.cancelShopIds').val();
+        var arrays = [];
+        a = a.replace(/，/ig,',');
+        arrays = a.split(',');
+        $.get('/dashixiongwx/admin/shop/${shop_id}/motto/curclear/set',{arrays:arrays},function(){
+            window.location.reload();
+        });
+    });
+</script>

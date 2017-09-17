@@ -1,0 +1,269 @@
+<style type="text/css" media="all">
+    .loading{width:19px; display : none; }
+    .load-more,.new-msg{ background : #FFEFD5; border : 1px dashed #DDD; padding : 10px; text-align : center; }
+    .load-more a, .new-msg a { display : block; }
+    .msg-intime{font-size:12px;color:#999;margin-left:10px;}
+    #msg_list tr{border-bottom:1px dashed #ddd;line-height:1.5em;}
+    .table{width:100%;margin:5px 0;}
+    .msg-user-photo{vertical-align:top;}
+    .reply-input{
+        height:25px;
+        border:solid 1px #ddd;
+        color: #333;
+        font-size: 16px;
+        line-height:25px;
+        -webkit-border-radius:3px;
+        -webkit-appearance:none;
+        -webkit-box-sizing:border-box; 
+        width:100%;
+        display:block;
+        -webkit-box-flex:1
+    }
+    .reply-action{ display:-webkit-box; }
+    .reply-action>a{ width:40px; margin-left:10px;background:green; color:#fff;border-radius:5px;padding:3px 6px; }
+    .reply-dot{font-size:14px;color:#ccc;}
+    .reply-tip{margin-left:10px;}
+    .send-sus{width:16px;overflow:hidden;margin-left:10px;display:block;}
+    .send-sus img{width:16px;height:16px;}
+</style>
+<table class="table" border="0" bordercolor="#ccc" cellpadding="1" cellspacing="1" >
+    <thead>
+        <tr style="display:none;" class="new-msg-tr">
+            <td colspan="2">
+                <div class="new-msg">
+                    <a href="#" onclick="return false;">
+                        有条<span id="nums"></span>新消息
+                    </a>
+                </div>        
+            </td>
+        </tr>
+    </thead>
+    <tbody id="msg_list">
+    </tbody>
+    <tfoot>
+        <tr class="load-more-tr">
+            <td colspan="2" width="30">
+                <div class="load-more">
+                    <a href="#" onclick="return false;">
+                        加载更多 
+                    </a>
+                </div>        
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<script type="text/javascript" charset="utf-8">
+    var shop_id = ${shop_id};
+    var msgs = {{html JSON.stringify(msgs)}};
+
+    var users = {{html JSON.stringify(users)}};
+    var user_map = {};
+
+    var updateUserMap = function (users) {
+
+        console.log(users);
+
+        users.forEach(function (user) {
+            user_map[ user.id ]  = user;
+        });
+    };
+
+    updateUserMap( users );
+
+    var getUserInfo = function (user_id) {
+        if(  user_id.indexOf( 's_' ) == -1 ){//'s_'开头的id就是普通用户的id
+             user_id = user_id.substr(2) - 0;
+        }
+        var user = {};
+
+        if( user_map[ user_id ] ){
+            return user_map[ user_id ];
+        }
+        
+        return user;
+    };
+
+    var make_item = function (msg) {
+        var user_info = getUserInfo( msg.fromUserId );
+        msg.content = msg.content.replace(/\n/ig, '</br>');
+        var html = [
+            '<tr class="msg" mid="'+ msg.id +'">',
+	        	'<td width="30" class="msg-user-photo">',
+                    '<a target="_blank" href="/dashixiongwx/admin/shop/'+ shop_id +'/msg/'+ user_info.id +'/list">',
+                        '<img width="30" src="'+  (user_info.head || 'http://s.ksmimi.com/dashixiong_static/img/human_head.jpg' ) +'" />',
+                    '</a>',
+	        	'</td>',
+                '<td>',
+                    '<a target="_blank" href="/dashixiongwx/admin/shop/'+ shop_id +'/order/list/'+ user_info.id +'/'+ user_info.nick+'">',
+                        user_info.nick || msg.fromUserId,
+                    '</a>',
+                    '<span class="msg-intime">'+ msg.intime + '</span>',
+                    '<div class="content">',
+                        msg.content,
+                        //富媒体内容的显示
+                        (function(){
+                            if (msg.msgType == 'image'){
+                            return [
+                                '<div>',
+                                    '<a target="_blank" href="'+ msg.ext.picUrl +'">',
+                                        '<img src="'+ msg.ext.picUrl +'" alt="" width="80" />',
+                                    '</a>    ',
+                                '</div>'].join('');
+                            }
+                            if(msg.msgType == 'voice'){
+                                return '<a class="download-voice" target="_blank" href="/dashixiongwx/shop/'+ shop_id +'/download/media/'+msg.ext.mediaId+'" onclick="return false;">点击下载</a>';
+                            }
+                         })(),
+                        //是否显示已回复
+                        (function () {
+                            var span = '<span class="reply-tip" style="display:none;">';
+                            if( msg.reply ){
+                                span = '<span class="reply-tip">';
+                            }
+                            return [
+                                span,  
+                                '<span class="reply-dot"><font color="red">● </font>已回复</span>',
+                                '</span>'
+                            ].join( '' );
+                        })(),
+                    '</div>',
+                    '<div class="reply-action nowrap">',
+                        '<input type="text" class="reply-input nowrap" value="" />',
+                        '<span class="send-sus" style="display:none"></span>',
+                        '<a targetId="'+ msg.id +'" from="'+ msg.toUserId +'" to="'+ msg.fromUserId +'" class="reply" type="del" onclick="return false;" href="#"> 回复</a>',
+                    '</div>',
+                '</td>',
+	        '</tr>'
+        ];
+        return html.join('');
+    };
+
+    var make_items = function (ms) {
+        var html = [];
+        ms.forEach(function (msg, i) {
+            html.push( make_item( msg ) );
+        });     
+        return html.join('');
+    };
+    
+    $( '#msg_list' ).html( make_items(msgs) );
+
+
+    $( 'tbody' ).delegate( '.reply', 'click', function () {
+        var input = $(this).siblings( 'input' );
+        var reply = input.val();
+        var send_sus = $(this).siblings( '.send-sus' );
+        var loading = input.siblings( '.loading' );
+        if( !reply )return;
+        var url = '/dashixiongwx/admin/shop/'+ shop_id +'/reply';
+        var p = {
+            'msg[fromUserId]' : $(this).attr('from'),
+            'msg[toUserId]' : $(this).attr( 'to' ),
+            'msg[content]' : reply,
+            'msg[targetId]' : $(this).attr( 'targetId'),
+            'msg[msgType]' : 'text'
+        }
+        console.log(p);
+
+        //loading.show();
+        $.post( url, p, function (res) {
+            loading.hide();
+
+            res = JSON.parse(res);
+            console.log(res);
+            console.log(typeof res);
+
+            if( !res.code ){
+                send_sus.html( '<img src="http://s.ksmimi.com/dashixiong_static/img/success.png" />' );
+            }else{
+                send_sus.html( '<img src="http://s.ksmimi.com/dashixiong_static/img/error.png" />' );
+            }
+            send_sus.show();
+
+            if( !res.code ){
+                input.val('');
+                input.parents( 'tr' ).find( '.reply-tip' ).show();//显示“已回复”
+                input.blur();
+            }else{
+                input.val('');
+                input.val(reply);
+            }
+            setTimeout(function () {
+                send_sus.hide();
+            },3000);
+        });
+
+    });//end click
+    
+    $( 'tbody' ).delegate( '.reply-input', 'keyup', function (e) {
+        if(e.keyCode == 13){
+            var btn = $( this ).siblings( '.reply' );
+            btn.trigger( 'click' );
+        }
+    });
+
+    $( 'tbody' ).delegate('.download-voice', 'click', function () {
+        $.get( this.href, function (res) {
+            location.href = res.url;
+        });
+    });
+    
+    var limit = 30;
+    $( '.load-more' ).click(function () {
+        var last_msg_id = $('tr.msg').last().attr('mid');
+        var url = '/dashixiongwx/admin/shop/'+ shop_id +'/msg/list/'+ last_msg_id +'/'+limit
+        console.log(url);
+        $.get( url, function (res) {
+            console.log(res);
+            console.log(typeof res);
+            res = JSON.parse(res);
+            if( res.code ){
+                alert(res.msg);
+                return;
+            }
+            
+            updateUserMap( res.users );//更新一下用户数据, 获取新一批消息所涉及的用户的头像, nick等
+
+            $( '#msg_list' ).append( make_items(res.msgs) );
+            if( res.msgs.length < limit ){
+                $( '.load-more' ).hide();
+                $( '.load-more-tr' ).hide();
+            }
+        });
+    });
+
+</script>
+<!--socket.io -->
+<script src="http://www.ksmimi.com:6889/socket.io/socket.io.js"></script>
+<script>
+    var socket = io.connect('http://'+ location.host +':6889');
+    var msgs_pushed = [];
+
+    var show_unread_num = function () {
+        $( '#nums' ).text( msgs_pushed.length );
+        $( '.new-msg-tr' ).show();
+    };
+    var clear_unread = function () {
+        msgs_pushed.length = 0;
+        $( '.new-msg-tr' ).hide();
+        closeAllNotifications();
+        location.reload();
+    };
+
+    $( '.new-msg' ).click(function () {
+        clear_unread();
+    });
+
+    //通过这个请求上报一下自己的店铺id
+    socket.emit('report_shop_id', {
+        shop_id : shop_id
+    });
+    socket.on('message', function (data) {
+        console.log(data);
+        notify(data, true);
+        msgs_pushed.push( data );
+        show_unread_num();
+    });
+</script>
+

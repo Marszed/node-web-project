@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .ops{
+            margin-bottom:20px;
+        }
+    </style>
+</head>
+<body>
+<h1>道具人品来源统计</h1>
+<div class="ops">
+    <a href="?y=${pre_date_y}&m=${pre_date_m}&d=${pre_date_d}">前一天</a>
+    <span class="current-date">当前日期为：${y}年${m}月${d}日</span>
+    <a href="?y=${next_date_y}&m=${next_date_m}&d=${next_date_d}">后一天</a>
+    | 共 ${rpRendVal} 人品
+</div>
+<table>
+    <tr>
+        <td>序号</td>
+        <td>用户ID</td>
+        <td>用户名</td>
+        <td>道具名称</td>
+        <td>人品值</td>
+        <td>道具或人品来源</td>
+        <td>时间</td>
+    </tr>
+    {{each(arr, i) infos}}
+    <tr>
+        <td>${i+1}</td>
+        <td><a target="_blank" href="/dashixiongwx/admin/shop/${shop_id}/order/list/${arr.userId}/${arr.nick}">${arr.userId}</a></td>
+        <td>${arr.nick}</td>
+        <td>${arr.tool}</td>
+        <td>${arr.rp}</td>
+        <td>${arr.qd}</td>
+        <td>${arr.timeStamp}</td>
+    </tr>
+    {{/each}}
+</table>
+</body>
+</html>

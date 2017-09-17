@@ -1,0 +1,60 @@
+<style>
+    .h1-span{
+        font-size: 20px;
+    }
+</style>
+<h1>
+    客户评价
+    <span class="h1-span">
+        <a href="/dashixiongwx/admin/shop/${shop_id}/customer/evaluation?y=${pre_date_y}&m=${pre_date_m}&d=${pre_date_d}">
+            &lt;&lt;前一天
+        </a>
+        ${shop_id}号店${m}月${d}日(${xingqi})业绩
+        <a href="/dashixiongwx/admin/shop/${shop_id}/customer/evaluation?y=${next_date_y}&m=${next_date_m}&d=${next_date_d}">
+            后一天&gt;&gt;
+        </a>
+        {{if power>10}}
+        <select name="shopId" id="shopId">
+            {{each(shop,i) shops}}
+            <option value="${shop.shopId}">${shop.address}</option>
+            {{/each}}
+        </select>
+        {{/if}}
+    </span>
+</h1>
+<table>
+    <tr>
+        <th>序号</th>
+        <th>id</th>
+        <th>openId</th>
+        <th>userId</th>
+        <th>shopId</th>
+        <th>评价内容</th>
+        <th>评论日期</th>
+    </tr>
+    {{each(comment,i) comments}}
+    <tr>
+        <td>${i+1}</td>
+        <td>${comment.id}</td>
+        <td>${comment.openId}</td>
+        <td><a target="_blank" href="/dashixiongwx/admin/shop/${comment.shopId}/order/list/${comment.userId}/${comment.nick}">${comment.userId}</a></td>
+        <td>${comment.shopId}</td>
+        <td>{{html comment.content}}</td>
+        <td>${comment.timeStamp}</td>
+    </tr>
+    {{/each}}
+</table>
+
+
+<script>
+    $(document).ready(function(){
+       var $shop = $('#shopId');
+        var y = '${next_date_y}',
+            m = '${next_date_m}',
+            d = '${next_date_d}';
+        $shop.change(function(e){
+            var shopId = $(this).val();
+            window.location.href = 'http://www.dashixiong.com/dashixiongwx/admin/shop/"'+shopId+'"/customer/evaluation?y="'+y+'"&m="'+m+'"&d="'+d+'"">';
+        });
+    });
+</script>

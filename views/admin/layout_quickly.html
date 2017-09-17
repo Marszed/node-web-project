@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html> 
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+	<meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1"/>
+	<title>${shop_id}号店管理处 - 呼叫大师兄</title>
+    <link rel="stylesheet" href="http://s.ksmimi.com/dashixiong_static/csspro/hot_sneaks/jquery-ui-1.10.4.custom.min.css">
+    <!--<script src="http://s.ksmimi.com/dashixiong_static/jspro/jquery-1.10.2.js"></script>-->
+    <link rel="shortcut icon" type="image/x-icon" href="http://s.ksmimi.com/dashixiong_static/img/favicon.ico" />
+    <link rel="bookmark" type="image/x-icon"  href="http://s.ksmimi.com/dashixiong_static/img/favicon.ico" />
+    <script src="http://s.ksmimi.com/jspro/v0.93/jquery.js" type="text/javascript"></script>
+    <script src="http://s.ksmimi.com/dashixiong_static/jspro/jquery-ui-1.10.4.custom.min.js"></script>
+    <link rel="stylesheet" href="http://s.ksmimi.com/dashixiong_static/csspro/table.css">
+    <script type="text/javascript" charset="utf-8">
+        var DSX = {};
+        DSX.env = {
+            static : 's.ksmimi.com',
+            img : 'img.ksmimi.com'
+        };
+        DSX.shop = {
+            id : ${shop_id}
+        };
+    </script>
+	<style>
+		html{
+			-webkit-text-size-adjust:none;
+		}
+		body{
+			background-image: url(http://s.ksmimi.com/imgpro/grid.png);
+			background-repeat: repeat;
+			background-size: auto;
+			background-color : #CCC;
+			color : #888;
+		}
+        table{
+	        border-spacing: 0
+        }
+
+		.container{
+			width:80%;
+			max-width:500px;
+			background : #FFF;
+			padding : 20px;
+			margin :  10px auto;
+			border-bottom : 1px solid #CCC;
+			border-right : 1px solid #CCC;
+		}
+		.note{
+			color : #CCC;	
+		}
+		#nav{
+			padding : 10px;	
+		}
+		#nav a{
+			padding : 10px 2px;	
+			line-height : 24px;
+		}
+		li{
+			line-height : 24px;		
+            list-style : none;
+		}
+		a{
+			color : #40A0C0;
+		}
+
+        #top{position:fixed;right:10px; bottom:10px; display:inline-block;width:48px;height:48px; background:#ccc;line-height:48px; text-align:center;}
+	</style>
+
+</head> 
+<body> 
+    {{html body}}
+    <a href="#" id="top">TOP</a>
+</body> 
+</html> 

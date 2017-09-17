@@ -1,0 +1,32 @@
+<style type="text/css" media="all">
+    .tool-img{
+        border : 1px solid #CCC; 
+    }
+    .tool-title{
+        font-size : 18px; 
+        color : #333;
+    } 
+    .title{
+        color : #333;
+        font-size : 18px;
+        margin-bottom : 10px;
+    }
+    .tool-list li{
+        margin-bottom : 10px; 
+    } 
+</style>
+<div class="container">
+    <p class="title">
+        你目前拥有${tools.length}个道具，如下:
+    </p>
+    <ul class="tool-list">
+    {{each(tool, i) tools}}
+    <li>
+        <img class="tool-img" width="50" src="${tool.img}" alt="${tool.title}" />
+        <span class="tool-title">${tool.title}</span> ${tool.description}
+    </li>
+    {{/each}}
+    </ul>
+</div>
+
+

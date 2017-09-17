@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<title>大师兄后台登录</title>
+<style type="text/css">
+    body{background:#fff;margin: 0;padding: 0;color:#4f6b72; font-family:"微软雅黑","Microsoft YaHei", sans-serif;}
+    input{text-indent:0;}
+    input[type="password"],input[type="email"]{
+        height:33px;
+        width:100%;
+        border: solid 1px #ddd;
+        border-top-color: #bbb;
+        color: #333;
+        font-size: 16px;
+        padding-left: 26px; 
+        -webkit-border-radius:2px;
+        -webkit-appearance: none;
+        -webkit-box-sizing: border-box; 
+        background: -webkit-gradient(linear,0 0,0 100%,from(#f5f5f5),to(#fdfdfd));
+    }
+    input[type="password"]:focus,input[type="email"]:focus{ background:#fff;outline:none;}
+    #box{width:320px;margin:0 auto;border:0;}
+    .login-wrap{padding:17px 20px 15px 20px}
+    .field{position:relative;}
+    .loginName, .pwd{margin-top:10px;}
+    .loginName:before, .pwd:before{background:url(http://s.ksmimi.com/dashixiong_static/img/login.png) no-repeat 0 0;background-size:56px;content: '';position:absolute;left:0px;top:2px;width:25px;height:25px;}
+    .loginName:before{background-position:8px 8px;}
+    .pwd:before{background-position:8px -47px;}
+    .subBtn{margin-top:20px;}
+    input.login-sub{ 
+        display:inline-block;
+        border:0;
+        background:#f40;
+        text-align:center;
+        color:#fff;
+        font-weight:700;
+        min-width:100%;
+        height:44px;
+        line-height:44px;
+        padding:0;
+        font-size:24px;
+        text-shadow: 0 -1px 0 #441307;
+        -webkit-border-radius:2px;
+        background:-webkit-gradient(linear,0 0,0 100%,color-stop(0,#f50),color-stop(1,#f40));
+        -webkit-box-shadow:0 -1px 0 #bf3210 inset;
+    }
+    .loginType{
+        font-size:18px;
+        line-height:30px;
+        width:100%;
+    }
+</style>
+</head>
+<body>
+<div id="box">
+    <section id="innerContent">
+        <div id="login" class="login-wrap">
+           <form action="/dashixiongwx/admin/dologin" method="post" accept-charset="utf-8">
+                <h1 id="heading">来，登个录~</h1>
+                <div class="field">
+                    <select name="loginType" class="loginType">
+                        <option value="seller">店家</option> <!-- 权限为0 -->
+                        <option value="admin">客服</option> <!-- 权限大于0 -->
+                    </select>
+                </div>
+                <div class="field loginName">
+                    <input id="email" name="email" type="email" placeholder="手机号/会员名" />
+                </div>
+                <div class="field pwd">
+                    <input id="pwd" name="pwd" type="password" placeholder="密码" />
+                </div>
+                <div class="field subBtn">
+                    <input type="submit" class="login-sub" value="走你~ →" />
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+</body>
+</html>

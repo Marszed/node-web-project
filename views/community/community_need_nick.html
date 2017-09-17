@@ -1,0 +1,123 @@
+<style>
+    body{
+        background : none; 
+    }
+	h2{
+		font-size : 20px;	
+		font-weight : 700;
+		line-height : 32px;
+		margin-bottom : 15px;
+		border-bottom : 1px dashed #CCC;
+	}
+	
+	ul{
+		margin-bottom : 15px;	
+		list-style : disc inside;
+	}
+    .container{
+        border : none; 
+    }
+	
+	.section{
+		margin : 0 0 20px 0;	
+	}	
+	.head{
+		clear : both;	
+	}
+  .needed{
+    color : red; 
+  }
+  .desc{
+    color : #CCC;
+    font-size : 12px;
+    padding-left : 10px;
+  }
+    .info{
+        color : orange; 
+        margin : 0 0 15px 0;
+        padding : 5px 0;
+    }
+    .content{
+        position : relative; 
+    }
+    #content{
+        width : 70%;
+        border : 1px solid #ddd;  
+        color : #AAA;
+        font-size : 20px;
+        line-height : 30px;
+        letter-spacing : 3px;
+
+    }
+    img.pencil{
+        width : 15px; 
+        position : relative;
+        top : -2px;
+        opacity : 0.7;
+    }
+    .footer{
+        padding : 10px 0; 
+        text-align : right;
+    }
+    .submit{
+        padding : 8px;
+        border : none;
+        border-bottom : 1px solid #DDD;
+		background : #40a0c0;
+        color : #FFF;
+        position : relative;
+        right : -2px;
+        text-decoration : none;
+    }
+    .head .submit{
+        display : none;
+        padding : 4px 10px;
+        font-weight : 0;
+        font-size: 16px;
+        font-weight: 100;
+    }
+    .err{
+        line-height : 30px; 
+        color : red;
+        display : none;
+    }
+
+</style>
+
+<form id="submit_form" action="/dashixiongwx/shop/${shop_id}/community/nick" method="POST">
+    <input type="hidden" name="shop_name" value="${shop_name}">
+    <div class="container">
+    	<div class="section">
+            <h2 class="head"><img class="pencil" src="http://s.ksmimi.com/dashixiong_static/img/pencil.jpg" alt="" />
+                出来混, 起个牛逼的名字吧
+            </h2>
+            <div class="content">
+                <input id="content" name="nick" />  <a class="submit" href="#" onclick="return false;" >进入社区</a>
+                <input type="hidden" name="url" id="url" value="" />
+            </div>
+    		<p class="err">
+                你的名字屌爆了! 能不能短点？   
+            </p>
+    	</div>
+    </div>
+</form>
+<script type="text/javascript" charset="utf-8">
+    var submit_in_head = $( '.head .submit' );
+    var $url = $( '#url' );
+    $url.val( location.href );
+    $( '.submit' ).click(function () {
+        var val = $('#content').val();
+        if( !val ){
+            return;    
+        } 
+        if( val.length>10 ){
+            $( '.err' ).show();
+            return;
+        }
+        
+        $( '#submit_form' ).submit();
+    });
+</script>
+
+
+

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="utf-8"/>
+    <title>菜品评论</title>
+    <link rel="stylesheet" href="http://${staticHost}/dsx/csspro/base.css" />
+    <link rel="stylesheet" href="http://${staticHost}/dsx/csspro/productComment.css" />
+    <script src="http://s.ksmimi.com/dsx/jspro/jquery-1.8.0.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+    <div id="box">
+        <div id="header">菜品评论</div>
+        <div id="main">
+            <div class="order-item">
+                <ul class="comment-list">
+                    <li class="product-list-li">
+                        <div class="comment-content">
+                            <img class="product-img" src="http://img.ksmimi.com/uploads/products/${img}" />
+                            <div class="comment-text">
+                                <p class="comment-title">${title}</p>
+                                <p class="comment-price">¥ ${price}</p>
+                            </div>
+                            <div class="comment-options">
+                                <label><input type="radio" name="comment-option_" value="味道杠杠的"/> 味道杠杠的</label>
+                                <label><input type="radio" name="comment-option_" value="不错，下次继续" /> 不错，下次继续</label>
+                                <label><input type="radio" name="comment-option_" value="朕绝得一般般" /> 朕绝得一般般</label>
+                                <label><input type="radio" name="comment-option_" value="我只能呵呵了" /> 我只能呵呵了</label>
+                                <label><input type="radio" name="comment-option_" other="other" value="其他" /> <span>其它</span><input type="text" show="show" maxlength="8" placeholder="最多输入8个字"></label>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <div id="footer">
+            <div class="submit-btn">提交</div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $('input').click(function(){
+            if(typeof ($(this).attr('other')) != 'undefined'){
+                $(this).siblings('input[type=text]').show('speed').focus();
+                $(this).siblings('span').hide('speed');
+            }else{
+                $(this).closest('div').find('input[type=text]').hide('speed');
+                $(this).closest('div').find('span').show('speed');
+            }
+
+        });
+
+//        提交评论到数据库
+        $('.submit-btn').click(function(){
+            var userId = ${userId},
+                    productId = ${productId},
+                    userOrderId = ${userOrderId};
+            var commentValue = $('input[name=comment-option_]:checked').val();
+
+            if(commentValue == '其他'){
+                commentValue = $('input[type=text]').val();
+            }
+            commentValue = commentValue.trim();
+            if(commentValue){
+                $.post('/dashixiongwx/product/comment/submit',{userOrderId:userOrderId,userId:userId,productId:productId,content:commentValue},function(data){
+                    if(data=="评论成功"){
+                        $('.submit-btn').unbind('click');
+                        /*if(confirm(data+'!。。继续评论？。。。')){
+                            window.location.href = 'http://192.168.1.111:6789/dashixiongwx/my/orders?wx_id=${wx_id}';
+                        }else{ *///判断一个订单是否评论完成
+                            window.location.href = 'http://www.ksmimi.com/dashixiongwx/product/comment/finish?wx_id=${wx_id}';
+//                        }
+
+                    }
+
+                });
+            }else{
+                alert("请先评论！呵呵。。。");
+                return false;
+            }
+
+        });
+    });
+</script>
+</html>

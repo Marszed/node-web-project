@@ -1,0 +1,233 @@
+<style type="text/css" media="all">
+    .add{
+        margin-bottom : 10px; 
+        background : #FFF;
+    }
+    .company{
+        font-size : 24px; 
+        line-height : 24px;
+        padding : 5px;
+        background : 
+    }
+    .add{
+        border : 1px solid #CCC; 
+        padding : 10px;
+    }    
+    .item{
+        border : 1px solid #CCC;     
+        background : #FFF;
+    }
+    .other-info{
+        margin-left : 40px; 
+    }
+    .info{
+        padding-bottom : 10px; 
+    }
+    ul.info li{
+        list-style : disc; 
+    }
+    .item{
+        margin-bottom : 20px; 
+    }
+    .list{
+        padding : 0;
+    }
+    .unfetch{
+        color : #888; 
+    }
+    .fetched,.unfetch{
+        float : right; 
+    }
+    .del{
+        font-size : 14px;  
+    }
+    .item-fetched{
+        opacity : 0.5; 
+    }
+    .note{
+        padding : 10px; 
+        color : #888;
+    }
+    .num-unfetch{
+        font-size : 24px;
+        color : red;
+        padding : 5px;
+    }
+    .date{
+        font-size : 24px; 
+        text-align : center;
+    }
+</style>
+
+
+<div class="add">
+    <form action="/dashixiongwx/admin/shop/${shop_id}/expressinfofetch/doadd" method="post" accept-charset="utf-8">
+        <label for="">快递</label>
+        <span>
+            <select name="express_info_fetch[company]" id="">
+                <option value="申通">申通</option>
+                <option value="圆通">圆通</option>
+                <option value="中通">中通</option>
+                <option value="国通">国通</option>
+                <option value="百世汇通">百世汇通</option>
+                <option value="韵达">韵达</option>
+                <option value="顺丰">顺丰</option>
+                <option value="天天">天天</option>
+                <option value="全峰">全峰</option>
+                <option value="EMS">EMS</option>
+                <option value="京东">京东</option>
+                <option value="亚马逊">亚马逊</option>
+                <option value="当当">当当</option>
+                <option value="1号店">1号店</option>
+                <option value="凡客">凡客</option>
+                <option value="其他">其他</option>
+            </select>
+        </span>
+        <label for="">姓名</label>  <input type="text" name="express_info_fetch[name]" id="" value="" />
+        <label for="">手机</label>  <input type="text" name="express_info_fetch[mobile]" id="" value="" />
+        <label for="">其他信息</label>  <input type="text" name="express_info_fetch[otherInfo]" id="" value="" />
+        <input type="submit" name="" id="" value="提交" />
+    </form>
+</div>
+
+<p class="date">
+    <a href="/dashixiongwx/admin/shop/${shop_id}/expressinfofetch/list?y=${pre_y}&m=${pre_m}&d=${pre_d}">&lt;&lt;前一天</a> <span > ${today_y}年${today_m}月${today_d}日 </span> <a href="/dashixiongwx/admin/shop/${shop_id}/expressinfofetch/list?y=${next_y}&m=${next_m}&d=${next_d}">后一天&gt;&gt;</a> 
+</p>
+
+<p>
+    <span class="note"> </span>
+    <span>显示
+        <select name="" id="express_select"> 
+            <option>全部</option>
+        </select>     
+    的快递</span>
+</p>
+
+<ul class="list">
+{{each(exp, i) express_info_fetch}}
+{{if exp.status==1}}
+<li class="item item-fetched">
+{{else}}
+<li class="item">
+{{/if}}
+    <div >
+        <div class="company">
+            {{if exp.status == 0}}
+            <img class="img-unfetch" src="http://s.ksmimi.com/dashixiong_static/img/warning-icon.png" alt="" />
+            <a id="${exp.id}"  wx_id="${exp.wx_id}" href="#" class="fetched" onclick="return false;">确认取件</a>
+            <a id="${exp.id}" href="#" class="unfetch" onclick="return false;" style="display:none;">取消</a>
+            {{else}}
+            <img class="img-unfetch" src="http://s.ksmimi.com/dashixiong_static/img/warning-icon.png" alt="" style="display:none;" />
+            <a id="${exp.id}" wx_id="${exp.wx_id}" href="#" class="fetched" onclick="return false;" style="display:none;">确认取件</a>
+            <a id="${exp.id}" href="#" class="unfetch" onclick="return false;">取消</a>
+            {{/if}}
+            <span class="company-name">${exp.company}</span> - ${exp.name} <a class="del" fid="${exp.id}" href="#" onclick="return false;">删除</a>
+        </div>    
+        <div>
+            <ul class="info">
+                <li><a href="tel:${exp.mobile}">${exp.mobile}</a></li>      
+                {{if exp.otherInfo}}
+                <li>
+                    ${exp.otherInfo}
+                </li>
+                {{/if}}
+            </ul>
+        </div>
+    </div>
+</li>
+{{/each}}
+    
+</ul>
+
+<script type="text/javascript" charset="utf-8">
+    var shop_id = ${shop_id};
+    var items = {{html JSON.stringify(express_info_fetch)}};
+
+    $( '.fetched' ).click(function () {
+        var fetch_id = this.id ;
+        var This = this;
+        var wx_id = $(this).attr('wx_id') || "";
+        $( this ).parents( 'li.item' ).toggleClass( 'item-fetched' );
+        $.get( '/dashixiongwx/admin/shop/'+shop_id+'/expressinfofetch/'+ fetch_id +'/status/update/1', {wx_id: wx_id}, function (res) {
+            if( !res.code ){
+                $( This ).parents( 'li.item' ).find( '.unfetch' ).show();
+                $( This ).parents( 'li.item' ).find( '.img-unfetch' ).hide();
+                $( This ).hide();
+            }
+            count();
+        });
+    });
+    $( '.unfetch' ).click(function () {
+        var fetch_id = this.id ;
+        var This = this; 
+        $( this ).parents( 'li.item' ).toggleClass( 'item-fetched' );
+        $.get( '/dashixiongwx/admin/shop/'+shop_id+'/expressinfofetch/'+ fetch_id +'/status/update/0', function (res) {
+            if( !res.code ){
+                $( This ).parents( 'li.item' ).find( '.fetched' ).show();
+                $( This ).parents( 'li.item' ).find( '.img-unfetch' ).show();
+                $( This ).hide();
+            }
+            count();
+        });
+    });
+    
+    $( '.del' ).click(function () {
+        var yes = confirm( '确定要删除?' );
+        if( !yes )return;
+        var fid = $( this ).attr( 'fid' );
+        var This = this;
+        $.get( '/dashixiongwx/admin/shop/'+shop_id+'/expressinfofetch/del/'+fid, function (res) {
+            if( !res.code ){
+                $( This ).parents( 'li.item' ).remove();
+            }
+
+            count();
+        });
+    });
+
+    var count = function () {
+        var items = $( '.item' );
+        var items_unfetch = $( '.item-fetched' );
+        $( '.note' ).html( '共有'+ items.size() +'个快件要取, 还剩<span class="num-unfetch">'+ ( items.size() - items_unfetch.size() ) +'</span>个未取' );
+    };    
+
+
+    if( items.length ){
+        var map = {};
+        items.forEach(function (item) {
+            if( !map[ item.company ] ) {
+                map[ item.company ] = 0;
+            }
+            ++map[ item.company ];
+        });
+        var html = [];
+        for( var p in map ){
+            html.push( '<option value="'+ p +'">'+ p +'('+ map[p] +')</option>' );
+        }
+        $( '#express_select' ).append( html.join('') );
+
+    }
+
+    $( '#express_select' ).change(function () {
+        var val =  $(this).val();
+        if( val == '全部' ){
+            $( '.item' ).show();
+        }else{
+            $( '.item' ).each(function (i, item) {
+                if( $( item ).find( '.company-name' ).text() == val ) {
+                    $( item ).show();
+                    return;
+                }
+                $( item ).hide();
+            });
+        }
+
+
+    });
+
+//---init ---------
+    count();
+</script>
+
+
+

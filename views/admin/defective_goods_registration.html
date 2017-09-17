@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>坏货登记</title>
+    <style>
+        body{
+            background-image: url(http://s.ksmimi.com/imgpro/grid.png);
+        }
+        table{
+            border-spacing: 0;
+            min-width: 840px;
+        }
+        tr{
+            text-align: center;
+            height: 40px;
+        }
+        h2 span{
+            font-size: 16px;
+        }
+        th,td{
+            border: 1px solid #000000;
+            border-collapse: collapse;
+        }
+        .add-btn{
+            width: 40px;
+            height: 26px;
+            background-color: #3ad796;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .find-btn{
+            cursor: pointer;
+        }
+        .submit{
+            cursor: pointer;
+            background-color: #3ad796;
+            color: white;
+            font-size: 16px;
+        }
+        .remove{
+            cursor: pointer;
+            background-color: #3ad796;
+            color: white;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h2>${shop_id}号店坏货登记
+            <span class="h1-span">
+            <a href="/dashixiongwx/admin/shop/${shop_id}/defectiveGoodsRegistration?y=${pre_date_y}&m=${pre_date_m}&d=${pre_date_d}">
+                &lt;&lt;前一天
+            </a>
+            ${shop_id}号店${m}月${d}日(${xingqi})业绩
+            <a href="/dashixiongwx/admin/shop/${shop_id}/defectiveGoodsRegistration?y=${next_date_y}&m=${next_date_m}&d=${next_date_d}">
+                后一天&gt;&gt;
+            </a>
+            {{if power>10}}
+            <select name="shopId" id="shopId">
+                {{each(shop,i) shops}}
+                <option value="${shop.shopId}">${shop.address}</option>
+                {{/each}}
+            </select>
+            {{/if}}
+            </span>
+    </h2>
+    <table>
+        <tr>
+            <th>序号</th>
+            <th>shopId</th>
+            <th>产品条码</th>
+            <th>产品名称</th>
+            <th>数量(共:${allNum})</th>
+            <th>账面亏损(共:${allPrice.toFixed(2)}元)</th>
+            <th>实际亏损(共:${allCost.toFixed(2)}元)</th>
+            <th>操作</th>
+        </tr>
+        {{each(badGood,i) badGoods}}
+        <tr>
+            <td>${i+1}</td>
+            <td>${shop_id}</td>
+            <td>${badGood.code}</td>
+            <td>${badGood.title}</td>
+            <td>${badGood.num}</td>
+            <td>${(badGood.num * badGood.price).toFixed(2)}</td>
+            <td>${(badGood.num * badGood.cost).toFixed(2)}</td>
+            <td><a class="delete-record" id="${badGood.id}" href="" onclick="return false;">删除</a></td>
+        </tr>
+        {{/each}}
+    </table>
+    <hr/>
+    <br/>
+    开始时间:<input class="start-date" type="date" placeholder="格式:2015-03-01"  />&nbsp;&nbsp;
+    结束时间:<input class="end-date" type="date" placeholder="格式:2015-03-03" >&nbsp;&nbsp;
+    <input class="find-btn" type="button" value="查询" title="点击查询区间内的坏货">
+    <table class="data-table">
+
+    </table>
+    <hr/>
+    <input class="add-btn" type="button" value="增加" title="增加一个坏货登记" />
+    <div class="main">
+        <span>
+            条码:<input class="first-barcode barcode" type="text" name="barcode" />
+            数量:<input class="first-number number" type="number" name="number" placeholder="输入数量如:2" />
+            <input type="button" class="remove" value="删除" title="删除当前记录"/>
+            <br/>
+        </span>
+    </div>
+    <br/>
+    <input class="submit" type="button" value="提交"/>
+</body>
+<script type="text/javascript" src="http://s.ksmimi.com/dsx/jspro/jquery-2.1.1.min.js"></script>
+<script type="text/javascript">
+    var $doc = $(document),
+            $firstBarcode = $('.first-barcode'),
+            $barcode = $('.barcode'),
+            $number = $('.number'),
+            $addBtn = $('.add-btn'),
+            $main = $('.main'),
+            $submit = $('.submit'),
+            shopId = ${shop_id};
+    $doc
+       .on('keypress','.barcode', function(event){//获取条码输入框的回车事件，让数量输入框获得焦点
+            if(event.keyCode == "13"){
+                $(this).siblings('.number').focus();
+            }
+        })
+       .on('keypress','.number', function(event){
+                if(event.keyCode == "13"){
+                    $addBtn.trigger('click');
+                    $parentSpan = $(this).closest('span'),
+                     $lastSpan = $parentSpan.siblings('span').last();
+                    $barcodeInput = $lastSpan.find('input').first();
+                    $barcodeInput.focus();
+                }
+            })
+       .on('click', '.remove', function(e){
+                $(this).closest('span').remove();
+            })
+            .on('click','.delete-record', function(e){
+                var $this = $(this),
+                        delId = $this.attr('id');
+                if(confirm('确认删除?')){
+                    $.post('/dashixiongwx/admin/shop/'+shopId+'/delete/defectiveGoodsRegistration',{id: delId}, function(data){
+                        if(data=="sus"){
+                            alert('成功删除');
+                            window.location.reload();
+                        }
+                    });
+                }else{
+                    return false;
+                }
+
+            });
+    $doc.ready(function(){
+        var $firstBarcode = $('.first-barcode'),
+                $firstNumber = $('.first-number'),
+                $addBtn = $('.add-btn'),
+                $main = $('.main');
+        //首次载入页面让条码输入框获得焦点
+        $firstBarcode.focus();
+        //给增加按钮绑定事件
+        $addBtn.bind('click', function(e){
+            var $span = $('<span>条码:<input class="barcode" type="text" name="barcode" />' +
+                    '&nbsp;数量:<input class="number" type="number" name="number" placeholder="输入数量如:2" />' +
+                    '&nbsp;<input type="button" class="remove" value="删除"/><br/></span>');
+            $span.appendTo($main);
+            //新增元素获取焦点
+            $main.find('span').last().find('input').first().focus();
+        });
+        //提交
+        $submit.click(function(event){
+            var $newMain = $('.main'),
+                    $span = $newMain.find('span'),
+                    flag = true;
+            var record = [];
+            $.each($span, function(i,span){
+                var $input = $(span).find('input');
+                if(!$input.eq(0).val() || !$input.eq(1).val()){
+                    flag = false;
+                    return false;
+                }
+                var temp = {
+                    code: $input.eq(0).val(),
+                    num: $input.eq(1).val()
+                };
+                record.push(temp);
+            });
+            if(flag){
+                $.post('/dashixiongwx/admin/shop/'+shopId+'/save/defectiveGoodsRegistration',{arg: record}, function(data){
+                    if(data=='sus'){
+                        alert('成功提交!');
+                        window.location.reload();
+                    }else{
+                        alert('提交失败！');
+                    }
+                });
+            }else{
+                alert('禁止提交！输入不合法!');
+                return false;
+            }
+
+        });
+
+        //查询坏货记录
+        var $findBtn = $('.find-btn');
+        $findBtn.click(function(e){
+            var startDateVal = $('.start-date').val(),
+                    endDateVal = $('.end-date').val();
+            if(startDateVal && endDateVal){
+                var json = {
+                        startDate: startDateVal,
+                        endDate: endDateVal
+                };
+                $.post('/dashixiongwx/admin/shop/'+shopId+'/find/defectiveGoodsRegistration',{arg: json}, function(data){
+                    if(data!='xx'){
+                       var data = JSON.parse(data),
+                           allPrice = 0,
+                               allCost = 0,
+                               allNum = 0;
+                        for(var j= 0,le=data.length; j < le; j++){
+                            allPrice += data[j].price * data[j].num;
+                            allCost += data[j].cost * data[j].num;
+                            allNum += data[j].num;
+                        }
+                        var $table = $('.data-table');
+                        $table.empty();
+                        var $th = '<tr><th>序号</th><th>shopId</th><th>产品条码</th><th>产品名称</th><th>数量(共:'+allNum+')</th><th>账面亏损(共:'+allPrice+')</th><th>实际亏损(共:'+allCost+')</th></tr>';
+                        $table.append($th);
+                        for(var i= 0,len=data.length;i < len; i++){
+                            var $tr = $('<tr><td>'+(i+1)+'</td><td>'+data[i].shopId+'</td><td>'+data[i].code+'</td><td>'+data[i].title+'</td><td>'+data[i].num+'</td><td>'+(data[i].num*data[i].price).toFixed(2)+'</td><td>'+(data[i].num*data[i].cost).toFixed(2)+'</td></tr>');
+                            $table.append($tr);
+                        }
+                    }else{
+                        alert('查询不到数据！')
+                    }
+                });
+            }else{
+               alert('请输入查询日期！')
+            }
+        });
+
+    });
+</script>
+</html>
