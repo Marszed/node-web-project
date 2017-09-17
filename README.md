@@ -96,8 +96,8 @@ ps aux|grep redis 查看redis进程，端口号
     export LSCOLORS=EXFXBXDXCXegedabagacad
     #在该文件中添加mysql/bin的目录
     PATH=$PATH:/usr/local/mysql/bin
-    ```
-5: OK! 现在可以进行mysql登录了, mysql -u root -p <第一次使用初始密码>
-6: 修改密码 SET PASSWORD FOR 'root'@'localhost' = PASSWORD('123456');
+    ```<br>
+5: OK! 现在可以进行mysql登录了, mysql -u root -p (第一次使用初始密码)<br>
+6: 修改密码 SET PASSWORD FOR 'root'@'localhost' = PASSWORD('123456')<br>
 7: enjoy yourself!😆😆
 
