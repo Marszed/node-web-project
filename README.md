@@ -117,5 +117,65 @@ ps aux|grep redis 查看redis进程，端口号
 11: mysql：mysql -h ip -u user -p (远程登录)<br>
 12: show variables like 'character%';(查看当前的编码)<br>
 13: desc Table; (展示表结构)<br>
-14: balabala...()
+14: balabala...(😓😲😓)
+
+# nginx install (MAC)
+1: [官网下载](https://brew.sh/index_zh-cn.html) （通过homebrew软件包管理器安装）<br>
+2: brew install nginx
+
+## ======nginx常用命令======
+sudo nginx start 启动<br>
+nginx -s quit 退出<br>
+nginx -s reload 重新加载<br>
+nginx -t 测试nginx.conf配置<br>
+/usr/local/etc/nginx(ngix.conf配置文件)<br>
+/usr/local/cellarbr<br>
+/usr/local/var
+
+# pm2 install
+npm install -g pm2
+
+## ======pm2常用命令======
+``` javascript
+// 安装更新卸载
+npm install pm2 -g //安装pm2,可能需要sudo权限
+pm2 update // 更新pm2
+pm2 uninstall pm2 //移除pm2
+
+// 开启关闭
+pm2 start server.js //启动server.js进程
+pm2 start server.js -i 4 //启动4个server.js进程
+pm2 restart server.js //重启server.js进程
+pm2 stop all // 停止所有进程
+pm2 stop server.js //停止server.js进程
+pm2 stop 0 //停止编号为0的进程
+
+// 配置启动信息
+pm2 start app.json
+{
+  "apps" : [{
+    "script"    : "server.js",  //进程名
+    "instances" : "max",   //开启进程数，可为数值，也可为max。与服务器cpu核数相关
+    "exec_mode" : "cluster" // 可选：fork(服务器单核推荐) cluster(多核推荐)
+  }]
+}
+
+// 查看
+pm2 list //查看当前正在运行的进程
+pm2 show 0 //查看执行编号为0的进程
+
+// 监控
+pm2 monit //监控当前所有的进程
+pm2 monit 0 //监控批评行编号为0的进程
+pm2 monit server.js //监控名称为server.js的进程
+
+// 日志
+pm2 logs //显示所有日志
+pm2 logs 0 //显示执行编号为0的日志
+pm2 logs server.js //显示名称为server.js的进程
+pm2 flush  //清洗所有的数据[注：我没有试出来效果]
+```
+
+
+
 
