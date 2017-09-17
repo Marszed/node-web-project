@@ -85,6 +85,7 @@ ps aux|grep redis 查看redis进程，端口号
 1: [官网下载](https://www.mysql.com/downloads/) （现在需要注册oracle账户了，😶😳）<br>
 2: 安装包(pkg) 一路点击下一步就好，需要备份初始账号密码 (弹框有提示)<br>
 3: command + space 搜索 mysql， 点击 start mysql server<br>
+    ![](https://github.com/Marszed/node-web-project/raw/master/gitImage/mysql.png)
 4: 将mysql加入到系统的环境变量<br>
     cd /usr/local/mysql/bin<br>
     vim ~/.bash_profile (新建一个.bash_profile文件)<br>
