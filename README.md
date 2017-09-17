@@ -85,7 +85,7 @@ ps aux|grep redis 查看redis进程，端口号
 1: [官网下载](https://www.mysql.com/downloads/) （现在需要注册oracle账户了，😶😳）<br>
 2: 安装包(pkg) 一路点击下一步就好，需要备份初始账号密码 (弹框有提示)<br>
 3: command + space 搜索 mysql， 点击 start mysql server<br>
-    ![](https://github.com/Marszed/node-web-project/raw/master/gitImage/mysql.png)
+    ![](https://github.com/Marszed/node-web-project/raw/master/gitImage/mysql.png)<br>
 4: 将mysql加入到系统的环境变量<br>
     cd /usr/local/mysql/bin<br>
     vim ~/.bash_profile (新建一个.bash_profile文件)<br>
@@ -100,4 +100,22 @@ ps aux|grep redis 查看redis进程，端口号
 5: OK! 现在可以进行mysql登录了, mysql -u root -p (第一次使用初始密码)<br>
 6: 修改密码 SET PASSWORD FOR 'root'@'localhost' = PASSWORD('123456')<br>
 7: enjoy yourself!😆😆
+
+## ======mysql终端基础常用命令======
+0: mysql -u root -p (本地用户登录)
+1: show databases; (展示所有数据库)<br>
+2: create dataBase XXX; (新建数据库)<br>
+2: drop dataBase XXX; (删除数据库)<br>
+3: user XXX; (应用新建的数据库)<br>
+4: show tables; (当前数据库的所有表)<br>
+5: source XXX.sql; (导入sql脚本)<br>
+6: mysqldump -uroot -p -B dbname > dbname.sql (备份单个数据库)<br>
+7: mysqldump -uroot -p --all-databases > all.sql (备份全部数据库)<br>
+8: mysqldump -uroot -p -B dbname --table tablename > tablename.sql(备份表)<br>
+9: mysql -uroot -p < name.sql (恢复数据库)<br>
+10: mysql -uroot -p dbname < name.sql (恢复表,必须指定数据库)<br>
+11: mysql：mysql -h ip -u user -p (远程登录)<br>
+12: show variables like 'character%';(查看当前的编码)<br>
+13: desc Table; (展示表结构)<br>
+14: balabala...()
 
