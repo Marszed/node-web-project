@@ -1,5 +1,5 @@
 # redis install (MAC)
-1. download --> https://redis.io/download 官网下载
+1. download --> [官网下载](https://redis.io/download)
 2. unZip --> tar -xzf redis-xx.xx.x.tar.gz
 3. mv --> mv **/redis-xx.xx.x.tar.gz /user/local (没权限加sudo)
 4. test --> make test
@@ -66,7 +66,7 @@ appendonly no
 appendfsync everysec
 ```
 6: 验证自定义配置<br>
-7: 先启动redis-server服务 redis-server /user/local/redis-xx.xx.x/etc/redis/conf
+7: 先启动redis-server服务 redis-server /user/local/redis-xx.xx.x/etc/redis/conf<br>
 8: 打开redis-cli 客户端 redis-cli, 输入set get试试结果，😆😆
 配置成功的标识<br>
 ![](https://github.com/Marszed/node-web-project/raw/master/gitImage/redis-cli.png)
@@ -82,3 +82,21 @@ redis-check-rdb RDB文件修复工具<br>
 ps aux|grep redis 查看redis进程，端口号
 
 # mysql install (MAC)
+1: [官网下载](https://www.mysql.com/downloads/) （现在需要注册oracle账户了，😶😳）<br>
+2: 安装包(pkg) 一路点击下一步就好，需要备份初始账号密码 (弹框有提示)<br>
+3: command + space 搜索 mysql， 点击 start mysql server<br>
+4: 将mysql加入到系统的环境变量<br>
+    cd /usr/local/mysql/bin<br>
+    vim ~/.bash_profile (新建一个.bash_profile文件)<br>
+    ```ssh
+    export NUM_DIR=~/.num
+    #set color
+    export CLICOLOR=1
+    export LSCOLORS=EXFXBXDXCXegedabagacad
+    #在该文件中添加mysql/bin的目录
+    PATH=$PATH:/usr/local/mysql/bin
+    ```
+5: OK! 现在可以进行mysql登录了, mysql -u root -p <第一次使用初始密码>
+6: 修改密码 SET PASSWORD FOR 'root'@'localhost' = PASSWORD('123456');
+7: enjoy yourself!😆😆
+
