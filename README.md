@@ -9,10 +9,10 @@
 ![](https://github.com/Marszed/node-web-project/raw/master/gitImage/redis-server.png)
 
 ## ======redis自定义配置======
-1: /user/local/redis-*.*.* 下新建 log(日志文件) bin(启动路径) etc(配置文件) db (本地数据库路径)
-2: 将 /user/local/redis-*.*.*/src 下的 mkreleasehdr.sh，redis-benchmark， redis-check-rdb， redis-cli， redis-server拷贝到新建的bin (mv **/* **/*)
-3: log 新建log-redis.log (vim log-redis.log)
-4: 在etc目录下新建redis.conf配置文件 (vim redis.conf)
+1: /user/local/redis-*.*.* 下新建 log(日志文件) bin(启动路径) etc(配置文件) db (本地数据库路径)<br>
+2: 将 /user/local/redis-*.*.*/src 下的 mkreleasehdr.sh，redis-benchmark， redis-check-rdb， redis-cli， redis-server拷贝到新建的bin (mv **/* **/*)<br>
+3: log 新建log-redis.log (vim log-redis.log)<br>
+4: 在etc目录下新建redis.conf配置文件 (vim redis.conf)<br>
 5: 配置如下:<br>
 ```ssh
 #修改为守护模式
@@ -64,14 +64,19 @@ appendonly no
 #always：表示每次更新操作后手动调用fsync()将数据写到磁盘（慢，安全）
 #everysec：表示每秒同步一次（折衷，默认值）
 appendfsync everysec
-```ssh
+```
+6 验证自定义配置<br>
+1: 先启动redis-server服务 redis-server /user/local/redis-*.*.*/etc/redis/conf
+2: 打开redis-cli 客户端 redis-cli, 输入set get试试结果，😆😆
+配置成功的标识<br>
+![](https://github.com/Marszed/node-web-project/raw/master/gitImage/redis-cli.png)
 
 
 
 ## ======redis常用命令说明======
-
 redis-server redis服务器
-redis-cli redis客户端
+redis-cli redis客户端 (redis-cli -h 127.0.0.1 -p 6379 指定端口启动)
 redis-benchmark redis性能测试工具
 redis-check-aof AOF文件修复工具
 redis-check-rdb RDB文件修复工具
+ps aux|grep redis 查看redis进程，端口号
