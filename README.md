@@ -1,7 +1,7 @@
 # redis install (MAC)
 1. download --> https://redis.io/download 官网下载
-2. unZip --> tar -xzf redis-*.*.*.tar.gz
-3. mv --> mv **/redis-*.*.*.tar.gz /user/local (没权限加sudo)
+2. unZip --> tar -xzf redis-xx.xx.x.tar.gz
+3. mv --> mv **/redis-xx.xx.x.tar.gz /user/local (没权限加sudo)
 4. test --> make test
 5. install --> sudo make install
 6. redis start --> redis-server
@@ -9,8 +9,8 @@
 ![](https://github.com/Marszed/node-web-project/raw/master/gitImage/redis-server.png)
 
 ## ======redis自定义配置======
-1: /user/local/redis-*.*.* 下新建 log(日志文件) bin(启动路径) etc(配置文件) db (本地数据库路径)<br>
-2: 将 /user/local/redis-*.*.*/src 下的 mkreleasehdr.sh，redis-benchmark， redis-check-rdb， redis-cli， redis-server拷贝到新建的bin (mv **/* **/*)<br>
+1: /user/local/redis-xx.xx.x 下新建 log(日志文件) bin(启动路径) etc(配置文件) db (本地数据库路径)<br>
+2: 将 /user/local/redis-xx.xx.x/src 下的 mkreleasehdr.sh，redis-benchmark， redis-check-rdb， redis-cli， redis-server拷贝到新建的bin (mv **/* **/*)<br>
 3: log 新建log-redis.log (vim log-redis.log)<br>
 4: 在etc目录下新建redis.conf配置文件 (vim redis.conf)<br>
 5: 配置如下:<br>
@@ -19,7 +19,7 @@
 daemonize yes
 
 #设置进程锁文件
-pidfile /usr/local/redis-*.*.*/redis.pid
+pidfile /usr/local/redis-xx.xx.x/redis.pid
 
 #端口
 port 6379
@@ -31,7 +31,7 @@ timeout 300
 loglevel debug
 
 #日志文件位置
-logfile /usr/local/redis-*.*.*/log/log-redis.log
+logfile /usr/local/redis-xx.xx.x/log/log-redis.log
 
 #设置数据库的数量，默认数据库为16，可以使用SELECT 命令在连接上指定数据库id
 databases 16
@@ -52,7 +52,7 @@ rdbcompression yes
 dbfilename dump.rdb
 
 #指定本地数据库路径
-dir /usr/local/redis-*.*.*/db/
+dir /usr/local/redis-xx.xx.x/db/
 
 #指定是否在每次更新操作后进行日志记录，Redis在默认情况下是异步的把数据写入磁盘，如果不开启，可能
 #会在断电时导致一段时间内的数据丢失。因为 redis本身同步数据文件是按上面save条件来同步的，所以有
@@ -65,18 +65,20 @@ appendonly no
 #everysec：表示每秒同步一次（折衷，默认值）
 appendfsync everysec
 ```
-6 验证自定义配置<br>
-1: 先启动redis-server服务 redis-server /user/local/redis-*.*.*/etc/redis/conf
-2: 打开redis-cli 客户端 redis-cli, 输入set get试试结果，😆😆
+6: 验证自定义配置<br>
+7: 先启动redis-server服务 redis-server /user/local/redis-xx.xx.x/etc/redis/conf
+8: 打开redis-cli 客户端 redis-cli, 输入set get试试结果，😆😆
 配置成功的标识<br>
 ![](https://github.com/Marszed/node-web-project/raw/master/gitImage/redis-cli.png)
 
 
 
 ## ======redis常用命令说明======
-redis-server redis服务器
-redis-cli redis客户端 (redis-cli -h 127.0.0.1 -p 6379 指定端口启动)
-redis-benchmark redis性能测试工具
-redis-check-aof AOF文件修复工具
-redis-check-rdb RDB文件修复工具
+redis-server redis服务器<br>
+redis-cli redis客户端 (redis-cli -h 127.0.0.1 -p 6379 指定端口启动)<br>
+redis-benchmark redis性能测试工具<br>
+redis-check-aof AOF文件修复工具<br>
+redis-check-rdb RDB文件修复工具<br>
 ps aux|grep redis 查看redis进程，端口号
+
+# mysql install (MAC)
