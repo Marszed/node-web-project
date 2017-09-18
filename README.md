@@ -121,16 +121,22 @@ ps aux|grep redis 查看redis进程，端口号
 
 # nginx install (MAC)
 1: [官网下载](https://brew.sh/index_zh-cn.html) （通过homebrew软件包管理器安装）<br>
-2: brew install nginx
+2: brew install nginx<br>
+3: sudo nginx<br>
+4: 访问http://localhost:8080/<br>
+5: 配置成功<br>
+6: 推荐[Nginx高性能Web服务器详解](https://s.taobao.com/search?q=Nginx%E9%AB%98%E6%80%A7%E8%83%BDWeb%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AF%A6%E8%A7%A3&imgfile=&commend=all&ssid=s5-e&search_type=item&sourceId=tb.index&spm=a21bo.50862.201856-taobao-item.1&ie=utf8&initiative_id=tbindexz_20170918&sort=sale-desc)<br>
+![](https://github.com/Marszed/node-web-project/raw/master/gitImage/nginx.conf.png)<br>
+![](https://github.com/Marszed/node-web-project/raw/master/gitImage/nginx.png)
+
 
 ## ======nginx常用命令======
-sudo nginx start 启动<br>
+sudo nginx 启动<br>
 nginx -s quit 退出<br>
 nginx -s reload 重新加载<br>
 nginx -t 测试nginx.conf配置<br>
 /usr/local/etc/nginx(ngix.conf配置文件)<br>
-/usr/local/cellarbr<br>
-/usr/local/var
+
 
 # pm2 install
 npm install -g pm2

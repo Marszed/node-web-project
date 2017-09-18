@@ -1,0 +1,20 @@
+<style type="text/css" media="all">
+    p{
+        padding : 10px; 
+    } 
+</style>
+
+<form action="/register?from='Marszed'" method="post" accept-charset="utf-8">
+    <p>
+        <label for="name">用户名: </label><input type="text" name="msg[name]" id="name"/>
+    </p> 
+    <p>
+        <label for="password">密码: </label><input type="password" name="msg[password]" id="password"/>
+    </p>
+    <p>
+        <label for="passwordConfim">确认密码: </label><input type="password" name="msg[passwordConfim]" id="passwordConfim"/>
+    </p>
+    <p>
+        <input type="submit" id="submit" value="提交" />
+    </p>
+</form>

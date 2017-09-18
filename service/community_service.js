@@ -25,41 +25,6 @@ var middleware_load_user_by_user_id = require( '../lib/middleware_load_user_by_u
 var middleware_power = require('../lib/middleware_power');//这个模块里面有各种权限的中间件
 
 exports.route = function(app){
-
-    //类中间件: 看到路由中含有的shop_id, 就直接加载shop 的各种参数
-    //app.param('wx_id', function (req, res, next){
-    //    var wx_id = req.params.wx_id;
-    //    dashixiong.getUserByWxId(wx_id, function(err, ret){
-    //		if(err){
-    //			ld.debug(err);
-    //			res.send(502);
-    //			return;
-    //		}
-    //        var user = ret[0];
-    //        if( !user ){
-    //            next();
-    //            return;
-    //        }
-    //
-    //        req.user = user;//把user对象装入request, 方便后续的handler取用
-    //        //好, 接下来继续获取这个店的所有配置
-    //		dashixiong.getConfigOfShop(user.shopId, function(err, config){
-    //			if(err){
-    //				ld.debug(err);
-    //                res.end(502);
-    //                return;
-    //			}
-    //            var shop_conf = {};
-    //            config.forEach(function (obj, i) {
-    //                shop_conf[ obj.settingKey ] = obj.settingValue;
-    //            })
-    //            req.shop_conf = shop_conf
-    //            next();
-    //        });//end getConfigOfShop
-    //    });//end getUserByWxId
-    //
-    //});
-
     //ticket合法时, 获取cache中的user对象
     var i_need_auth_user_middleware = function (req, res, next) {
         var user_id = req.cookies.user_id;

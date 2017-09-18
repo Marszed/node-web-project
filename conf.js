@@ -97,14 +97,6 @@ var pool  = mysql.createPool({
 });
 
 exports.getConnection = function(){
-    /*var mySqlConn = {};
-    mySqlConn.query = function(){
-        var args = arguments;
-        pool.getConnection(function(err, conn){
-            conn.query.apply(conn, args);
-            conn.release();
-        });
-    };*/
     return pool;
 };
 
